@@ -1,0 +1,119 @@
+.site {
+    height: 100%;
+}
+
+.content {
+    max-width: 1280px;
+    margin: 0 auto;
+    color: var(--font-dark);
+}
+
+@media (min-width: 840px) {
+    .content {
+        display: flex;
+    }
+}
+
+.user-forms-content {
+    padding-top: 47px;
+    color: var(--font-dark);
+}
+
+@media (min-width: 481px) {
+    .user-forms-content {
+        height: 100%;
+        display: flex;
+        background-color: var(--background-color-gr);
+    }
+}
+
+/* Sidebar */
+.site-sidebar {
+    padding-top: 47px;
+}
+
+@media (min-width: 840px) {
+    .site-sidebar {
+        min-width: 170px;
+    } 
+}
+
+.sidebar-links {
+    position: sticky;
+    top: 170px;
+    font-size: 16px;
+}
+
+@media (max-width: 839px){
+    .sidebar-links ul {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+}
+
+.sidebar-links li {
+    padding: 0.5em 2em;
+    list-style: none outside;
+}
+
+@media (max-width: 839px){
+    .sidebar-links li:hover {
+        background-color: var(--accent-main-dark);
+    }
+}
+
+@media (min-width: 840px) {
+    .sidebar-links li {
+        border-top: 1px solid var(--background-color);
+        border-bottom: 1px solid var(--background-color);
+    }
+    
+    .sidebar-links li:hover {
+        border-top: 1px solid var(--border-light);
+        border-bottom: 1px solid var(--border-light);
+        border-right: 5px solid var(--accent-main-dark);
+    }
+}
+
+.sidebar-links a {
+    text-decoration: none;
+    color: var(--font-dark);
+}
+
+/* Main Content */
+.site-main {
+    width: 100%;
+}
+
+@media (min-width: 840px) {
+    .site-main {
+        padding: 47px 0;
+        border-left: 1px solid var(--border-light);
+    }
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    border-top: 1px solid var(--border-light);
+}
+
+.footer-content {
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1em;
+    color: var(--font-dark);
+}
+
+/* Nav Toggle */
+.site > input {
+    display: block;
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+}
+
