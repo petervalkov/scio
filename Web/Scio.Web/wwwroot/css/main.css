@@ -4,6 +4,7 @@
 
 .content {
     max-width: 1280px;
+    height: 100%;
     margin: 0 auto;
     color: var(--font-dark);
 }
@@ -35,6 +36,7 @@
 @media (min-width: 840px) {
     .site-sidebar {
         min-width: 170px;
+        border-right: 1px solid var(--border-light);
     } 
 }
 
@@ -89,7 +91,6 @@
 @media (min-width: 840px) {
     .site-main {
         padding: 47px 0;
-        border-left: 1px solid var(--border-light);
     }
 }
 
@@ -97,6 +98,7 @@
 footer {
     width: 100%;
     border-top: 1px solid var(--border-light);
+    background-color: var(--main-dark);
 }
 
 .footer-content {
@@ -106,7 +108,11 @@ footer {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 1em;
-    color: var(--font-dark);
+    color: var(--font-light);
+}
+
+.footer-content a {
+    color: inherit;
 }
 
 /* Nav Toggle */

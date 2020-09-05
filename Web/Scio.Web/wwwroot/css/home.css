@@ -1,0 +1,18 @@
+.home-page {
+    width: 100%;
+    padding-top: 47px;
+}
+
+.home-page h1 {
+    text-align: center;
+    padding-top: 1em;
+}
+
+.privacy-page {
+    width: 100%;
+    padding: 47px 2em;
+}
+
+.privacy-page h1 {
+    padding-top: 1em;
+}

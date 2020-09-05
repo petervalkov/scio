@@ -29,8 +29,12 @@
     margin-right: auto;
 }
 
-.site-logo h1 {
+.site-logo a {
     margin: auto 0;
+    font-size: 27px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--font-light);
 }
 
 .site-nav {
@@ -110,6 +114,30 @@
     text-decoration: none;
     font-size: 17px;
     padding: 0 0.5em;
+}
+
+
+.site-nav form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 47px;
+}
+
+.site-nav form button {
+    outline: none;
+    border: none;
+    background-color: inherit;
+    color: inherit;
+    font-size: 17px;
+    padding: 0 0.5em;
+    height: 100%;
+    width: 100%;
+}
+
+.site-nav form button:hover {
+    background-color:var(--accent-main-dark);
+    color: #ffffff;
 }
 
 .site-nav-label {
