@@ -1,0 +1,112 @@
+.account-form-content {
+    height: 100%;
+    padding-top: 47px;
+    color: var(--font-dark);
+}
+
+@media (min-width: 481px) {
+    .account-form-content {
+        display: flex;
+        background-color: var(--background-color-gr);
+    }
+}
+
+.account-form-content h2 {
+    margin-bottom: 0.5em;
+}
+
+.account-form-content button {
+    font: 21px Verdana;
+    width: 100%;
+    padding: 7px;
+    color: var(--font-light);
+    background-color: var(--accent-main-dark);
+    border: none;
+    outline:none;
+}
+
+.account-form {
+    width: 430px;
+    background-color: var(--background-color);
+    margin: 0 auto;
+    padding: 1em;
+}
+
+@media (min-width: 481px){
+    .account-form {
+        margin: auto;
+        border: 1px solid var(--border-light);
+    }
+}
+
+.account-form a {
+    text-decoration: none;
+    color: var(--accent-main-dark);
+}
+
+.account-form a.form-button {
+    margin-top: 1em;
+    font: 21px Verdana;
+    padding: 7px 17px;
+    float: right;
+    color: var(--font-light);
+    background-color: var(--accent-main-dark);
+    color: var(--font-light);
+}
+
+.validation-summary-errors ul {
+    list-style-type: none;
+    color: var(--font-error);
+}
+
+.form-group {
+    margin-top: 1.3em;
+}
+
+.form-group > span {
+    display: block;
+    height: 1em;
+    font-size: 0.9em;
+    color: var(--font-error);
+}
+
+.form-group-input {
+    display: flex;
+    padding: 5px 2px;
+    border-bottom: 3px solid var(--accent-main-dark);
+}
+
+.form-group-input input {
+    font-size: 19px;
+    color: var(--font-dark);
+    flex: auto;
+    border: none;
+}
+
+.form-group-input input:-webkit-autofill,
+.form-group-input input:-webkit-autofill:hover, 
+.form-group-input input:-webkit-autofill:focus {
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+} 
+
+.form-group-input input:-webkit-autofill::first-line {
+    font-size: 19px;
+}
+
+.form-group-input input:focus {
+    outline: none;
+}
+
+.form-group-input i {
+    font-size: 19px;
+    color: var(--font-dark);
+    opacity: 0.9;
+}
+
+.form-group-flex {
+    display: flex;
+    margin-top: 1em;
+    justify-content: space-between;
+}

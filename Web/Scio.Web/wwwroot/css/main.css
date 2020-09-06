@@ -1,8 +1,14 @@
 .site {
     height: 100%;
+    min-width: 430px;
 }
 
 .content {
+    height: 100%;
+    width: 100%;
+}
+
+.aside-main-content {
     max-width: 1280px;
     height: 100%;
     margin: 0 auto;
@@ -10,21 +16,8 @@
 }
 
 @media (min-width: 840px) {
-    .content {
+    .aside-main-content {
         display: flex;
-    }
-}
-
-.user-forms-content {
-    padding-top: 47px;
-    color: var(--font-dark);
-}
-
-@media (min-width: 481px) {
-    .user-forms-content {
-        height: 100%;
-        display: flex;
-        background-color: var(--background-color-gr);
     }
 }
 
@@ -43,7 +36,6 @@
 .sidebar-links {
     position: sticky;
     top: 170px;
-    font-size: 16px;
 }
 
 @media (max-width: 839px){
@@ -102,7 +94,6 @@ footer {
 }
 
 .footer-content {
-    font-size: 14px;
     display: flex;
     justify-content: space-between;
     max-width: 1280px;
