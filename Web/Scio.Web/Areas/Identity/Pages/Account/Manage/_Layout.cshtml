@@ -9,19 +9,18 @@
     }
 }
 
-<h2>Manage your account</h2>
-
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
+<div class="aside-main-content">
+    <aside class="site-sidebar">
+        <div class="sidebar-links">
             <partial name="_ManageNav" />
         </div>
-        <div class="col-md-9">
+    </aside>
+    <main class="site-main">
+        <div class="manage-account">
+            <h2>Manage your account</h2>
             @RenderBody()
         </div>
-    </div>
+    </main>
 </div>
 
 @section Scripts {
