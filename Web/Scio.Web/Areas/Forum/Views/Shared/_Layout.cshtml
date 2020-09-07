@@ -1,0 +1,46 @@
+﻿@using Scio.Common
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
+    <environment names="Development">
+        <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" asp-append-version="true">
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: '#mytextarea'
+            });
+        </script>
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" asp-append-version="true">
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <div class="site">
+        <partial name="~/Views/Shared/_NavbarPartial.cshtml" />
+        <div class="content">
+            <partial name="_CookieConsentPartial" />
+            <div class="aside-main-content">
+                <partial name="_SidebarPartial" />
+                <main class="site-main">
+                    <div class="forum">
+                        @this.RenderBody()
+                        <partial name="_SideContentPartial" />
+                    </div>
+                </main>
+            </div>
+        </div>
+        <partial name="~/Views/Shared/_FooterPartial.cshtml" />
+    </div>
+    <environment names="Development">
+    </environment>
+    <environment names="Staging,Production">
+    </environment>
+    @this.RenderSection("Scripts", required: false)
+</body>
+</html>

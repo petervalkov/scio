@@ -1,0 +1,48 @@
+﻿namespace Scio.Services.Data
+{
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Scio.Data.Common.Repositories;
+    using Scio.Data.Models;
+    using Scio.Services.Mapping;
+
+    public class QuestionService : IQuestionService
+    {
+        private readonly IDeletableEntityRepository<Question> questionRepository;
+
+        public QuestionService(IDeletableEntityRepository<Question> questionRepository)
+        {
+            this.questionRepository = questionRepository;
+        }
+
+        public async Task<string> CreateAsync(string title, string content, string authorId)
+        {
+            var question = new Question
+            {
+                Title = title,
+                Content = content,
+                AuthorId = authorId,
+            };
+
+            await this.questionRepository.AddAsync(question);
+            await this.questionRepository.SaveChangesAsync();
+
+            return question.Id;
+        }
+
+        public IEnumerable<TViewModel> GetAll<TViewModel>()
+            => this.questionRepository
+            .AllAsNoTrackingWithDeleted()
+            .To<TViewModel>()
+            .ToList();
+
+        public TViewModel GetById<TViewModel>(string id)
+            => this.questionRepository
+            .AllAsNoTrackingWithDeleted()
+            .Where(p => p.Id == id)
+            .To<TViewModel>()
+            .FirstOrDefault();
+    }
+}

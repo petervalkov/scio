@@ -1,0 +1,46 @@
+﻿@using Scio.Common
+@using Scio.Web.ViewModels.Forum.Home
+@model IEnumerable<IndexQuestionsViewModel>
+@{
+    ViewData["Title"] = "Scio Forum";
+}
+
+<div class="forum-header">
+    <h2>All Questions</h2>
+</div>
+<div class="forum-content">
+   @foreach (var question in Model)
+    {
+        <div class="forum-card">
+            <div class="forum-card-side">
+                <div class="answers">
+                    <p>@question.AnswersCount</p>
+                    <p>answers</p>
+                </div>
+                <i class="fas fa-chevron-up"></i>
+                <p>votes</p>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="forum-card-main">
+                <h3>
+                    <a asp-area="Forum" asp-controller="Questions" asp-action="Details" asp-route-id="@question.Id">@question.Title</a>
+                </h3>
+                <div class="forum-card-meta">
+                    <span>Asked @question.CreatedOn</span>
+                </div>
+                <p>@Html.Raw(question.Content)</p>
+                <div class="forum-card-footer">
+                    <div class="user-card">
+                        <div class="user-img-container">
+                            <img src="~/css/default-user-avatar.jpg">
+                        </div>
+                        <div class="user-card-details">
+                            <a href="">@question.AuthorEmail</a>
+                            <span>user</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
