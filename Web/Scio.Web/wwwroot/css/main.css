@@ -1,16 +1,16 @@
 .site {
-    height: 100%;
+    /* height: 100%; */
     min-width: 430px;
 }
 
 .content {
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
 }
 
 .aside-main-content {
+    min-height: calc(100vh - 73px);
     max-width: 1280px;
-    height: 100%;
     margin: 0 auto;
     color: var(--font-dark);
 }
@@ -47,7 +47,7 @@
 }
 
 .sidebar-links li {
-    padding: 0.5em 2em;
+    padding: 0.5em;
     list-style: none outside;
 }
 
@@ -98,7 +98,7 @@ footer {
     justify-content: space-between;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 1em;
+    padding: 0.5em 1em;
     color: var(--font-light);
 }
 
@@ -112,5 +112,14 @@ footer {
     position: absolute;
     visibility: hidden;
     pointer-events: none;
+}
+
+button {
+    font: 19px Verdana;
+    padding: 7px;
+    color: var(--font-light);
+    background-color: var(--accent-main-dark);
+    border: none;
+    outline:none;
 }
 

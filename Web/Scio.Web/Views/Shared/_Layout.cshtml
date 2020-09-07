@@ -5,7 +5,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
-
     <environment names="Development">
         <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" asp-append-version="true">
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
@@ -17,42 +16,12 @@
 </head>
 <body>
     <div class="site">
-        <input type="checkbox" id="site-nav-toggle">
-        <header class="site-header">
-            <div class="site-header-content">
-                <div class="site-logo">
-                    <a asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
-                </div>
-                <nav class="site-nav">
-                    <ul class="navbar-main">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </nav>
-                <label for="site-nav-toggle" class="site-nav-label">
-                    <i class="fas fa-bars"></i>
-                </label>
-            </div>
-        </header>
-
+        <partial name="_NavbarPartial" />
         <div class="content">
             <partial name="_CookieConsentPartial" />
             @this.RenderBody()
         </div>
-
-        <footer class="site-footer">
-            <div class="footer-content">
-                <div>
-                    <strong>&copy; @DateTime.Now.Year - @GlobalConstants.SystemName </strong>- <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </div>
-                <div>version 1.0.0</div>
-            </div>
-        </footer>
+        <partial name="_FooterPartial" />
     </div>
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
@@ -66,7 +35,6 @@
         <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-
     @this.RenderSection("Scripts", required: false)
 </body>
 </html>
