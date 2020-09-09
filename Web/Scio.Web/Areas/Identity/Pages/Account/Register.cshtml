@@ -4,9 +4,9 @@
     ViewData["Title"] = "Create new account";
 }
 
-<div class="account-form-content">
-    <div class="account-form">
-        <h2>@ViewData["Title"]</h2>
+<article class="user-form">
+    <section class="account-form">
+        <h1>@ViewData["Title"]</h1>
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -37,8 +37,8 @@
                 <p>Already have an account? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Login</a></p>
             </div>
         </form>
-    </div>
-</div>
+    </section>
+</article>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

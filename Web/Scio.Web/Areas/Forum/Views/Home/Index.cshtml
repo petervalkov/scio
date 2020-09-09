@@ -1,16 +1,13 @@
 ﻿@using Scio.Common
 @using Scio.Web.ViewModels.Forum.Home
 @model IEnumerable<IndexQuestionsViewModel>
-@{
-    ViewData["Title"] = "Scio Forum";
-}
+@{ ViewData["Title"] = "Scio Forum"; }
 
-<div class="forum-header">
-    <h2>All Questions</h2>
-</div>
-<div class="forum-content">
-   @foreach (var question in Model)
-    {
+<section class="forum">
+    <h1>All Questions</h1>
+    <div class="forum-content">
+       @foreach (var question in Model)
+        {
         <div class="forum-card">
             <div class="forum-card-side">
                 <div class="answers">
@@ -41,6 +38,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        </div>}
+    </div>
+    <partial name="_SideContentPartial" />
+</section>

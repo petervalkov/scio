@@ -17,10 +17,10 @@
 <body>
     <div class="site">
         <partial name="_NavbarPartial" />
-        <div class="content">
+        <main>
             <partial name="_CookieConsentPartial" />
             @this.RenderBody()
-        </div>
+        </main>
         <partial name="_FooterPartial" />
     </div>
     <environment names="Development">

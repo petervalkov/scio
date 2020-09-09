@@ -23,18 +23,13 @@
 <body>
     <div class="site">
         <partial name="~/Views/Shared/_NavbarPartial.cshtml" />
-        <div class="content">
+        <main>
             <partial name="_CookieConsentPartial" />
-            <div class="aside-main-content">
+            <article class="content">
                 <partial name="_SidebarPartial" />
-                <main class="site-main">
-                    <div class="forum">
-                        @this.RenderBody()
-                        <partial name="_SideContentPartial" />
-                    </div>
-                </main>
-            </div>
-        </div>
+                @this.RenderBody()
+            </article>
+        </main>
         <partial name="~/Views/Shared/_FooterPartial.cshtml" />
     </div>
     <environment names="Development">

@@ -5,83 +5,81 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="forum-header">
-    <h2>@Model.Title</h2>
+<section class="forum">
+    <h1>@Model.Title</h1>
     <div class="forum-card-meta">
         <span>@Model.CreatedOn</span>
     </div>
-</div>
-<div class="forum-content">
-    <div class="forum-card">
-        <div class="forum-card-side">
-            <div class="answers">
-                <p>@Model.Answers.Count()</p>
-                <p>answers</p>
+    <div class="forum-content">
+        <div class="forum-card">
+            <div class="forum-card-side">
+                <div class="answers">
+                    <p>@Model.Answers.Count()</p>
+                    <p>answers</p>
+                </div>
+                <i class="fas fa-chevron-up"></i>
+                <p>votes</p>
+                <i class="fas fa-chevron-down"></i>
             </div>
-            <i class="fas fa-chevron-up"></i>
-            <p>votes</p>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="forum-card-main">
-            <p>
-                @Html.Raw(Model.Content)
-            </p>
-            <div class="forum-card-footer">
-                <div class="forum-card-tags">
-                    <span><a href="#">some tag</a></span>
-                    <span><a href="#">some tag</a></span>
-                    <span><a href="#">some tag</a></span>
-                </div>
-                <div class="user-card">
-                    <div class="user-img-container">
-                        <img src="~/css/default-user-avatar.jpg">
+            <div class="forum-card-main">
+                <p>@Html.Raw(Model.Content)</p>
+                <div class="forum-card-footer">
+                    <div class="forum-card-tags">
+                        <span><a href="#">some tag</a></span>
+                        <span><a href="#">some tag</a></span>
+                        <span><a href="#">some tag</a></span>
                     </div>
-                    <div class="user-card-details">
-                        <a href="">@Model.AuthorEmail</a>
-                        <span>user</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-   @if (Model.Answers.Count() == 0)
-    {
-        <h2>No Answers</h2>
-    }
-    else
-    {
-        <h2>Answers</h2>
-       @foreach (var answer in Model.Answers)
-        {
-            <div class="forum-card">
-                <div class="forum-card-side">
-                    <i class="fas fa-chevron-up"></i>
-                    <p>votes</p>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="forum-card-main">
-                    <p>@Html.Raw(answer.Content)</p>
-                    <div class="forum-card-footer">
-                        <div class="user-card">
-                            <div class="user-img-container">
-                                <img src="~/css/default-user-avatar.jpg">
-                            </div>
-                            <div class="user-card-details">
-                                <a href="">@answer.AuthorEmail</a>
-                                <span>@answer.CreatedOn</span>
-                            </div>
+                    <div class="user-card">
+                        <div class="user-img-container">
+                            <img src="~/css/default-user-avatar.jpg">
+                        </div>
+                        <div class="user-card-details">
+                            <a href="">@Model.AuthorEmail</a>
+                            <span>user</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+       @if (Model.Answers.Count() == 0)
+        {
+            <h2>No Answers</h2>
         }
-    }
-    <h2>My Answer</h2>
-    <form role="form" asp-area="Forum" asp-controller="Answers" asp-action="Create" method="post">
-        <textarea id="mytextarea" name="content">Hello, World!</textarea>
-        <input type="hidden" value="@Model.Id" name="questionId" />
-        <button type="submit">Submit Answer</button>
-    </form>
-</div>
-        
+        else
+        {
+            <h2>Answers</h2>
+           @foreach (var answer in Model.Answers)
+            {
+                <div class="forum-card">
+                    <div class="forum-card-side">
+                        <i class="fas fa-chevron-up"></i>
+                        <p>votes</p>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="forum-card-main">
+                        <p>@Html.Raw(answer.Content)</p>
+                        <div class="forum-card-footer">
+                            <div class="user-card">
+                                <div class="user-img-container">
+                                    <img src="~/css/default-user-avatar.jpg">
+                                </div>
+                                <div class="user-card-details">
+                                    <a href="">@answer.AuthorEmail</a>
+                                    <span>@answer.CreatedOn</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <h2>My Answer</h2>
+        <form role="form" asp-area="Forum" asp-controller="Answers" asp-action="Create" method="post">
+            <textarea id="mytextarea" name="content">Hello, World!</textarea>
+            <input type="hidden" value="@Model.Id" name="questionId" />
+            <button type="submit">Submit Answer</button>
+        </form>
+    </div>
+    <partial name="_SideContentPartial" />
+</section>

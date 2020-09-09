@@ -5,9 +5,9 @@
     ViewData["Title"] = "Log in";
 }
 
-<div class="account-form-content">
-    <div class="account-form">
-        <h2>@ViewData["Title"]</h2>
+<article class="user-form">
+    <section class="account-form">
+        <h1>@ViewData["Title"]</h1>
         <form id="account" method="post">
             <div asp-validation-summary="All"></div>
             <div class="form-group">
@@ -16,7 +16,6 @@
                     <i class="far fa-envelope"></i>
                 </div>
                 <span asp-validation-for="Input.Email"></span>
-                
             </div>
             <div class="form-group">
                 <div class="form-group-input">
@@ -40,8 +39,8 @@
                 <p><a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a></p>
             </div>
         </form>
-    </div>
-</div>
+    </section>
+</article>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
