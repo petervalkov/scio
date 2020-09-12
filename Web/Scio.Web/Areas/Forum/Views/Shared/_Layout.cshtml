@@ -25,10 +25,10 @@
         <partial name="~/Views/Shared/_NavbarPartial.cshtml" />
         <main>
             <partial name="_CookieConsentPartial" />
-            <article class="content">
+            <div class="site-main-content">
                 <partial name="_SidebarPartial" />
                 @this.RenderBody()
-            </article>
+            </div>
         </main>
         <partial name="~/Views/Shared/_FooterPartial.cshtml" />
     </div>

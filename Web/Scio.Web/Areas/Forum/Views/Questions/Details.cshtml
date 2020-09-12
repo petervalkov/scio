@@ -5,22 +5,18 @@
     ViewData["Title"] = "Details";
 }
 
-<section class="forum">
-    <h1>@Model.Title</h1>
-    <div class="forum-card-meta">
+<article class="forum">
+    <header>
+        <h1>@Model.Title</h1>
         <span>@Model.CreatedOn</span>
-    </div>
+    </header>
     <div class="forum-content">
         <div class="forum-card">
-            <div class="forum-card-side">
-                <div class="answers">
-                    <p>@Model.Answers.Count()</p>
-                    <p>answers</p>
-                </div>
+            <aside>
                 <i class="fas fa-chevron-up"></i>
                 <p>votes</p>
                 <i class="fas fa-chevron-down"></i>
-            </div>
+            </aside>
             <div class="forum-card-main">
                 <p>@Html.Raw(Model.Content)</p>
                 <div class="forum-card-footer">
@@ -31,7 +27,7 @@
                     </div>
                     <div class="user-card">
                         <div class="user-img-container">
-                            <img src="~/css/default-user-avatar.jpg">
+                            <img src="~/img/default-user-avatar.jpg">
                         </div>
                         <div class="user-card-details">
                             <a href="">@Model.AuthorEmail</a>
@@ -48,15 +44,15 @@
         }
         else
         {
-            <h2>Answers</h2>
+            <h2>@Model.Answers.Count() Answers</h2>
            @foreach (var answer in Model.Answers)
             {
                 <div class="forum-card">
-                    <div class="forum-card-side">
+                    <aside>
                         <i class="fas fa-chevron-up"></i>
                         <p>votes</p>
                         <i class="fas fa-chevron-down"></i>
-                    </div>
+                    </aside>
                     <div class="forum-card-main">
                         <p>@Html.Raw(answer.Content)</p>
                         <div class="forum-card-footer">
@@ -82,4 +78,4 @@
         </form>
     </div>
     <partial name="_SideContentPartial" />
-</section>
+</article>

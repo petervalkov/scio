@@ -3,13 +3,15 @@
 @model IEnumerable<IndexQuestionsViewModel>
 @{ ViewData["Title"] = "Scio Forum"; }
 
-<section class="forum">
-    <h1>All Questions</h1>
+<article class="forum">
+    <header>
+        <h1>All Questions</h1>
+    </header>
     <div class="forum-content">
        @foreach (var question in Model)
         {
         <div class="forum-card">
-            <div class="forum-card-side">
+            <aside>
                 <div class="answers">
                     <p>@question.AnswersCount</p>
                     <p>answers</p>
@@ -17,19 +19,17 @@
                 <i class="fas fa-chevron-up"></i>
                 <p>votes</p>
                 <i class="fas fa-chevron-down"></i>
-            </div>
+            </aside>
             <div class="forum-card-main">
                 <h3>
                     <a asp-area="Forum" asp-controller="Questions" asp-action="Details" asp-route-id="@question.Id">@question.Title</a>
                 </h3>
-                <div class="forum-card-meta">
-                    <span>Asked @question.CreatedOn</span>
-                </div>
+                <span>Asked @question.CreatedOn</span>
                 <p>@Html.Raw(question.Content)</p>
                 <div class="forum-card-footer">
                     <div class="user-card">
                         <div class="user-img-container">
-                            <img src="~/css/default-user-avatar.jpg">
+                            <img src="~/img/default-user-avatar.jpg">
                         </div>
                         <div class="user-card-details">
                             <a href="">@question.AuthorEmail</a>
@@ -41,4 +41,4 @@
         </div>}
     </div>
     <partial name="_SideContentPartial" />
-</section>
+</article>

@@ -2,8 +2,10 @@
     ViewData["Title"] = "Ask Question";
 }
 
-<section class="forum">
-    <h1>Ask Question</h1>
+<article class="forum">
+    <header>
+        <h1>Ask Question</h1>
+    </header>
     <div class="forum-content">
         <form role="form" asp-area="Forum" asp-controller="Questions" asp-action="Create" method="post">
             <div class="form-group">
@@ -24,4 +26,4 @@
         </form>
     </div>
     <partial name="_SideContentPartial" />
-</section>
+</article>

@@ -9,15 +9,15 @@
     }
 }
 
-<article class="content">
+<div class="site-main-content">
     <aside>
         <partial name="_ManageNav" />
     </aside>
-    <section class="manage-account">
+    <article class="manage-account">
         <h2>Manage your account</h2>
         @RenderBody()
-    </section>
-</article>
+    </article>
+</div>
 
 @section Scripts {
     @RenderSection("Scripts", required: false)
