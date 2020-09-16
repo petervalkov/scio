@@ -2,6 +2,7 @@
 {
     using System.Reflection;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -19,6 +20,8 @@
     using Scio.Services.Data;
     using Scio.Services.Mapping;
     using Scio.Services.Messaging;
+    using Scio.Web.Infrastructure.Authorization;
+    using Scio.Web.Infrastructure.Validation;
     using Scio.Web.ViewModels;
 
     public class Startup
@@ -37,7 +40,8 @@
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
-                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -46,10 +50,23 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
+            services.AddScoped<ModelStateValidationFilterAttribute>();
+            services.AddScoped<IdentifierValidationFilterAttribute>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
             services.AddSingleton(this.configuration);
+
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.AddPolicy("Resource", policy => policy.AddRequirements(new ResourceAuthorizationRequirement()));
+            });
+
+            services.AddScoped<IAuthorizationHandler, ResourceAuthorizationHandler>();
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));

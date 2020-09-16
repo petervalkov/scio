@@ -1,12 +1,13 @@
-﻿namespace Scio.Web.ViewModels.Forum.Questions
+﻿namespace Scio.Web.ViewModels.Forum.Answers
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class CreateAnswerInputModel
+    public class CreateInputModel
     {
         [Required]
         public string Content { get; set; }
 
+        [Required]
         public string QuestionId { get; set; }
     }
 }

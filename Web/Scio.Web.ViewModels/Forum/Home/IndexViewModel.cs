@@ -2,10 +2,13 @@
 {
     using System;
 
+    using AutoMapper;
+
     using Scio.Data.Models;
     using Scio.Services.Mapping;
+    using Scio.Web.ViewModels.Forum.Questions;
 
-    public class IndexQuestionsViewModel : IMapFrom<Question>
+    public class IndexViewModel : IMapFrom<Question>
     {
         public string Id { get; set; }
 
@@ -13,12 +16,12 @@
 
         public string Content { get; set; }
 
+        public DateTime CreatedOn { get; set; }
+
         public int AnswersCount { get; set; }
 
         public string AuthorId { get; set; }
 
         public string AuthorEmail { get; set; }
-
-        public DateTime CreatedOn { get; set; }
     }
 }

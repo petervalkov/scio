@@ -1,9 +1,11 @@
 ﻿namespace Scio.Services.Data
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Scio.Data.Common.Repositories;
     using Scio.Data.Models;
+    using Scio.Services.Mapping;
 
     public class AnswerService : IAnswerService
     {
@@ -14,7 +16,7 @@
             this.answersRepository = answersRepository;
         }
 
-        public async Task<string> CreateAsync(string content, string questionId, string authorId)
+        public async Task CreateAsync(string content, string questionId, string authorId)
         {
             var answer = new Answer
             {
@@ -25,8 +27,33 @@
 
             await this.answersRepository.AddAsync(answer);
             await this.answersRepository.SaveChangesAsync();
+        }
 
-            return answer.Id;
+        public TViewModel GetById<TViewModel>(string id)
+            => this.answersRepository
+            .AllAsNoTracking()
+            .Where(p => p.Id == id)
+            .To<TViewModel>()
+            .FirstOrDefault();
+
+        public async Task EditAsync(string id, string content)
+        {
+            var answer = this.answersRepository
+                .All()
+                .FirstOrDefault(x => x.Id == id);
+
+            answer.Content = content;
+            await this.answersRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var answer = this.answersRepository
+                .AllAsNoTracking()
+                .FirstOrDefault(q => q.Id == id);
+
+            this.answersRepository.Delete(answer);
+            await this.answersRepository.SaveChangesAsync();
         }
     }
 }

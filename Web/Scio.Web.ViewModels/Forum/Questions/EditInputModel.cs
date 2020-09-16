@@ -2,8 +2,11 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class CreateQuestionInputModel
+    public class EditInputModel
     {
+        [Required]
+        public string Id { get; set; }
+
         [Required]
         [MaxLength(500)]
         public string Title { get; set; }

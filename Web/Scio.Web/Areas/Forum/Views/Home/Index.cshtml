@@ -1,7 +1,10 @@
 ﻿@using Scio.Common
 @using Scio.Web.ViewModels.Forum.Home
-@model IEnumerable<IndexQuestionsViewModel>
-@{ ViewData["Title"] = "Scio Forum"; }
+@model IEnumerable<IndexViewModel>
+
+@{
+    ViewData["Title"] = "Scio Forum";
+}
 
 <article class="forum">
     <header>
@@ -24,8 +27,16 @@
                 <h3>
                     <a asp-area="Forum" asp-controller="Questions" asp-action="Details" asp-route-id="@question.Id">@question.Title</a>
                 </h3>
-                <span>Asked @question.CreatedOn</span>
-                <p>@Html.Raw(question.Content)</p>
+                <div class="summary">
+                    <a asp-area="Forum" asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id">
+                        <i class="far fa-edit"></i>
+                    </a>
+                    <a asp-area="Forum" asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id">
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                    <span>Asked @question.CreatedOn</span>
+                </div>
+                @Html.Raw(question.Content)
                 <div class="forum-card-footer">
                     <div class="user-card">
                         <div class="user-img-container">

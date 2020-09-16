@@ -34,15 +34,37 @@
 
         public IEnumerable<TViewModel> GetAll<TViewModel>()
             => this.questionRepository
-            .AllAsNoTrackingWithDeleted()
+            .AllAsNoTracking()
             .To<TViewModel>()
             .ToList();
 
         public TViewModel GetById<TViewModel>(string id)
             => this.questionRepository
-            .AllAsNoTrackingWithDeleted()
+            .AllAsNoTracking()
             .Where(p => p.Id == id)
             .To<TViewModel>()
             .FirstOrDefault();
+
+        public async Task EditAsync(string id, string title, string content)
+        {
+            var question = this.questionRepository
+                .All()
+                .FirstOrDefault(x => x.Id == id);
+
+            question.Title = title;
+            question.Content = content;
+
+            await this.questionRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var question = this.questionRepository
+                .AllAsNoTracking()
+                .FirstOrDefault(q => q.Id == id);
+
+            this.questionRepository.Delete(question);
+            await this.questionRepository.SaveChangesAsync();
+        }
     }
 }

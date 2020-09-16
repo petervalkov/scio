@@ -10,5 +10,9 @@
         IEnumerable<TViewModel> GetAll<TViewModel>();
 
         TViewModel GetById<TViewModel>(string id);
+
+        Task EditAsync(string id, string title, string content);
+
+        Task DeleteAsync(string id);
     }
 }

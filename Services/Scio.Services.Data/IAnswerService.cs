@@ -4,6 +4,12 @@
 
     public interface IAnswerService
     {
-        Task<string> CreateAsync(string content, string questionId, string authorId);
+        Task CreateAsync(string content, string questionId, string authorId);
+
+        TViewModel GetById<TViewModel>(string id);
+
+        Task EditAsync(string id, string content);
+
+        Task DeleteAsync(string id);
     }
 }

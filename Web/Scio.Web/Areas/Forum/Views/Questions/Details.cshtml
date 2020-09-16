@@ -1,5 +1,5 @@
 ﻿@using Scio.Web.ViewModels.Forum.Questions
-@model QuestionDetailsViewModel
+@model DetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -8,7 +8,15 @@
 <article class="forum">
     <header>
         <h1>@Model.Title</h1>
-        <span>@Model.CreatedOn</span>
+        <div class="summary">
+            <a asp-area="Forum" asp-controller="Questions" asp-action="Edit" asp-route-id="@Model.Id">
+                <i class="far fa-edit"></i>
+            </a>
+            <a asp-area="Forum" asp-controller="Questions" asp-action="Delete" asp-route-id="@Model.Id">
+                <i class="far fa-trash-alt"></i>
+            </a>
+            <span>Asked @Model.CreatedOn</span>
+        </div>
     </header>
     <div class="forum-content">
         <div class="forum-card">
@@ -18,7 +26,7 @@
                 <i class="fas fa-chevron-down"></i>
             </aside>
             <div class="forum-card-main">
-                <p>@Html.Raw(Model.Content)</p>
+                @Html.Raw(Model.Content)
                 <div class="forum-card-footer">
                     <div class="forum-card-tags">
                         <span><a href="#">some tag</a></span>
@@ -54,6 +62,15 @@
                         <i class="fas fa-chevron-down"></i>
                     </aside>
                     <div class="forum-card-main">
+                        <div class="summary">
+                            <a asp-area="Forum" asp-controller="Answers" asp-action="Edit" asp-route-id="@answer.Id">
+                                <i class="far fa-edit"></i>
+                            </a>
+                            <a asp-area="Forum" asp-controller="Answers" asp-action="Delete" asp-route-id="@answer.Id">
+                                <i class="far fa-trash-alt"></i>
+                            </a>
+                            <span>Answered @Model.CreatedOn</span>
+                        </div>
                         <p>@Html.Raw(answer.Content)</p>
                         <div class="forum-card-footer">
                             <div class="user-card">
