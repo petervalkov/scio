@@ -4,7 +4,7 @@
     using Scio.Data.Models;
     using Scio.Services.Mapping;
 
-    public class ResourceOwnerValidationModel : IMapFrom<Question>, IMapFrom<Answer>, IOwnable<string>
+    public class ResourceOwnerValidationModel : IMapFrom<ForumPost>, IOwnable<string>
     {
         public string AuthorId { get; set; }
 

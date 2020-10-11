@@ -57,11 +57,11 @@ h1, h2 {
 }
 
 h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 }
 
 a {
@@ -541,12 +541,26 @@ nav form button:hover {
     border-bottom: 1px solid var(--border-light);
 }
 
+.forum > header > span {
+    font-size: 0.8em;
+}
+
 .forum h2 {
     margin-top: 1em;
 }
 
-.forum > header > span {
+.forum-post-controls {
+    margin-top: 0.5em;
+    display: flex;
     font-size: 0.8em;
+}
+
+.forum-post-controls a {
+    padding-right: 0.5em;
+}
+
+.forum-post-comments {
+    margin-left: auto;
 }
 
 .forum > aside {
@@ -583,149 +597,144 @@ nav form button:hover {
     width: 100%;
 }
 
-.forum-content button {
-    margin-top: 1em;
-    float: right;
-}
-
-.forum-card {
+.forum-post {
     display: flex;
     width: 100%;
     padding: 1em 0;
     border-bottom: 1px solid var(--border-light);
 }
 
-.forum-card > aside {
+.forum-post > aside {
     flex: 0 0 81px;
     text-align: center;
-    font-size: 0.9em;
 }
 
-.forum-card-main {
+.forum-post > aside > div {
+    margin-top: 0.5em;
+    margin-bottom: 1.5em;
+    line-height: 1.3em;
+    font-size: 0.8em;
+}
+
+.forum-post-main {
     width: 100%;
     padding: 0 0.5em;
 }
 
-.forum-card-main > span {
+.forum-post-main span {
     font-size: 0.8em;
 }
 
-.forum-card-main > p {
-    padding: 0.5em 0;
+.forum-post-main > header {
+    margin-bottom: 0.5em;
 }
 
-.forum-card-footer {
+.forum-post-main > header a {
+    color: var(--font-dark)
+}
+
+.forum-post-main > header :hover {
+    color: var(--accent-main-dark)
+}
+
+.forum-post-main > span {
+    font-size: 0.8em;
+}
+
+.forum-post-meta {
     margin-top: 1em;
 } 
 
 @media(min-width: 481px){
-    .forum-card-footer {
+    .forum-post-meta {
         display: flex;
         justify-content: space-between;
     }  
 }
 
-.answers {
-    margin-bottom: 2em;
-}
-
-.forum-card-tags span {
+.forum-post-tags span {
     background-color: var(--accent-main-light);
     border-radius: 5px;
     margin: 2px;
 }
 
-.forum-card-tags span a {
+.forum-post-tags span a {
     color: var(--accent-main-dark);
     white-space: nowrap;
     padding: 0.5em;
 }
 
-.user-card {
+.forum-post-author {
     display: flex;
-    flex: 1 0 20%;
+    flex: 0 0 20%;
 }
 
-@media(min-width: 481px){
-    .user-card {
-        order: 1;
-    }
-
-    .forum-card-tags {
-        order: 2;
-    }
-
-    .forum-card-tags span {
-        float: right;
-    }
+@media(max-width: 480px){
+    .forum-post-author {
+        margin-top: 1em;
+    }  
 }
 
-.user-card-details {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 0.5em;
-}
-
-.user-card-details a {
-    text-decoration: none;
-}
-
-.user-card-details span {
-    font-size: 0.8em;
-}
-
-.user-card img {
+.forum-post-author > img {
     width: 40px;
     height: auto;
     margin: auto 0;
     border-radius: 50%;
 }
 
-.comments-toggle {
+.forum-post-author > section {
+    line-height: 1.3em;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 0.5em;
 }
 
-.comments-toggle span {
-    cursor: pointer;
+/* Comments */
+.forum-post-controls > button {
+    background: none;
+    color: var(--accent-main-dark);
+	border: none;
+	padding: 0;
+	font: inherit;
+    outline: inherit;
     margin-left: auto;
+    cursor: pointer;
 }
 
-.forum-comments-card {
+.forum-comments {
     font-size: 0.9em;
     max-height: 0;
     overflow: hidden;
+    margin-top: 0.5em;
+    padding-left: 0.5em;
     transition: max-height 0.3s ease-out;
-    
 }
 
-.forum-comment {
-    display: flex;
+.forum-comment-content {
+    padding-left: 2em;
     border-bottom: 1px solid #c2c3c37e ;
 }
 
-.forum-comment:last-child {
+.forum-comment-content:last-child {
     border-bottom: none ;
 }
 
-.forum-comment-side {
-    flex: 0 0 30px;
-    text-align: center;
+.forum-add-comment-card textarea {
+    margin-top: 0.5em;
+    outline-color: var(--accent-main-dark);
+    width: 100%;
 }
 
-.forum-comment-main p span {
-    word-wrap: none;
+.add-comment {
+    font-size: 0.8em;
+    padding: 0.3em;
+    float: right;
 }
 
-.forum-comment-main p span a img{    
-    position: relative;
-    top: 0.33em;
-    width: 17px;
-    height: auto;
-    margin-right: 3px;
-    border-radius: 50%;
+.add-comment:disabled {
+    background-color: rgb(189, 189, 189);
 }
-
 
 /* Account */
 .manage-account {

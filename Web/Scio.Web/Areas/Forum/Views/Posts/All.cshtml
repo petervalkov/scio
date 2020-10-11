@@ -1,0 +1,75 @@
+﻿@using Scio.Common
+@using Scio.Web.ViewModels.Forum.Posts
+@model IEnumerable<QuestionViewModel>
+
+@{ ViewData["Title"] = "All Questions"; }
+
+<article class="forum">
+    <header>
+        <h1>All Questions</h1>
+    </header>
+    <div class="forum-content">
+       @foreach (var question in Model)
+        {
+        <div class="forum-post">
+            <aside>
+                <div>
+                    <p>@question.AnswersCount</p>
+                    <p>answers</p>
+                </div>
+                <div>
+                    <p class="forum-comments-count">@question.Comments.Count()</p>
+                    <p>comments</p>
+                </div>
+            </aside>
+            <div class="forum-post-main">
+                <header>
+                    <h3>
+                        <a asp-area="Forum" asp-controller="Posts" asp-action="Details" asp-route-id="@question.Id">@question.Title</a>
+                    </h3>
+                    <span>Asked @question.CreatedOn.ToString("dd MMMM yyyy")</span>
+                </header>
+                @Html.Raw(question.Body)
+                <div class="forum-post-meta">
+                    <div class="forum-post-author">
+                        <img src="~/img/default-user-avatar.jpg">
+                        <section>
+                            <a href="#">@question.AuthorEmail</a>
+                            <span>user</span>
+                        </section>
+                    </div>
+                    <div class="forum-post-tags">
+                        <span><a href="#">some tag</a></span>
+                        <span><a href="#">some tag</a></span>
+                        <span><a href="#">some tag</a></span>
+                    </div>
+                </div>
+                <div class="forum-post-controls">
+                    <a asp-area="Forum" asp-controller="Posts" asp-action="EditQuestion" asp-route-id="@question.Id">
+                        edit <i class="far fa-edit"></i>
+                    </a>
+                    <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@question.Id">
+                        delete <i class="far fa-trash-alt"></i>
+                    </a>
+                    <button class="comments-toggle" onclick="toggleComments(event)">comments</button>
+                </div>
+                <div class="forum-comments">
+                   @foreach (var comment in question.Comments)
+                    {
+                    <div class="forum-comment-content">
+                        @comment.Body
+                        <span> - @comment.AuthorEmail</span>
+                        <span> - @comment.CreatedOn.ToString("dd MMMM yyyy")</span>
+                    </div>
+                    }
+                    <div class="forum-add-comment-card">
+                        <textarea rows="3"></textarea>
+                        <button onclick="postComment('@question.Id', event)" class="add-comment">add comment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    <partial name="_SideContentPartial" />
+</article>

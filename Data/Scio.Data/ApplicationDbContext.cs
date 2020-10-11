@@ -24,9 +24,9 @@
         {
         }
 
-        public DbSet<Question> Questions { get; set; }
+        public DbSet<ForumPost> ForumPosts { get; set; }
 
-        public DbSet<Answer> Answers { get; set; }
+        public DbSet<ForumComment> ForumComments { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
 

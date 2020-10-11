@@ -51,7 +51,6 @@
                     });
 
             services.AddScoped<ModelStateValidationFilterAttribute>();
-            services.AddScoped<IdentifierValidationFilterAttribute>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -75,8 +74,8 @@
 
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration.GetSection("SENDGRID_API_KEY").Value));
-            services.AddTransient<IQuestionService, QuestionService>();
-            services.AddTransient<IAnswerService, AnswerService>();
+            services.AddTransient<IForumPostService, ForumPostService>();
+            services.AddTransient<IForumCommentService, ForumCommentService>();
             services.AddTransient<ISettingsService, SettingsService>();
         }
 
