@@ -13,12 +13,12 @@
 
         public string Body { get; set; }
 
+        public int CommentsCount { get; set; }
+
         public string AuthorEmail { get; set; }
 
         public string AuthorId { get; set; }
 
         public DateTime CreatedOn { get; set; }
-
-        public IEnumerable<PostCommentViewModel> Comments { get; set; }
     }
 }

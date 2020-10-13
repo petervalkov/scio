@@ -19,10 +19,10 @@
 
         public int AnswersCount { get; set; }
 
+        public int CommentsCount { get; set; }
+
         public string AuthorId { get; set; }
 
         public string AuthorEmail { get; set; }
-
-        public IEnumerable<PostCommentViewModel> Comments { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿namespace Scio.Services.Data
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Scio.Data.Common.Repositories;
@@ -15,7 +17,7 @@
             this.commentsRepository = commentsRepository;
         }
 
-        public async Task<TResponseModel> Create<TResponseModel>(string body, string parentId, string postId, string authorId)
+        public async Task<TViewModel> Create<TViewModel>(string body, string parentId, string postId, string authorId)
         {
             var comment = new ForumComment
             {
@@ -28,7 +30,14 @@
             await this.commentsRepository.AddAsync(comment);
             await this.commentsRepository.SaveChangesAsync();
 
-            return AutoMapperConfig.MapperInstance.Map<TResponseModel>(comment);
+            return AutoMapperConfig.MapperInstance.Map<TViewModel>(comment);
         }
+
+        public IEnumerable<TViewModel> GetAllByParentId<TViewModel>(string postId, string parentId)
+            => this.commentsRepository
+               .AllAsNoTracking()
+               .Where(p => p.PostId == postId && p.ParentId == parentId)
+               .To<TViewModel>()
+               .ToList();
     }
 }

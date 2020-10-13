@@ -1,5 +1,6 @@
 ﻿namespace Scio.Web.Areas.Forum.Controllers
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -24,12 +25,30 @@
             this.commentService = commentService;
         }
 
-        [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<CreateResponseModel>> Post(CreateInputModel input)
+        public ActionResult<AllPostCommentsViewModel> Get(string postId)
+        {
+            if (postId == null)
+            {
+                return this.BadRequest();
+            }
+
+            var result = this.commentService.GetAllByParentId<PostCommentsViewModel>(postId, null);
+
+            if (result == null)
+            {
+                return this.BadRequest();
+            }
+
+            return new AllPostCommentsViewModel { Comments = result };
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<PostCommentsViewModel>> Post(InputModel input)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var result = await this.commentService.Create<CreateResponseModel>(input.Body, null, input.PostId, userId);
+            var result = await this.commentService.Create<PostCommentsViewModel>(input.Body, null, input.PostId, userId);
             return result;
         }
     }

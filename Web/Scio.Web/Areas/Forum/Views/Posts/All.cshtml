@@ -11,14 +11,14 @@
     <div class="forum-content">
        @foreach (var question in Model)
         {
-        <div class="forum-post">
+        <div class="forum-post" id="@question.Id">
             <aside>
                 <div>
                     <p>@question.AnswersCount</p>
                     <p>answers</p>
                 </div>
                 <div>
-                    <p class="forum-comments-count">@question.Comments.Count()</p>
+                    <p class="forum-comments-count">@question.CommentsCount</p>
                     <p>comments</p>
                 </div>
             </aside>
@@ -38,11 +38,6 @@
                             <span>user</span>
                         </section>
                     </div>
-                    <div class="forum-post-tags">
-                        <span><a href="#">some tag</a></span>
-                        <span><a href="#">some tag</a></span>
-                        <span><a href="#">some tag</a></span>
-                    </div>
                 </div>
                 <div class="forum-post-controls">
                     <a asp-area="Forum" asp-controller="Posts" asp-action="EditQuestion" asp-route-id="@question.Id">
@@ -51,20 +46,15 @@
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@question.Id">
                         delete <i class="far fa-trash-alt"></i>
                     </a>
-                    <button class="comments-toggle" onclick="toggleComments(event)">comments</button>
+                    <button class="comments-toggle" onclick="toggleComments('@question.Id')">comments</button>
                 </div>
                 <div class="forum-comments">
-                   @foreach (var comment in question.Comments)
-                    {
-                    <div class="forum-comment-content">
-                        @comment.Body
-                        <span> - @comment.AuthorEmail</span>
-                        <span> - @comment.CreatedOn.ToString("dd MMMM yyyy")</span>
-                    </div>
-                    }
                     <div class="forum-add-comment-card">
-                        <textarea rows="3"></textarea>
-                        <button onclick="postComment('@question.Id', event)" class="add-comment">add comment</button>
+                       @if (this.User.Identity.IsAuthenticated)
+                        {
+                            <textarea rows="3"></textarea>
+                            <button onclick="postComment('@question.Id')" class="add-comment">add comment</button>
+                        }
                     </div>
                 </div>
             </div>

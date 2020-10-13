@@ -1,39 +1,59 @@
-function toggleComments(event) {
-    const comments = event.target.closest(".forum-post-main").querySelector(".forum-comments");
-    if (comments.style.maxHeight) { comments.style.maxHeight = null; }
-    else { comments.style.maxHeight = comments.scrollHeight + "px"; }
+async function toggleComments(postId) {
+    const comments = document.getElementById(postId).querySelector(".forum-comments");
+    if (comments.style.maxHeight) {
+        comments.style.maxHeight = null;
+    } else {
+        if (comments.childElementCount == 1) {
+            const data = await commentsApi.get(postId);
+            if (data) {
+                data.comments.forEach(comment => comments.insertBefore(createComment(comment), comments.lastElementChild));
+            } else {
+                alert("Something went wrong!");
+            }
+        }
+        
+        comments.style.maxHeight = comments.scrollHeight + "px";
+    }
 }
 
-async function postComment(postId, event) {
-    const button = event.target;
-    button.disabled = true;
-    
-    const comments = button.closest(".forum-comments");
+async function postComment(postId) {
+    const currentPost = document.getElementById(postId);
+
+    const comments = currentPost.querySelector(".forum-comments");
+    const commentsCount = currentPost.querySelector(".forum-comments-count");
     const textArea = comments.querySelector("textarea");
-    const commentsCount = button.closest(".forum-post").querySelector(".forum-comments-count");
+    const button = comments.querySelector("button");
+    button.disabled = true;
 
-    const response = await fetch('/api/comments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ postId, body: textArea.value })
-    });
+    const data = await commentsApi.post(postId, textArea.value);
 
-    if(response.status == 200){
-        const data = await response.json();
-        const forumComment = createElement('div', [
-            createElement('p', data.body),
-            createElement('span', data.createdOn)
-        ], { className:'forum-comment-content' });
-
+    if (data) {
         textArea.value = "";
-        comments.insertBefore(forumComment, comments.lastElementChild);
+        comments.insertBefore(createComment(data), comments.lastElementChild);
         comments.style.maxHeight = comments.scrollHeight + "px";
-        commentsCount.textContent = Number(commentsCount.textContent) + 1;
+        commentsCount.textContent = Number(commentsCount.textContent) + 1; //Change
     } else {
-        alert("Something went wrong!")
+        alert("Something went wrong!");
     }
 
     button.disabled = false;
+}
+
+const commentsApi = {
+    get: async (postId) => await fetch(`/api/comments?postId=${postId}`).then(response => {
+        if (response.status == 200) {
+            return response.json();
+        }
+    }),
+    post: async (postId, body) => await fetch('/api/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postId, body })
+    }).then(response => {
+        if (response.status == 200) {
+            return response.json();
+        }
+    })
 }
 
 function createElement(type, content, attributes) {
@@ -50,6 +70,10 @@ function createElement(type, content, attributes) {
     }
 
     function append(node) {
+        if (node == null) { //Remove
+            node = document.createTextNode('');
+        }
+
         if (typeof node === 'string') {
             node = document.createTextNode(node);
         }
@@ -57,4 +81,13 @@ function createElement(type, content, attributes) {
     }
 
     return result;
+}
+
+function createComment(comment) {
+    return createElement('div', [
+        comment.body,
+        createElement('span', comment.authorEmail),
+        createElement('span', comment.createdOn)
+    ], { className: 'forum-comment-content' }
+    );
 }
