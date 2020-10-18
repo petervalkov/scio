@@ -16,6 +16,9 @@ namespace Scio.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
+            this.ForumPosts = new HashSet<ForumPost>();
+            this.ForumComments = new HashSet<ForumComment>();
+            this.ForumVotes = new HashSet<ForumVote>();
         }
 
         // Audit info
@@ -33,5 +36,11 @@ namespace Scio.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        public virtual ICollection<ForumPost> ForumPosts { get; set; }
+
+        public virtual ICollection<ForumComment> ForumComments { get; set; }
+
+        public virtual ICollection<ForumVote> ForumVotes { get; set; }
     }
 }

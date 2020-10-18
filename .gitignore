@@ -353,8 +353,16 @@ MigrationBackup/
 .ionide/
 
 # Custom ignores
+**/bundleconfig.json
 **/wwwroot/lib/
+**/wwwroot/img/
 **/wwwroot/css/pages
+**/wwwroot/css/src
+
 appsettings.Production.json
 *.min.css
 *.min.js
+
+Data/Scio.Data/appsettings.json
+
+

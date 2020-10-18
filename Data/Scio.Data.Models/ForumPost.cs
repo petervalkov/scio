@@ -12,6 +12,7 @@
             this.Id = Guid.NewGuid().ToString();
             this.Answers = new HashSet<ForumPost>();
             this.Comments = new HashSet<ForumComment>();
+            this.Votes = new HashSet<ForumVote>();
         }
 
         public string Title { get; set; }
@@ -29,5 +30,7 @@
         public virtual ICollection<ForumPost> Answers { get; set; }
 
         public virtual ICollection<ForumComment> Comments { get; set; }
+
+        public virtual ICollection<ForumVote> Votes { get; set; }
     }
 }

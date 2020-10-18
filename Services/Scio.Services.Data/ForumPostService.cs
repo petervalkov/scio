@@ -90,5 +90,19 @@
             this.forumPostsRepository.Delete(question);
             await this.forumPostsRepository.SaveChangesAsync();
         }
+
+        public TValidationModel SearchForVote<TValidationModel>(string postId, string userId)
+        {
+            var post = this.forumPostsRepository
+              .AllWithDeletedIncluding("Votes")
+              .Where(p => p.Id == postId)
+              .Select(p => new ForumPost
+              {
+                  Votes = p.Votes.Where(v => v.UserId == userId).ToList(),
+              })
+              .FirstOrDefault();
+
+            return AutoMapperConfig.MapperInstance.Map<TValidationModel>(post);
+        }
     }
 }

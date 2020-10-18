@@ -18,5 +18,7 @@
         Task EditAnswerAsync(string id, string body);
 
         Task DeleteAsync(string id);
+
+        TValidationModel SearchForVote<TValidationModel>(string postId, string userId);
     }
 }

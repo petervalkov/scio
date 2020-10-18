@@ -28,6 +28,8 @@
 
         public DbSet<ForumComment> ForumComments { get; set; }
 
+        public DbSet<ForumVote> ForumVotes { get; set; }
+
         public DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
