@@ -15,6 +15,8 @@
 
         public string Body { get; set; }
 
+        public int VotesCount { get; set; }
+
         public int CommentsCount { get; set; }
 
         public DateTime CreatedOn { get; set; }

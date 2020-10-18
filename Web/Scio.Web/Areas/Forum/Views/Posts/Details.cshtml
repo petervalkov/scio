@@ -13,6 +13,13 @@
     <div class="forum-content">
         <div class="forum-post" id="@Model.Id">
             <aside>
+                <a class="upvote" onclick="vote(1, '@Model.Id')">
+                    <i class="fas fa-chevron-up"></i>
+                </a>
+                <p class="forum-votes-count">@Model.VotesCount</p>
+                <a class="downvote" onclick="vote(-1, '@Model.Id')">
+                    <i class="fas fa-chevron-down"></i>
+                </a>
                 <div>
                     <p>@Model.Answers.Count()</p>
                     <p>answers</p>
@@ -64,9 +71,13 @@
             {
             <div class="forum-post" id="@answer.Id">
                 <aside>
-                    <i class="fas fa-chevron-up"></i>
-                    <p>votes</p>
-                    <i class="fas fa-chevron-down"></i>
+                    <a class="upvote" onclick="vote(1, '@answer.Id')">
+                        <i class="fas fa-chevron-up"></i>
+                    </a>
+                    <p class="forum-votes-count">@answer.VotesCount</p>
+                    <a class="downvote" onclick="vote(-1, '@answer.Id')">
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
                     <div>
                         <p class="forum-comments-count">@answer.CommentsCount</p>
                         <p>comments</p>

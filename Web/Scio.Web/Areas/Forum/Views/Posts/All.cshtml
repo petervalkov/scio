@@ -13,6 +13,13 @@
         {
         <div class="forum-post" id="@question.Id">
             <aside>
+                <a class="upvote" onclick="vote(1, '@question.Id')">
+                    <i class="fas fa-chevron-up"></i>
+                </a>
+                <p class="forum-votes-count">@question.VotesCount</p>
+                <a class="downvote" onclick="vote(-1, '@question.Id')">
+                    <i class="fas fa-chevron-down"></i>
+                </a>
                 <div>
                     <p>@question.AnswersCount</p>
                     <p>answers</p>

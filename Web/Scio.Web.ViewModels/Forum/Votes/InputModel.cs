@@ -2,15 +2,15 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using Scio.Common;
+
     public class InputModel
     {
-        [Required(ErrorMessage = "Invalid Post")]
+        [Required(ErrorMessage = ErrorMessage.Default)]
         public string PostId { get; set; }
 
         [Required]
-        [Range(-1, 1, ErrorMessage = "Invalid Vote")] // Add 0 check
+        [Range(-1, 1, ErrorMessage = ErrorMessage.Default)]
         public int VoteValue { get; set; }
-
-        public string UserId { get; set; }
     }
 }

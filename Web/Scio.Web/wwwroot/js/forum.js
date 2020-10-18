@@ -11,7 +11,7 @@ async function toggleComments(postId) {
                 alert("Something went wrong!");
             }
         }
-        
+
         comments.style.maxHeight = comments.scrollHeight + "px";
     }
 }
@@ -54,6 +54,72 @@ const commentsApi = {
             return response.json();
         }
     })
+}
+
+const voteType = { '-1': 'downvote', '1': 'upvote' }
+const icons = {
+    spinner: '<i class="fas fa-spinner i-spinner"></i>',
+    downvote: '<i class="fas fa-chevron-down"></i>',
+    upvote: '<i class="fas fa-chevron-up"></i>'
+}
+const messages = {
+    defaultError: 'Something went wrong',
+    login: 'Please login to your account'
+}
+
+async function vote(voteValue, postId) {
+    const forumPost = document.getElementById(postId);
+    const vote = voteType[voteValue];
+    const target = forumPost.querySelector(`.${vote}`);
+    target.innerHTML = icons.spinner;
+    
+    let message = messages.defaultError;
+    const result = await forumApi.vote({ voteValue, postId });
+    if (result) {
+        if (result.votesSum != undefined) {
+            const votes = forumPost.querySelector('.forum-votes-count');
+            votes.textContent = result.votesSum;
+            message = result.message;
+        } else if (result.errorMessage) {
+            message = result.errorMessage;
+        }
+    }
+
+    target.innerHTML = icons[vote];
+    alert(message);
+}
+
+const forumApi = {
+    vote: async (data) => await handleRequest('votes', 'POST', data)
+}
+
+async function handleRequest(endpoint, method, data) {
+    const options = { method }
+    const headers = {}
+
+    if (data !== undefined) {
+        headers['Content-Type'] = 'application/json'
+        options.body = JSON.stringify(data);
+    }
+
+    options.headers = headers;
+
+    const response = await fetch(`/api/${endpoint}`, options);
+
+    if (response.status == 200) {
+        return await response.json();
+    } else if (response.status == 401) {
+        return { errorMessage: messages.login }
+    } else {
+        const result = await response.json();
+        let errorMessage = messages.defaultError;
+        if (result.ErrorMessage) {
+            errorMessage = result.ErrorMessage[0]; //Show only first
+        } else if (result.errors) {
+            errorMessage = result.errors[Object.keys(result.errors)[0]];
+        }
+        return { errorMessage };
+    }
 }
 
 function createElement(type, content, attributes) {
