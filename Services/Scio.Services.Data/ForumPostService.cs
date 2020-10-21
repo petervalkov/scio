@@ -31,13 +31,14 @@
             .To<TViewModel>()
             .FirstOrDefault();
 
-        public async Task<string> CreateQuestionAsync(string title, string body, string authorId)
+        public async Task<string> CreateAsync(string title, string body, string questionId, string authorId)
         {
             var question = new ForumPost
             {
                 Title = title,
                 Body = body,
                 AuthorId = authorId,
+                QuestionId = questionId,
             };
 
             await this.forumPostsRepository.AddAsync(question);
@@ -46,7 +47,7 @@
             return question.Id;
         }
 
-        public async Task EditQuestionAsync(string id, string title, string body)
+        public async Task EditAsync(string id, string title, string body)
         {
             var question = this.forumPostsRepository
                 .All()
@@ -55,29 +56,6 @@
             question.Title = title;
             question.Body = body;
 
-            await this.forumPostsRepository.SaveChangesAsync();
-        }
-
-        public async Task CreateAnswerAsync(string body, string questionId, string authorId)
-        {
-            var answer = new ForumPost
-            {
-                Body = body,
-                QuestionId = questionId,
-                AuthorId = authorId,
-            };
-
-            await this.forumPostsRepository.AddAsync(answer);
-            await this.forumPostsRepository.SaveChangesAsync();
-        }
-
-        public async Task EditAnswerAsync(string id, string body)
-        {
-            var answer = this.forumPostsRepository
-                .All()
-                .FirstOrDefault(x => x.Id == id);
-
-            answer.Body = body;
             await this.forumPostsRepository.SaveChangesAsync();
         }
 

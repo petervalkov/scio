@@ -1,0 +1,106 @@
+﻿@using Scio.Web.ViewModels.Forum.Posts
+@model EditViewModel
+
+@{
+    ViewData["Title"] = "Edit Post";
+}
+
+
+
+<form class="forum" role="form" asp-area="Forum" asp-controller="Posts" asp-action="Edit" method="post">
+    <header>
+        <div asp-validation-summary="All"></div>
+       @if (Model.QuestionId == null)
+        {
+        <div class="form-group">
+            <input asp-for="Title" type="text" id="question-title" name="title">
+            <span asp-validation-for="Title"></span>
+        </div>
+        }
+        else
+        {
+        <h1>@Model.QuestionTitle</h1>
+        <span>Asked @Model.QuestionCreatedOn.ToString("dd MMMM yyyy")</span>
+        }
+    </header>
+    <div class="forum-content">
+        <div class="forum-post">
+            <aside>
+                <i class="fas fa-chevron-up"></i>
+                <p>votes</p>
+                <i class="fas fa-chevron-down"></i>
+            </aside>
+            <div class="forum-post-main">
+               @if (Model.QuestionId == null)
+                {
+                <div class="form-group">
+                    <textarea asp-for="Body" id="mytextarea" name="body"></textarea>
+                    <span asp-validation-for="Body"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Id" type="hidden" name="id">
+                    <button type="submit">Save Changes</button>
+                </div>
+                }
+                else
+                {
+                    @Html.Raw(Model.QuestionBody)
+                }
+                <div class="forum-post-meta">
+                    <div class="forum-post-author">
+                        <img src="~/img/default-user-avatar.jpg">
+                        <section>
+                           @if (Model.QuestionId == null)
+                            {
+                            <a href="#">@Model.AuthorEmail</a>
+                            }
+                            else
+                            {
+                            <a href="#">@Model.QuestionAuthorEmail</a>
+                            }
+                            <span>user</span>
+                        </section>
+                    </div>
+                    <div class="forum-post-tags">
+                        <span><a href="#">some tag</a></span>
+                        <span><a href="#">some tag</a></span>
+                        <span><a href="#">some tag</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+       @if (Model.QuestionId != null)
+        {
+        <h2>My Answer</h2>
+        <div class="forum-post">
+            <aside>
+                <div>
+                    <p class="forum-comments-count">@Model.CommentsCount</p>
+                    <p>comments</p>
+                </div>
+            </aside>
+            <div class="forum-post-main">
+                <div class="form-group">
+                    <textarea asp-for="Body" id="mytextarea" name="body"></textarea>
+                    <span asp-validation-for="Body"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Id" type="hidden" name="id">
+                    <button type="submit">Save Changes</button>
+                </div>
+                <div class="forum-post-meta">
+                    <div class="forum-post-author">
+                        <img src="~/img/default-user-avatar.jpg">
+                        <section>
+                            <a href="#">@Model.AuthorEmail</a>
+                            <span>user</span>
+                        </section>
+                    </div>
+                    <span>Answered @Model.CreatedOn.ToString("dd MMMM yyyy")</span>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    <partial name="_SideContentPartial" />
+</form>

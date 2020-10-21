@@ -31,6 +31,8 @@
         }
 
         [HttpGet]
+        [Route("Forum")]
+        [Route("Forum/Posts")]
         [AllowAnonymous]
         public IActionResult All()
         {
@@ -39,6 +41,8 @@
         }
 
         [HttpGet]
+        [Route("Forum/{id}")]
+        [Route("Forum/Posts/{id}")]
         [AllowAnonymous]
         public IActionResult Details([Required] string id)
         {
@@ -58,11 +62,11 @@
         }
 
         [HttpPost]
-        [ModelStateValidationFilter]
+        [ModelStateValidationFilter] // Change to ValidateModelState
         public async Task<IActionResult> AskQuestion(CreateQuestionInputModel input)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-            var questionId = await this.forumPostService.CreateQuestionAsync(input.Title, input.Body, user.Id);
+            var userId = this.userManager.GetUserId(this.User);
+            var questionId = await this.forumPostService.CreateAsync(input.Title, input.Body, null, userId);
 
             if (questionId != null)
             {
@@ -72,102 +76,64 @@
             return this.View(input);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> EditQuestion([Required] string id)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return this.NotFound();
-            }
-
-            var question = this.forumPostService.GetById<EditQuestionViewModel>(id);
-
-            var isAuthorized = await this.authorizationService.AuthorizeAsync(this.User, question, "Resource");
-            if (!isAuthorized.Succeeded)
-            {
-                return this.Forbid();
-            }
-
-            return this.View(question);
-        }
-
-        [HttpPost]
-        [ModelStateValidationFilter]
-        public async Task<IActionResult> EditQuestion(EditQuestionInputModel input)
-        {
-            var question = this.forumPostService.GetById<EditQuestionViewModel>(input.Id);
-
-            var isAuthorized = await this.authorizationService.AuthorizeAsync(this.User, question, "Resource");
-            if (!isAuthorized.Succeeded)
-            {
-                return this.Forbid();
-            }
-
-            await this.forumPostService.EditQuestionAsync(input.Id, input.Title, input.Body);
-            return this.RedirectToAction(nameof(this.All));
-        }
-
         [HttpPost]
         public async Task<IActionResult> AnswerQuestion(CreateAnswerInputModel input)
         {
             if (this.ModelState.IsValid)
             {
                 var user = await this.userManager.GetUserAsync(this.User);
-                await this.forumPostService.CreateAnswerAsync(input.Body, input.QuestionId, user.Id);
+                await this.forumPostService.CreateAsync(null, input.Body, input.QuestionId, user.Id);
             }
 
             return this.RedirectToAction(nameof(this.Details), new { id = input.QuestionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditAnswer([Required] string id)
+        [ValidateModelState]
+        public async Task<IActionResult> Edit([Required] string id)
         {
-            if (!this.ModelState.IsValid)
+            var post = this.forumPostService.GetById<EditViewModel>(id);
+
+            if (!(await this.authorizationService.AuthorizeAsync(this.User, post, "Resource")).Succeeded)
             {
-                return this.NotFound();
+                return this.BadRequest();
             }
 
-            var answer = this.forumPostService.GetById<EditAnswerViewModel>(id);
-
-            var isAuthorized = await this.authorizationService.AuthorizeAsync(this.User, answer, "Resource");
-            if (!isAuthorized.Succeeded)
-            {
-                return this.Forbid();
-            }
-
-            return this.View(answer);
+            return this.View(post);
         }
 
         [HttpPost]
-        [ModelStateValidationFilter]
-        public async Task<IActionResult> EditAnswer(EditAnswerInputModel input)
+        [ValidateModelState]
+        public async Task<IActionResult> Edit(EditInputModel input)
         {
-            var answer = this.forumPostService.GetById<EditAnswerInputModel>(input.Id);
+            var post = this.forumPostService.GetById<EditViewModel>(input.Id);
 
-            var isAuthorized = await this.authorizationService.AuthorizeAsync(this.User, answer, "Resource");
-            if (!isAuthorized.Succeeded)
+            if (post.QuestionId == null && input.Title == null)
             {
-                return this.Forbid();
+                return this.BadRequest();
             }
 
-            await this.forumPostService.EditAnswerAsync(input.Id, input.Body);
-            return this.RedirectToAction(nameof(this.Details), new { id = answer.QuestionId });
+            if (!(await this.authorizationService.AuthorizeAsync(this.User, post, "Resource")).Succeeded)
+            {
+                return this.BadRequest();
+            }
+
+            await this.forumPostService.EditAsync(input.Id, input.Title, input.Body);
+
+            var postId = post.QuestionId ?? input.Id;
+
+            return this.RedirectToAction(nameof(this.Details), new { id = postId });
         }
 
         [HttpGet]
+        [ValidateModelState]
         public async Task<IActionResult> Delete([Required] string id)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.NotFound();
-            }
-
             var question = this.forumPostService.GetById<ResourceOwnerValidationModel>(id);
 
-            var isAuthorized = await this.authorizationService.AuthorizeAsync(this.User, question, "Resource");
-            if (!isAuthorized.Succeeded)
+            if (!(await this.authorizationService.AuthorizeAsync(this.User, question, "Resource")).Succeeded)
             {
-                return this.Forbid();
+                return this.BadRequest();
             }
 
             await this.forumPostService.DeleteAsync(id);

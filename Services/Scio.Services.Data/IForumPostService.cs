@@ -9,13 +9,9 @@
 
         IEnumerable<TViewModel> GetAllQuestions<TViewModel>();
 
-        Task<string> CreateQuestionAsync(string title, string body, string authorId);
+        Task<string> CreateAsync(string title, string body, string questionId, string authorId);
 
-        Task EditQuestionAsync(string id, string title, string body);
-
-        Task CreateAnswerAsync(string body, string questionId, string authorId);
-
-        Task EditAnswerAsync(string id, string body);
+        Task EditAsync(string id, string title, string body);
 
         Task DeleteAsync(string id);
 

@@ -51,32 +51,32 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
-            services.ConfigureApplicationCookie(o =>
-            {
-                o.Events = new CookieAuthenticationEvents()
-                {
-                    OnRedirectToLogin = (ctx) =>
-                    {
-                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                        {
-                            ctx.Response.StatusCode = 401;
-                        }
+            //services.ConfigureApplicationCookie(o =>
+            //{
+            //    o.Events = new CookieAuthenticationEvents()
+            //    {
+            //        OnRedirectToLogin = (ctx) =>
+            //        {
+            //            if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+            //            {
+            //                ctx.Response.StatusCode = 401;
+            //            }
 
-                        return Task.CompletedTask;
-                    },
-                    OnRedirectToAccessDenied = (ctx) =>
-                    {
-                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                        {
-                            ctx.Response.StatusCode = 403;
-                        }
+            //            return Task.CompletedTask;
+            //        },
+            //        OnRedirectToAccessDenied = (ctx) =>
+            //        {
+            //            if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+            //            {
+            //                ctx.Response.StatusCode = 403;
+            //            }
 
-                        return Task.CompletedTask;
-                    },
-                };
-            });
+            //            return Task.CompletedTask;
+            //        },
+            //    };
+            //});
 
-            services.AddScoped<ModelStateValidationFilterAttribute>();
+            services.AddScoped<ValidateModelStateAttribute>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -142,11 +142,11 @@
 
             app.UseEndpoints(
                 endpoints =>
-                    {
-                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                        endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                        endpoints.MapRazorPages();
-                    });
+                {
+                    endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapRazorPages();
+                });
         }
     }
 }

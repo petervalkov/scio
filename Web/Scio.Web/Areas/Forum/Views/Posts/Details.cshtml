@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="forum-post-controls">
-                    <a asp-area="Forum" asp-controller="Posts" asp-action="EditQuestion" asp-route-id="@Model.Id">
+                    <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@Model.Id">
                         edit <i class="far fa-edit"></i>
                     </a>
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id">
@@ -96,7 +96,7 @@
                         <span>Answered @answer.CreatedOn.ToString("dd MMMM yyyy")</span>
                     </div>
                     <div class="forum-post-controls">
-                        <a asp-area="Forum" asp-controller="Posts" asp-action="EditAnswer" asp-route-id="@answer.Id">
+                        <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@answer.Id">
                             edit <i class="far fa-edit"></i>
                         </a>
                         <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@answer.Id">
