@@ -35,15 +35,15 @@ html {
     min-width: 430px;
 }
 
-@media (min-width: 840px){
+/* @media (min-width: 840px){
     html {
-        font-size: 17px;
+        font-size: 15px;
     }
-}
+} */
 
 @media (min-width: 1280px){
     html {
-        font-size: 19px;
+        font-size: 17px;
     }
 }
 
@@ -67,6 +67,7 @@ h2 {
 a {
     text-decoration: none;
     color: var(--accent-main-dark);
+    cursor: pointer;
 }
 
 li {
@@ -74,13 +75,46 @@ li {
 }
 
 button {
-    padding: 0.5em;
-    font-size: 1.1em;
+    font-size: inherit;
+    padding: 0.3em 0.7em;
     color: var(--font-light);
     background-color: var(--accent-main-dark);
     border: none;
     outline:none;
 }
+
+button:hover {
+    background-color:  #3a94cf;
+}
+
+textarea {
+    font: inherit;
+    width: 100%;
+    padding: 0.1em;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--border-light); 
+    outline-color: var(--accent-main-light);
+}
+
+.i-spinner {
+    animation: spin-animation 1s infinite;
+    display: inline-block;
+}
+  
+@keyframes spin-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(359deg);
+    }
+}
+
+.align-right {
+    text-align: right;
+}
+
 /* Header */
 .site > header {
     position: fixed;
@@ -545,24 +579,6 @@ nav form button:hover {
     font-size: 0.8em;
 }
 
-.forum h2 {
-    margin-top: 1em;
-}
-
-.forum-post-controls {
-    margin-top: 0.5em;
-    display: flex;
-    font-size: 0.8em;
-}
-
-.forum-post-controls a {
-    padding-right: 0.5em;
-}
-
-.forum-post-comments {
-    margin-left: auto;
-}
-
 .forum > aside {
     padding: 1em 0.5em;
 }
@@ -571,6 +587,10 @@ nav form button:hover {
     .forum > aside {
         flex: 0 0 230px;
     }
+}
+
+.forum .form-group {
+    margin: 0;
 }
 
 .forum-content {
@@ -633,14 +653,11 @@ nav form button:hover {
     color: var(--font-dark)
 }
 
-.forum-post-main > header :hover {
-    color: var(--accent-main-dark)
-}
-
 .forum-post-main > span {
     font-size: 0.8em;
 }
 
+/* Meta */
 .forum-post-meta {
     margin-top: 1em;
 } 
@@ -690,19 +707,19 @@ nav form button:hover {
     padding: 0 0.5em;
 }
 
-/* Comments */
-.forum-post-controls > button {
-    background: none;
-    color: var(--accent-main-dark);
-	border: none;
-	padding: 0;
-	font: inherit;
-    outline: inherit;
-    margin-left: auto;
-    cursor: pointer;
+/* Controls */
+.forum-post-controls {
+    margin-top: 0.5em;
+    display: flex;
+    font-size: 0.8em;
 }
 
-.forum-comments {
+.forum-post-controls a {
+    padding-right: 0.5em;
+}
+
+/* Comments */
+.forum-post-comments {
     font-size: 0.9em;
     max-height: 0;
     overflow: hidden;
@@ -711,29 +728,21 @@ nav form button:hover {
     transition: max-height 0.3s ease-out;
 }
 
-.forum-comment-content {
-    padding-left: 2em;
-    border-bottom: 1px solid #c2c3c37e ;
+.forum-comments-toggle {
+    margin-left: auto;
 }
 
-.forum-comment-content:last-child {
+.forum-comment {
+    padding-left: 2em;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.forum-comment:last-child {
     border-bottom: none ;
 }
 
-.forum-add-comment-card textarea {
+.forum-comment textarea {
     margin-top: 0.5em;
-    outline-color: var(--accent-main-dark);
-    width: 100%;
-}
-
-.add-comment {
-    font-size: 0.8em;
-    padding: 0.3em;
-    float: right;
-}
-
-.add-comment:disabled {
-    background-color: rgb(189, 189, 189);
 }
 
 /* Account */
