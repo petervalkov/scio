@@ -21,6 +21,12 @@ namespace Scio.Data.Models
             this.ForumVotes = new HashSet<ForumVote>();
         }
 
+        public string DisplayName { get; set; }
+
+        public string FullName { get; set; }
+
+        public string ImageUrl { get; set; }
+
         // Audit info
         public DateTime CreatedOn { get; set; }
 

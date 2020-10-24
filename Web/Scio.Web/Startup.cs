@@ -3,6 +3,8 @@
     using System.Reflection;
     using System.Threading.Tasks;
 
+    using CloudinaryDotNet;
+
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
@@ -101,7 +103,17 @@
             services.AddTransient<IForumPostService, ForumPostService>();
             services.AddTransient<IForumCommentService, ForumCommentService>();
             services.AddTransient<IForumVoteService, ForumVoteService>();
+            services.AddTransient<ICloudinaryService, CloudinaryService>();
             services.AddTransient<ISettingsService, SettingsService>();
+
+            Account account = new Account(
+                this.configuration["Cloudinary:AppName"],
+                this.configuration["Cloudinary:AppKey"],
+                this.configuration["Cloudinary:AppSecret"]);
+
+            Cloudinary cloudinary = new Cloudinary(account);
+
+            services.AddSingleton(cloudinary);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
