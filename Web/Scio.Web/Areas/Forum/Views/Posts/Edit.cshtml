@@ -13,7 +13,7 @@
        @if (Model.QuestionId == null)
         {
         <div class="form-group">
-            <input asp-for="Title" type="text" id="question-title" name="title">
+            <textarea asp-for="Title" type="text" id="question-title" name="title" rows="3"></textarea>
             <span asp-validation-for="Title"></span>
         </div>
         }
@@ -26,47 +26,67 @@
     <div class="forum-content">
         <div class="forum-post">
             <aside>
-                <i class="fas fa-chevron-up"></i>
-                <p>votes</p>
-                <i class="fas fa-chevron-down"></i>
+                <div>
+                    <i class="fas fa-chevron-up"></i>
+                    <p>votes</p>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </aside>
             <div class="forum-post-main">
-               @if (Model.QuestionId == null)
+                @if (Model.QuestionId == null)
                 {
-                <div class="form-group">
-                    <textarea asp-for="Body" id="mytextarea" name="body"></textarea>
-                    <span asp-validation-for="Body"></span>
-                </div>
-                <div class="form-group">
-                    <input asp-for="Id" type="hidden" name="id">
-                    <button type="submit">Save Changes</button>
-                </div>
+                    <div class="form-group">
+                        <textarea asp-for="Body" id="mytextarea" name="body"></textarea>
+                        <span asp-validation-for="Body"></span>
+                    </div>
+                    <div class="forum-post-meta">
+                        <div class="forum-post-author">
+                            <img src="~/img/default-user-avatar.jpg">
+                            <section>
+                                @if (Model.QuestionId == null)
+                                {
+                                    <a href="#">@Model.AuthorEmail</a>
+                                }
+                                else
+                                {
+                                    <a href="#">@Model.QuestionAuthorEmail</a>
+                                }
+                                <span>user</span>
+                            </section>
+                        </div>
+                        <div class="form-group align-right">
+                            <input asp-for="Id" type="hidden" name="id">
+                            <button type="submit">Save</button>
+                        </div>
+                    </div>
+                    
                 }
                 else
                 {
                     @Html.Raw(Model.QuestionBody)
+                    <div class="forum-post-meta">
+                        <div class="forum-post-author">
+                            <img src="~/img/default-user-avatar.jpg">
+                            <section>
+                                @if (Model.QuestionId == null)
+                                {
+                                    <a href="#">@Model.AuthorEmail</a>
+                                }
+                                else
+                                {
+                                    <a href="#">@Model.QuestionAuthorEmail</a>
+                                }
+                                <span>user</span>
+                            </section>
+                        </div>
+                        <div class="forum-post-tags">
+                            <span><a href="#">some tag</a></span>
+                            <span><a href="#">some tag</a></span>
+                            <span><a href="#">some tag</a></span>
+                        </div>
+                    </div>
                 }
-                <div class="forum-post-meta">
-                    <div class="forum-post-author">
-                        <img src="~/img/default-user-avatar.jpg">
-                        <section>
-                           @if (Model.QuestionId == null)
-                            {
-                            <a href="#">@Model.AuthorEmail</a>
-                            }
-                            else
-                            {
-                            <a href="#">@Model.QuestionAuthorEmail</a>
-                            }
-                            <span>user</span>
-                        </section>
-                    </div>
-                    <div class="forum-post-tags">
-                        <span><a href="#">some tag</a></span>
-                        <span><a href="#">some tag</a></span>
-                        <span><a href="#">some tag</a></span>
-                    </div>
-                </div>
+
             </div>
         </div>
        @if (Model.QuestionId != null)
@@ -84,10 +104,6 @@
                     <textarea asp-for="Body" id="mytextarea" name="body"></textarea>
                     <span asp-validation-for="Body"></span>
                 </div>
-                <div class="form-group">
-                    <input asp-for="Id" type="hidden" name="id">
-                    <button type="submit">Save Changes</button>
-                </div>
                 <div class="forum-post-meta">
                     <div class="forum-post-author">
                         <img src="~/img/default-user-avatar.jpg">
@@ -96,8 +112,13 @@
                             <span>user</span>
                         </section>
                     </div>
-                    <span>Answered @Model.CreatedOn.ToString("dd MMMM yyyy")</span>
+                    <div class="form-group align-right">
+                        <input asp-for="Id" type="hidden" name="id">
+                        <button type="submit">Save</button>
+                    </div>
                 </div>
+                
+
             </div>
         </div>
         }

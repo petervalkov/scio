@@ -16,5 +16,7 @@
         Task DeleteAsync(string id);
 
         TValidationModel SearchForVote<TValidationModel>(string postId, string userId);
+
+        bool PostExist(string id);
     }
 }

@@ -7,7 +7,7 @@
     using Scio.Services.Mapping;
     using Scio.Web.ViewModels.Forum.Comments;
 
-    public class QuestionDetailsViewModel : IMapFrom<ForumPost>
+    public class DetailsViewModel : IMapFrom<ForumPost>
     {
         public string Id { get; set; }
 
@@ -23,6 +23,8 @@
 
         public string AuthorEmail { get; set; }
 
-        public IEnumerable<QuestionAnswerViewModel> Answers { get; set; }
+        public IEnumerable<AnswerViewModel> Answers { get; set; }
+
+        public string AnswerBody { get; set; }
     }
 }

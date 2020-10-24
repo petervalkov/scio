@@ -82,5 +82,7 @@
 
             return AutoMapperConfig.MapperInstance.Map<TValidationModel>(post);
         }
+
+        public bool PostExist(string id) => this.forumPostsRepository.AllAsNoTracking().Any(x => x.Id == id);
     }
 }

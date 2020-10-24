@@ -7,7 +7,7 @@
     using Scio.Services.Mapping;
     using Scio.Web.ViewModels.Forum.Comments;
 
-    public class QuestionAnswerViewModel : IMapFrom<ForumPost>
+    public class AnswerViewModel : IMapFrom<ForumPost>
     {
         public string Id { get; set; }
 

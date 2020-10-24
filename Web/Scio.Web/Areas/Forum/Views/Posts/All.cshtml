@@ -2,24 +2,26 @@
 @using Scio.Web.ViewModels.Forum.Posts
 @model IEnumerable<QuestionViewModel>
 
-@{ ViewData["Title"] = "All Questions"; }
+@{ ViewData["Title"] = "Forum"; }
 
 <article class="forum">
     <header>
-        <h1>All Questions</h1>
+        <h1>@ViewData["Title"]</h1>
     </header>
     <div class="forum-content">
        @foreach (var question in Model)
         {
         <div class="forum-post" id="@question.Id">
             <aside>
-                <a class="upvote" onclick="vote(1, '@question.Id')">
-                    <i class="fas fa-chevron-up"></i>
-                </a>
-                <p class="forum-votes-count">@question.VotesCount</p>
-                <a class="downvote" onclick="vote(-1, '@question.Id')">
-                    <i class="fas fa-chevron-down"></i>
-                </a>
+                <div>
+                    <a class="upvote" onclick="vote(1, '@question.Id')">
+                        <i class="fas fa-chevron-up"></i>
+                    </a>
+                    <p class="forum-votes-count">@question.VotesCount</p>
+                    <a class="downvote" onclick="vote(-1, '@question.Id')">
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                </div>
                 <div>
                     <p>@question.AnswersCount</p>
                     <p>answers</p>
@@ -31,9 +33,10 @@
             </aside>
             <div class="forum-post-main">
                 <header>
-                    <h3>
-                        <a asp-area="Forum" asp-controller="Posts" asp-action="Details" asp-route-id="@question.Id">@question.Title</a>
-                    </h3>
+                    <a asp-area="Forum" asp-controller="Posts" asp-action="Details" asp-route-id="@question.Id">
+                        <h2>@question.Title</h2>
+                    </a>
+                    
                     <span>Asked @question.CreatedOn.ToString("dd MMMM yyyy")</span>
                 </header>
                 @Html.Raw(question.Body)
@@ -53,14 +56,16 @@
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@question.Id">
                         delete <i class="far fa-trash-alt"></i>
                     </a>
-                    <button class="comments-toggle" onclick="toggleComments('@question.Id')">comments</button>
+                    <a class="forum-comments-toggle" onclick="toggleComments('@question.Id')">comments <i class="fas fa-plus"></i></a>
                 </div>
-                <div class="forum-comments">
-                    <div class="forum-add-comment-card">
+                <div class="forum-post-comments">
+                    <div class="forum-comment">
                        @if (this.User.Identity.IsAuthenticated)
                         {
-                            <textarea rows="3"></textarea>
-                            <button onclick="postComment('@question.Id')" class="add-comment">add comment</button>
+                        <textarea rows="3"></textarea>
+                        <div class="form-group align-right">
+                            <button onclick="postComment('@question.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                        </div>
                         }
                     </div>
                 </div>

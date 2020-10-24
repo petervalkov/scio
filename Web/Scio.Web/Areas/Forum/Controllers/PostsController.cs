@@ -51,41 +51,60 @@
                 return this.NotFound();
             }
 
-            var viewModel = this.forumPostService.GetById<QuestionDetailsViewModel>(id);
+            var viewModel = this.forumPostService.GetById<DetailsViewModel>(id);
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public IActionResult AskQuestion(CreateQuestionViewModel viewModel)
+        public IActionResult New()
         {
-            return this.View(viewModel);
+            return this.View();
         }
 
         [HttpPost]
-        [ModelStateValidationFilter] // Change to ValidateModelState
-        public async Task<IActionResult> AskQuestion(CreateQuestionInputModel input)
+        public async Task<IActionResult> New(CreateInputModel input)
         {
+            bool isQuestion = input.QuestionId == null;
+
+            if (!this.ModelState.IsValid)
+            {
+                if (isQuestion)
+                {
+                    return this.View(input);
+                }
+
+                var questionId = this.forumPostService.GetById<DetailsViewModel>(input.QuestionId);
+                if (questionId == null)
+                {
+                    return this.BadRequest();
+                }
+
+                return this.View(nameof(this.Details), questionId);
+            }
+
             var userId = this.userManager.GetUserId(this.User);
-            var questionId = await this.forumPostService.CreateAsync(input.Title, input.Body, null, userId);
 
-            if (questionId != null)
+            if (isQuestion)
             {
-                return this.RedirectToAction(nameof(this.Details), new { id = questionId });
+                string questionId = await this.forumPostService.CreateAsync(input.Title, input.Body, null, userId);
+                if (questionId != null)
+                {
+                    return this.RedirectToAction(nameof(this.Details), new { id = questionId });
+                }
+            }
+            else
+            {
+                if (this.forumPostService.PostExist(input.QuestionId))
+                {
+                    string answerId = await this.forumPostService.CreateAsync(null, input.AnswerBody, input.QuestionId, userId);
+                    if (answerId != null)
+                    {
+                        return this.RedirectToAction(nameof(this.Details), new { id = input.QuestionId });
+                    }
+                }
             }
 
-            return this.View(input);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AnswerQuestion(CreateAnswerInputModel input)
-        {
-            if (this.ModelState.IsValid)
-            {
-                var user = await this.userManager.GetUserAsync(this.User);
-                await this.forumPostService.CreateAsync(null, input.Body, input.QuestionId, user.Id);
-            }
-
-            return this.RedirectToAction(nameof(this.Details), new { id = input.QuestionId });
+            return this.BadRequest();
         }
 
         [HttpGet]

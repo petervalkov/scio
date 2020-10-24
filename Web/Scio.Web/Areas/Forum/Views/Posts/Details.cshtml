@@ -1,8 +1,8 @@
 ﻿@using Scio.Web.ViewModels.Forum.Posts
-@model QuestionDetailsViewModel
+@model DetailsViewModel
 
 @{
-    ViewData["Title"] = "Question Details";
+    ViewData["Title"] = Model.Title;
 }
 
 <article class="forum">
@@ -13,13 +13,15 @@
     <div class="forum-content">
         <div class="forum-post" id="@Model.Id">
             <aside>
-                <a class="upvote" onclick="vote(1, '@Model.Id')">
-                    <i class="fas fa-chevron-up"></i>
-                </a>
-                <p class="forum-votes-count">@Model.VotesCount</p>
-                <a class="downvote" onclick="vote(-1, '@Model.Id')">
-                    <i class="fas fa-chevron-down"></i>
-                </a>
+                <div>
+                    <a class="upvote" onclick="vote(1, '@Model.Id')">
+                        <i class="fas fa-chevron-up"></i>
+                    </a>
+                    <p class="forum-votes-count">@Model.VotesCount</p>
+                    <a class="downvote" onclick="vote(-1, '@Model.Id')">
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                </div>
                 <div>
                     <p>@Model.Answers.Count()</p>
                     <p>answers</p>
@@ -36,7 +38,7 @@
                         <img src="~/img/default-user-avatar.jpg">
                         <section>
                             <a href="#">@Model.AuthorEmail</a>
-                            <span>user</span>
+                            <span>role</span>
                         </section>
                     </div>
                 </div>
@@ -47,20 +49,22 @@
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id">
                         delete <i class="far fa-trash-alt"></i>
                     </a>
-                    <button class="comments-toggle" onclick="toggleComments('@Model.Id')">comments</button>
+                    <a class="forum-comments-toggle" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
                 </div>
-                <div class="forum-comments">
-                    <div class="forum-add-comment-card">
-                       @if (this.User.Identity.IsAuthenticated)
+                <div class="forum-post-comments">
+                    <div class="forum-comment">
+                        @if (this.User.Identity.IsAuthenticated)
                         {
-                            <textarea rows="3"></textarea>
-                            <button onclick="postComment('@Model.Id')" class="add-comment">add comment</button>
+                        <textarea rows="3"></textarea>
+                        <div class="form-group align-right">
+                            <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                        </div>
                         }
                     </div>
                 </div>
             </div>
         </div>
-       @if (Model.Answers.Count() == 0)
+        @if (Model.Answers.Count() == 0)
         {
             <h2>No Answers</h2>
         }
@@ -69,59 +73,77 @@
             <h2>Answers</h2>
            @foreach (var answer in Model.Answers)
             {
-            <div class="forum-post" id="@answer.Id">
-                <aside>
-                    <a class="upvote" onclick="vote(1, '@answer.Id')">
-                        <i class="fas fa-chevron-up"></i>
-                    </a>
-                    <p class="forum-votes-count">@answer.VotesCount</p>
-                    <a class="downvote" onclick="vote(-1, '@answer.Id')">
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <div>
-                        <p class="forum-comments-count">@answer.CommentsCount</p>
-                        <p>comments</p>
-                    </div>
-                </aside>
-                <div class="forum-post-main">
-                    @Html.Raw(answer.Body)
-                    <div class="forum-post-meta">
-                        <div class="forum-post-author">
-                            <img src="~/img/default-user-avatar.jpg">
-                            <section>
-                                <a href="#">@answer.AuthorEmail</a>
-                                <span>user</span>
-                            </section>
+                <div class="forum-post" id="@answer.Id">
+                    <aside>
+                        <div>
+                            <a class="upvote" onclick="vote(1, '@answer.Id')">
+                                <i class="fas fa-chevron-up"></i>
+                            </a>
+                            <p class="forum-votes-count">@answer.VotesCount</p>
+                            <a class="downvote" onclick="vote(-1, '@answer.Id')">
+                                <i class="fas fa-chevron-down"></i>
+                            </a>
                         </div>
-                        <span>Answered @answer.CreatedOn.ToString("dd MMMM yyyy")</span>
-                    </div>
-                    <div class="forum-post-controls">
-                        <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@answer.Id">
-                            edit <i class="far fa-edit"></i>
-                        </a>
-                        <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@answer.Id">
-                            delete <i class="far fa-trash-alt"></i>
-                        </a>
-                        <button class="comments-toggle" onclick="toggleComments('@answer.Id')">comments</button>
-                    </div>
-                    <div class="forum-comments">
-                        <div class="forum-add-comment-card">
-                           @if (this.User.Identity.IsAuthenticated)
-                            {
+                        <div>
+                            <p class="forum-comments-count">@answer.CommentsCount</p>
+                            <p>comments</p>
+                        </div>
+                    </aside>
+                    <div class="forum-post-main">
+                        @Html.Raw(answer.Body)
+                        <div class="forum-post-meta">
+                            <div class="forum-post-author">
+                                <img src="~/img/default-user-avatar.jpg">
+                                <section>
+                                    <a href="#">@answer.AuthorEmail</a>
+                                    <span>user</span>
+                                </section>
+                            </div>
+                            <span>Answered @answer.CreatedOn.ToString("dd MMMM yyyy")</span>
+                        </div>
+                        <div class="forum-post-controls">
+                            <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@answer.Id">
+                                edit <i class="far fa-edit"></i>
+                            </a>
+                            <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@answer.Id">
+                                delete <i class="far fa-trash-alt"></i>
+                            </a>
+                            <a class="forum-comments-toggle" onclick="toggleComments('@answer.Id')">comments <i class="fas fa-plus"></i></a>
+                        </div>
+                        <div class="forum-post-comments">
+                            <div class="forum-comment">
+                                @if (this.User.Identity.IsAuthenticated)
+                                {
                                 <textarea rows="3"></textarea>
-                                <button onclick="postComment('@answer.Id')" class="add-comment">add comment</button>
-                            }
+                                <div class="form-group align-right">
+                                    <button onclick="postComment('@answer.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                                </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
         }
         <h2>My Answer</h2>
-        <form role="form" asp-area="Forum" asp-controller="Posts" asp-action="AnswerQuestion" method="post">
-            <textarea id="mytextarea" name="body"></textarea>
+        <form role="form" asp-area="Forum" asp-controller="Posts" asp-action="New" method="post">
             <input type="hidden" value="@Model.Id" name="questionId" />
-            <button type="submit">Submit Answer</button>
+            <div class="form-group">
+                <textarea asp-for="AnswerBody" id="mytextarea" name="answerBody"></textarea>
+                <span asp-validation-for="AnswerBody"></span>
+            </div>
+            <div class="forum-post-meta">
+                <div class="forum-post-author">
+                    <img src="~/img/default-user-avatar.jpg">
+                    <section>
+                        <a href="#">username</a>
+                        <span>role</span>
+                    </section>
+                </div>
+                <div class="form-group align-right">
+                    <button type="submit">Submit</button>
+                </div>
+            </div>
         </form>
     </div>
     <partial name="_SideContentPartial" />
