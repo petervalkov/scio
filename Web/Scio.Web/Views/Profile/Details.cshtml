@@ -1,0 +1,56 @@
+﻿@using Scio.Common
+@using Scio.Web.ViewModels.Profile
+@model ViewModel
+
+@{ ViewData["Title"] = Model.DisplayName; }
+
+<div class="site-main-content">
+    <aside>
+        <ul>
+            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a asp-area="Forum" asp-controller="Posts" asp-action="All">Forum</a></li>
+            <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Settings</a></li>
+        </ul>
+    </aside>
+    <article class="account">
+        <div class="account-profile">
+            <div class="image-container">
+                <img src="@Model.ImageUrl">
+            </div>
+            <ul>
+                <li>
+                    <div>Posts:</div>
+                    <div>@Model.ForumPostsCount</div>
+                </li>
+                <li>
+                    <div>Comments:</div>
+                    <div>@Model.ForumCommentsCount</div>
+                </li>
+            </ul>
+        </div>
+        <div class="account-details">
+            <div class="account-details-header">
+                <h1>@Model.DisplayName</h1>
+                <div>userRole</div>
+            </div>
+            <h4>Basic info:</h4>
+            <ul>
+                <li>
+                    <div>Email</div>
+                    <div>@Model.Email</div>
+                </li>
+                <li>
+                    <div class="details-key">Full Name</div>
+                    <div class="details-value">@Model.FullName</div>
+                </li>
+                <li>
+                    <div class="details-key">Phone</div>
+                    <div class="details-value">@Model.PhoneNumber</div>
+                </li>
+            </ul>
+            <div class="form-group align-right">
+                <a asp-area="" asp-controller="Profile" asp-action="Edit">Edit</a>
+            </div>
+        </div>
+    </article>
+</div>

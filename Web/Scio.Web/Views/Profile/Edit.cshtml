@@ -1,0 +1,69 @@
+﻿@using Scio.Common
+@using Scio.Web.ViewModels.Profile
+@model ViewModel
+
+@{ ViewData["Title"] = Model.DisplayName; }
+
+<div class="site-main-content">
+    <aside>
+        <ul>
+            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a asp-area="Forum" asp-controller="Posts" asp-action="All">Forum</a></li>
+            <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Settings</a></li>
+        </ul>
+    </aside>
+    <form class="account" role="form" asp-area="" enctype="multipart/form-data" asp-controller="Profile" asp-action="Edit" method="post">
+        <div class="account-profile">
+            <div class="image-container">
+                <img src="@Model.ImageUrl">
+            </div>
+            <div>
+                <input type="file" name="image" />
+            </div>
+            <ul>
+                <li>
+                    <div>Posts:</div>
+                    <div>@Model.ForumPostsCount</div>
+                </li>
+                <li>
+                    <div>Comments:</div>
+                    <div>@Model.ForumCommentsCount</div>
+                </li>
+            </ul>
+        </div>
+        <div class="account-details">
+            <div class="account-details-header">
+                <div class="form-group">
+                    <input asp-for="DisplayName" />
+                    <span asp-validation-for="DisplayName"></span>
+                    <div>user</div>
+                </div>
+            </div>
+            <h4>Basic info:</h4>
+            <ul>
+                <li>
+                    <div>Email</div>
+                    <div>@Model.Email</div>
+                </li>
+                <li>
+                    <div class="details-key">Full Name</div>
+                    <div class="form-group">
+                        <input asp-for="FullName" />
+                        <span asp-validation-for="FullName"></span>
+                    </div>
+                </li>
+                <li>
+                    <div class="details-key">Phone</div>
+                    <div class="form-group">
+                        <input asp-for="PhoneNumber" />
+                        <span asp-validation-for="PhoneNumber"></span>
+                    </div>
+
+                </li>
+            </ul>
+            <div class="form-group align-right">
+                <button type="submit">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
