@@ -1,16 +1,15 @@
 ﻿namespace Scio.Web.ViewModels.Forum.Posts
 {
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Text.RegularExpressions;
 
     using Scio.Common;
-    using Scio.Data.Models;
-    using Scio.Services.Mapping;
 
-    public class CreateInputModel : IValidatableObject
+    public class CreateInputModel : IValidatableObject // Fix Validate method
     {
-        [MaxLength(400)]
+        [Display(Name = FieldName.Title)]
+        [StringLength(Validation.MaxTitleLength, MinimumLength = Validation.MinStringLength, ErrorMessage = ErrorMessage.AllowedLengthRange)]
         public string Title { get; set; }
 
         public string Body { get; set; }
@@ -21,30 +20,43 @@
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var missingTitle = string.IsNullOrWhiteSpace(this.Title);
-
-            if (this.QuestionId == null)
+            if (this.QuestionId == null && this.AnswerBody == null)
             {
-                if (missingTitle)
+                if (this.Title == null)
                 {
-                    yield return new ValidationResult(ErrorMessage.RequiredField, new HashSet<string> { nameof(this.Title) });
+                    yield return new ValidationResult(string.Format(ErrorMessage.RequiredField, FieldName.Title), new HashSet<string> { nameof(this.Title) });
                 }
 
-                if (string.IsNullOrWhiteSpace(this.Body))
+                var body = Regex.Replace(this.Body ?? string.Empty, @"<(.|\n)*?>", string.Empty);
+                if (string.IsNullOrWhiteSpace(body))
                 {
-                    yield return new ValidationResult(ErrorMessage.RequiredField, new HashSet<string> { nameof(this.Body) });
+                    yield return new ValidationResult(string.Format(ErrorMessage.RequiredField, FieldName.PostBody), new HashSet<string> { nameof(this.Body) });
+                }
+                else if (body.Length < Validation.MinStringLength)
+                {
+                    yield return new ValidationResult(string.Format(ErrorMessage.MinLength, FieldName.PostBody, Validation.MinStringLength), new HashSet<string> { nameof(this.Body) });
                 }
             }
-            else if (missingTitle)
+            else if (this.Title == null && this.Body == null)
             {
-                if (string.IsNullOrWhiteSpace(this.AnswerBody))
+                if (this.QuestionId == null)
                 {
-                    yield return new ValidationResult(ErrorMessage.RequiredField, new HashSet<string> { nameof(this.AnswerBody) });
+                    yield return new ValidationResult(ErrorMessage.InvalidRequest, new HashSet<string> { ErrorMessage.InvalidRequest });
+                }
+
+                var body = Regex.Replace(this.AnswerBody ?? string.Empty, @"<(.|\n)*?>", string.Empty);
+                if (string.IsNullOrWhiteSpace(body))
+                {
+                    yield return new ValidationResult(string.Format(ErrorMessage.RequiredField, FieldName.AnswerBody), new HashSet<string> { nameof(this.AnswerBody) });
+                }
+                else if (body.Length < Validation.MinStringLength)
+                {
+                    yield return new ValidationResult(string.Format(ErrorMessage.MinLength, FieldName.AnswerBody, Validation.MinStringLength), new HashSet<string> { nameof(this.AnswerBody) });
                 }
             }
             else
             {
-                yield return new ValidationResult(ErrorMessage.InvalidRequest); // If both QuestionId and Title are provided
+                yield return new ValidationResult(ErrorMessage.InvalidRequest, new HashSet<string> { ErrorMessage.InvalidRequest });
             }
         }
     }

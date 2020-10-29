@@ -1,12 +1,14 @@
 ﻿namespace Scio.Web.Areas.Forum.Controllers
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
+    using Scio.Common;
     using Scio.Data.Models;
     using Scio.Services.Data;
     using Scio.Web.Infrastructure.Validation;
@@ -56,55 +58,40 @@
         }
 
         [HttpGet]
-        public IActionResult New()
-        {
-            return this.View();
-        }
+        public IActionResult New() => this.View();
 
         [HttpPost]
         public async Task<IActionResult> New(CreateInputModel input)
         {
-            bool isQuestion = input.QuestionId == null;
+            if (this.ModelState.ContainsKey(ErrorMessage.InvalidRequest) ||
+                !(input.QuestionId == null || this.forumPostService.PostExist(input.QuestionId)))
+            {
+                return this.BadRequest();
+            }
 
             if (!this.ModelState.IsValid)
             {
-                if (isQuestion)
+                if (input.QuestionId == null)
                 {
                     return this.View(input);
                 }
 
-                var questionId = this.forumPostService.GetById<DetailsViewModel>(input.QuestionId);
-                if (questionId == null)
-                {
-                    return this.BadRequest();
-                }
+                var question = this.forumPostService
+                    .GetById<DetailsViewModel>(input.QuestionId);
 
-                return this.View(nameof(this.Details), questionId);
+                return this.View(nameof(this.Details), question);
             }
 
-            var userId = this.userManager.GetUserId(this.User);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var postId = await this.forumPostService
+                .CreateAsync(input.Title, input.Body ?? input.AnswerBody, input.QuestionId, userId);
 
-            if (isQuestion)
+            if (postId == null)
             {
-                string questionId = await this.forumPostService.CreateAsync(input.Title, input.Body, null, userId);
-                if (questionId != null)
-                {
-                    return this.RedirectToAction(nameof(this.Details), new { id = questionId });
-                }
-            }
-            else
-            {
-                if (this.forumPostService.PostExist(input.QuestionId))
-                {
-                    string answerId = await this.forumPostService.CreateAsync(null, input.AnswerBody, input.QuestionId, userId);
-                    if (answerId != null)
-                    {
-                        return this.RedirectToAction(nameof(this.Details), new { id = input.QuestionId });
-                    }
-                }
+                return this.BadRequest();
             }
 
-            return this.BadRequest();
+            return this.RedirectToAction(nameof(this.Details), new { id = input.QuestionId ?? postId });
         }
 
         [HttpGet]
