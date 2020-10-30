@@ -10,11 +10,17 @@
     {
         [Display(Name = FieldName.DisplayName)]
         [Required(ErrorMessage = ErrorMessage.RequiredField)]
-        [StringLength(Validation.MaxNameLength, MinimumLength = Validation.MinNameLength, ErrorMessage = ErrorMessage.AllowedLengthRange)]
+        [StringLength(
+            Validation.MaxNameLength,
+            MinimumLength = Validation.MinStringLength,
+            ErrorMessage = ErrorMessage.AllowedLengthRange)]
         public string DisplayName { get; set; }
 
         [Display(Name = FieldName.FullName)]
-        [StringLength(Validation.MaxNameLength, MinimumLength = Validation.MinNameLength, ErrorMessage = ErrorMessage.AllowedLengthRange)]
+        [StringLength(
+            Validation.MaxNameLength,
+            MinimumLength = Validation.MinStringLength,
+            ErrorMessage = ErrorMessage.AllowedLengthRange)]
         public string FullName { get; set; }
 
         public string Email { get; set; }

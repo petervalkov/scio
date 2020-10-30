@@ -1,4 +1,4 @@
-﻿namespace Scio.Web.Infrastructure.Utilities
+﻿namespace Scio.Web.Helpers
 {
     public static class PropertyCopier<TParent, TChild>
         where TParent : class

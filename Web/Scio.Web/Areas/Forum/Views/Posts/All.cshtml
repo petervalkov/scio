@@ -1,4 +1,6 @@
 ﻿@using Scio.Common
+@using Scio.Web.Helpers
+@using System.Security.Claims
 @using Scio.Web.ViewModels.Forum.Posts
 @model IEnumerable<QuestionViewModel>
 
@@ -36,26 +38,28 @@
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Details" asp-route-id="@question.Id">
                         <h2>@question.Title</h2>
                     </a>
-                    
-                    <span>Asked @question.CreatedOn.ToString("dd MMMM yyyy")</span>
+                    <span>Asked @TimeSpanParser.Parse(question.CreatedOn)</span>
                 </header>
                 @Html.Raw(question.Body)
                 <div class="forum-post-meta">
                     <div class="forum-post-author">
-                        <img src="~/img/default-user-avatar.jpg">
+                        <img src="@(question.AuthorImageUrl ?? "~/img/default-user.png")">
                         <section>
-                            <a href="#">@question.AuthorEmail</a>
+                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@question.AuthorId">@question.AuthorDisplayName</a>
                             <span>user</span>
                         </section>
                     </div>
                 </div>
                 <div class="forum-post-controls">
+                   @if (question.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                    {
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@question.Id">
                         edit <i class="far fa-edit"></i>
                     </a>
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@question.Id">
                         delete <i class="far fa-trash-alt"></i>
                     </a>
+                    }
                     <a class="forum-comments-toggle" onclick="toggleComments('@question.Id')">comments <i class="fas fa-plus"></i></a>
                 </div>
                 <div class="forum-post-comments">

@@ -1,4 +1,6 @@
 ﻿@using Scio.Web.ViewModels.Forum.Posts
+@using Scio.Web.Helpers
+@using System.Security.Claims
 @model DetailsViewModel
 
 @{
@@ -8,7 +10,7 @@
 <article class="forum">
     <header>
         <h1>@Model.Title</h1>
-        <span>Asked @Model.CreatedOn.ToString("dd MMMM yyyy")</span>
+        <span>Asked @TimeSpanParser.Parse(Model.CreatedOn)</span>
     </header>
     <div class="forum-content">
         <div class="forum-post" id="@Model.Id">
@@ -17,7 +19,7 @@
                     <a class="upvote" onclick="vote(1, '@Model.Id')">
                         <i class="fas fa-chevron-up"></i>
                     </a>
-                    <p class="forum-votes-count">@Model.VotesCount</p>
+                    <p class="forum-votes-count">@Model.TotalVotes</p>
                     <a class="downvote" onclick="vote(-1, '@Model.Id')">
                         <i class="fas fa-chevron-down"></i>
                     </a>
@@ -35,94 +37,100 @@
                 @Html.Raw(Model.Body)
                 <div class="forum-post-meta">
                     <div class="forum-post-author">
-                        <img src="~/img/default-user-avatar.jpg">
+                        <img src="@(Model.AuthorImageUrl ?? "~/img/default-user.png")">
                         <section>
-                            <a href="#">@Model.AuthorEmail</a>
-                            <span>role</span>
+                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorDisplayName</a>
+                            <span>user</span>
                         </section>
                     </div>
                 </div>
                 <div class="forum-post-controls">
+                   @if (Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                    {
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@Model.Id">
                         edit <i class="far fa-edit"></i>
                     </a>
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id">
                         delete <i class="far fa-trash-alt"></i>
                     </a>
+                    }
                     <a class="forum-comments-toggle" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
                 </div>
                 <div class="forum-post-comments">
                     <div class="forum-comment">
                         @if (this.User.Identity.IsAuthenticated)
                         {
-                        <textarea rows="3"></textarea>
-                        <div class="form-group align-right">
-                            <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
-                        </div>
+                            <textarea rows="3"></textarea>
+                            <div class="form-group align-right">
+                                <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                            </div>
                         }
                     </div>
                 </div>
             </div>
         </div>
-        @if (Model.Answers.Count() == 0)
+       @if (Model.Answers.Count() == 0)
         {
-            <h2>No Answers</h2>
+        <h2>No Answers</h2>
         }
         else
         {
-            <h2>Answers</h2>
+        <h2>Answers</h2>
            @foreach (var answer in Model.Answers)
             {
-                <div class="forum-post" id="@answer.Id">
-                    <aside>
-                        <div>
-                            <a class="upvote" onclick="vote(1, '@answer.Id')">
-                                <i class="fas fa-chevron-up"></i>
-                            </a>
-                            <p class="forum-votes-count">@answer.VotesCount</p>
-                            <a class="downvote" onclick="vote(-1, '@answer.Id')">
-                                <i class="fas fa-chevron-down"></i>
-                            </a>
+            <div class="forum-post" id="@answer.Id">
+                <aside>
+                    <div>
+                        <a class="upvote" onclick="vote(1, '@answer.Id')">
+                            <i class="fas fa-chevron-up"></i>
+                        </a>
+                        <p class="forum-votes-count">@answer.VotesCount</p>
+                        <a class="downvote" onclick="vote(-1, '@answer.Id')">
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <p class="forum-comments-count">@answer.CommentsCount</p>
+                        <p>comments</p>
+                    </div>
+                </aside>
+                <div class="forum-post-main">
+                    @Html.Raw(answer.Body)
+                    <div class="forum-post-meta">
+                        <div class="forum-post-author">
+                            <img src="@(answer.AuthorImageUrl ?? "~/img/default-user.png")">
+                            <section>
+                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@answer.AuthorId">@answer.AuthorDisplayName</a>
+                                <span>user</span>
+                            </section>
                         </div>
-                        <div>
-                            <p class="forum-comments-count">@answer.CommentsCount</p>
-                            <p>comments</p>
-                        </div>
-                    </aside>
-                    <div class="forum-post-main">
-                        @Html.Raw(answer.Body)
-                        <div class="forum-post-meta">
-                            <div class="forum-post-author">
-                                <img src="~/img/default-user-avatar.jpg">
-                                <section>
-                                    <a href="#">@answer.AuthorEmail</a>
-                                    <span>user</span>
-                                </section>
+                        <span>Answered @TimeSpanParser.Parse(answer.CreatedOn)</span>
+                    </div>
+                    <div class="forum-post-controls">
+                       @if (Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                        {
+                        <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@answer.Id">
+                            edit <i class="far fa-edit"></i>
+                        </a>
+                        <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@answer.Id">
+                            delete <i class="far fa-trash-alt"></i>
+                        </a>
+                        }
+                        <a class="forum-comments-toggle" onclick="toggleComments('@answer.Id')">comments <i class="fas fa-plus"></i></a>
+                    </div>
+                    <div class="forum-post-comments">
+                        <div class="forum-comment">
+                           @if (this.User.Identity.IsAuthenticated)
+                            {
+                            <textarea rows="3"></textarea>
+                            <div class="form-group align-right">
+                                <button onclick="postComment('@answer.Id')">Send <i class="fas fa-paper-plane"></i></button>
                             </div>
-                            <span>Answered @answer.CreatedOn.ToString("dd MMMM yyyy")</span>
-                        </div>
-                        <div class="forum-post-controls">
-                            <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@answer.Id">
-                                edit <i class="far fa-edit"></i>
-                            </a>
-                            <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@answer.Id">
-                                delete <i class="far fa-trash-alt"></i>
-                            </a>
-                            <a class="forum-comments-toggle" onclick="toggleComments('@answer.Id')">comments <i class="fas fa-plus"></i></a>
-                        </div>
-                        <div class="forum-post-comments">
-                            <div class="forum-comment">
-                                @if (this.User.Identity.IsAuthenticated)
-                                {
-                                <textarea rows="3"></textarea>
-                                <div class="form-group align-right">
-                                    <button onclick="postComment('@answer.Id')">Send <i class="fas fa-paper-plane"></i></button>
-                                </div>
-                                }
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
+            </div>
             }
         }
         <h2>My Answer</h2>
@@ -134,10 +142,10 @@
             </div>
             <div class="forum-post-meta">
                 <div class="forum-post-author">
-                    <img src="~/img/default-user-avatar.jpg">
+                    <img src="~/img/default-user.png">
                     <section>
-                        <a href="#">username</a>
-                        <span>role</span>
+                        <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                        <span>user</span>
                     </section>
                 </div>
                 <div class="form-group align-right">

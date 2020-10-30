@@ -2,8 +2,10 @@
 {
     public class Validation
     {
-        public const int MinNameLength = 3;
+        public const int MinStringLength = 3;
 
         public const int MaxNameLength = 200;
+
+        public const int MaxTitleLength = 400;
     }
 }

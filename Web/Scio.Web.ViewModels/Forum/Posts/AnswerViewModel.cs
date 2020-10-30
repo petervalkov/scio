@@ -17,9 +17,11 @@
 
         public int CommentsCount { get; set; }
 
-        public string AuthorEmail { get; set; }
+        public string AuthorDisplayName { get; set; }
 
         public string AuthorId { get; set; }
+
+        public string AuthorImageUrl { get; set; }
 
         public DateTime CreatedOn { get; set; }
     }

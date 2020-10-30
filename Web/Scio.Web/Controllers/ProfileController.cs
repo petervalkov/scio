@@ -11,7 +11,7 @@
     using Scio.Data.Models;
     using Scio.Services.Data;
     using Scio.Services.Mapping;
-    using Scio.Web.Infrastructure.Utilities;
+    using Scio.Web.Helpers;
     using Scio.Web.ViewModels.Profile;
 
     public class ProfileController : Controller

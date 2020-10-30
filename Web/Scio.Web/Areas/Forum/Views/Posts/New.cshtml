@@ -1,5 +1,6 @@
 ﻿@using Scio.Web.ViewModels.Forum.Posts
 @model CreateInputModel
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "New";
@@ -8,7 +9,7 @@
 <form class="forum" role="form" asp-area="Forum" asp-controller="Posts" asp-action="New" method="post">
     <header>
         <div class="form-group">
-            <textarea asp-for="Title" type="text" id="question-title" name="title" rows="3"></textarea>
+            <textarea asp-for="Title" id="question-title" rows="3" required></textarea>
             <span asp-validation-for="Title"></span>
         </div>
     </header>
@@ -21,10 +22,10 @@
                 </div>
                 <div class="forum-post-meta">
                     <div class="forum-post-author">
-                        <img src="~/img/default-user-avatar.jpg">
+                        <img src="~/img/default-user.png">
                         <section>
-                            <a href="#">username</a>
-                            <span>role</span>
+                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                            <span>user</span>
                         </section>
                     </div>
                     <div class="form-group align-right">
