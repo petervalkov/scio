@@ -1,5 +1,6 @@
 ﻿namespace Scio.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -17,6 +18,6 @@
 
         TValidationModel SearchForVote<TValidationModel>(string postId, string userId);
 
-        bool PostExist(string id);
+        bool PostExist(string id, string authorId = null, string questionId = null, bool validateQuestion = false);
     }
 }

@@ -109,26 +109,29 @@
         }
 
         [HttpPost]
-        [ValidateModelState]
         public async Task<IActionResult> Edit(EditInputModel input)
         {
-            var post = this.forumPostService.GetById<EditViewModel>(input.Id);
-
-            if (post.QuestionId == null && input.Title == null)
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (this.ModelState.ContainsKey(ErrorMessage.InvalidRequest) ||
+                !this.forumPostService.PostExist(input.Id, userId, input.QuestionId, true))
             {
                 return this.BadRequest();
             }
 
-            if (!(await this.authorizationService.AuthorizeAsync(this.User, post, "Resource")).Succeeded)
+            if (!this.ModelState.IsValid)
             {
-                return this.BadRequest();
+                var errorModel = this.forumPostService.GetById<EditViewModel>(input.Id);
+                errorModel.Title = errorModel.QuestionId == null ? input.Title : errorModel.Title;
+                errorModel.Body = errorModel.QuestionId == null ? input.Body : errorModel.Body;
+                errorModel.AnswerBody = input.AnswerBody;
+
+                return this.View(errorModel);
             }
 
-            await this.forumPostService.EditAsync(input.Id, input.Title, input.Body);
+            await this.forumPostService
+                .EditAsync(input.Id, input.Title, input.AnswerBody ?? input.Body);
 
-            var postId = post.QuestionId ?? input.Id;
-
-            return this.RedirectToAction(nameof(this.Details), new { id = postId });
+            return this.RedirectToAction(nameof(this.Details), new { id = input.QuestionId ?? input.Id });
         }
 
         [HttpGet]

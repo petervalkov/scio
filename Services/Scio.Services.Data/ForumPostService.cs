@@ -83,6 +83,11 @@
             return AutoMapperConfig.MapperInstance.Map<TValidationModel>(post);
         }
 
-        public bool PostExist(string id) => this.forumPostsRepository.AllAsNoTracking().Any(x => x.Id == id);
+        public bool PostExist(string id, string authorId = null, string questionId = null, bool validateQuestion = false)
+            => this.forumPostsRepository
+                .AllAsNoTracking()
+                .Any(x => x.Id == id
+                    && authorId != null ? x.AuthorId == authorId : true
+                    && validateQuestion ? x.QuestionId == questionId : true);
     }
 }
