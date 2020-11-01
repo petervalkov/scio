@@ -1,55 +1,69 @@
 ﻿namespace Scio.Web.Areas.Forum.Controllers
 {
-    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Scio.Data.Models;
+
+    using Scio.Common;
     using Scio.Services.Data;
+    using Scio.Web.Infrastructure.Validation;
+    using Scio.Web.ViewModels;
     using Scio.Web.ViewModels.Forum.Comments;
 
     [Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> userManager;
         private readonly IForumCommentService commentService;
+        private readonly IForumPostService forumPostService;
 
         public CommentsController(
-            UserManager<ApplicationUser> userManager,
-            IForumCommentService commentService)
+            IForumCommentService commentService,
+            IForumPostService forumPostService)
         {
-            this.userManager = userManager;
             this.commentService = commentService;
+            this.forumPostService = forumPostService;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult<AllPostCommentsViewModel> Get(string postId)
+        [ValidateModelState]
+        public ActionResult<AllPostCommentsViewModel> Get([Required] string postId)
         {
-            if (postId == null)
-            {
-                return this.BadRequest();
-            }
-
-            var result = this.commentService.GetAllByParentId<PostCommentsViewModel>(postId, null);
+            var result = this.commentService
+                .GetAllByParentId<PostCommentsViewModel>(postId, null);
 
             if (result == null)
             {
-                return this.BadRequest();
+                return this.BadRequest(new ApiResponseModel { Message = ErrorMessage.Default });
             }
 
-            return new AllPostCommentsViewModel { Comments = result };
+            return this.Ok(new ApiResponseModel { Data = result, Message = Message.SuccessDefault });
         }
 
         [HttpPost]
+        [ValidateModelState]
         public async Task<ActionResult<PostCommentsViewModel>> Post(InputModel input)
         {
-            var userId = this.userManager.GetUserId(this.User);
-            var result = await this.commentService.Create<PostCommentsViewModel>(input.Body, null, input.PostId, userId);
-            return result;
+            if (!this.forumPostService.PostExist(input.PostId))
+            {
+                return this.BadRequest(new ApiResponseModel { Message = ErrorMessage.Default });
+            }
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await this.commentService
+                .Create<PostCommentsViewModel>(input.Body, null, input.PostId, userId);
+
+            if (result == null)
+            {
+                return this.BadRequest(new ApiResponseModel { Message = ErrorMessage.Default });
+            }
+
+            return this.Ok(new ApiResponseModel { Data = result, Message = Message.SuccessDefault });
         }
     }
 }

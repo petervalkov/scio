@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="forum-post-controls">
-                   @if (Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                   @if (this.User.Identity.IsAuthenticated && Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                     {
                     <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@Model.Id">
                         edit <i class="far fa-edit"></i>
@@ -58,13 +58,10 @@
                 </div>
                 <div class="forum-post-comments">
                     <div class="forum-comment">
-                        @if (this.User.Identity.IsAuthenticated)
-                        {
-                            <textarea rows="3"></textarea>
-                            <div class="form-group align-right">
-                                <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
-                            </div>
-                        }
+                        <textarea rows="3"></textarea>
+                        <div class="form-group align-right">
+                            <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,13 +117,10 @@
                     </div>
                     <div class="forum-post-comments">
                         <div class="forum-comment">
-                           @if (this.User.Identity.IsAuthenticated)
-                            {
                             <textarea rows="3"></textarea>
                             <div class="form-group align-right">
                                 <button onclick="postComment('@answer.Id')">Send <i class="fas fa-paper-plane"></i></button>
                             </div>
-                            }
                         </div>
                     </div>
                 </div>

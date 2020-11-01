@@ -1,70 +1,53 @@
 async function toggleComments(postId) {
-    const comments = document.getElementById(postId).querySelector(".forum-comments");
+    const comments = document.getElementById(postId).querySelector(".forum-post-comments");
+    const btn = document.getElementById(postId).querySelector(".forum-comments-toggle");
+
     if (comments.style.maxHeight) {
         comments.style.maxHeight = null;
+        btn.innerHTML = `comments ${icons.plus}`;
     } else {
         if (comments.childElementCount == 1) {
-            const data = await commentsApi.get(postId);
-            if (data) {
-                data.comments.forEach(comment => comments.insertBefore(createComment(comment), comments.lastElementChild));
-            } else {
-                alert("Something went wrong!");
-            }
+            btn.innerHTML = `comments ${icons.spinner}`;
+            
+            const result = await forumApi('GET', `comments?postId=${postId}`);
+            if (result.successfull) {
+                result.data.forEach(comment => comments.insertBefore(createComment(comment), comments.lastElementChild));
+            }else{
+                alertify.alert("Error", result.message, function(){
+                    alertify.message(result.message);
+                });
+            }  
         }
 
+        btn.innerHTML = `comments ${icons.minus}`;
         comments.style.maxHeight = comments.scrollHeight + "px";
     }
 }
 
 async function postComment(postId) {
     const currentPost = document.getElementById(postId);
-
-    const comments = currentPost.querySelector(".forum-comments");
+    const comments = currentPost.querySelector(".forum-post-comments");
     const commentsCount = currentPost.querySelector(".forum-comments-count");
     const textArea = comments.querySelector("textarea");
     const button = comments.querySelector("button");
     button.disabled = true;
+    button.innerHTML = `Send ${icons.spinner}`;
 
-    const data = await commentsApi.post(postId, textArea.value);
+    const result = await forumApi('POST', 'comments', { postId, body: textArea.value });
 
-    if (data) {
+    if(result.successfull){
         textArea.value = "";
-        comments.insertBefore(createComment(data), comments.lastElementChild);
+        comments.insertBefore(createComment(result.data), comments.lastElementChild);
         comments.style.maxHeight = comments.scrollHeight + "px";
         commentsCount.textContent = Number(commentsCount.textContent) + 1; //Change
-    } else {
-        alert("Something went wrong!");
     }
 
+    button.innerHTML = `Send ${icons.send}`;
     button.disabled = false;
-}
 
-const commentsApi = {
-    get: async (postId) => await fetch(`/api/comments?postId=${postId}`).then(response => {
-        if (response.status == 200) {
-            return response.json();
-        }
-    }),
-    post: async (postId, body) => await fetch('/api/comments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ postId, body })
-    }).then(response => {
-        if (response.status == 200) {
-            return response.json();
-        }
-    })
-}
-
-const voteType = { '-1': 'downvote', '1': 'upvote' }
-const icons = {
-    spinner: '<i class="fas fa-spinner i-spinner"></i>',
-    downvote: '<i class="fas fa-chevron-down"></i>',
-    upvote: '<i class="fas fa-chevron-up"></i>'
-}
-const messages = {
-    defaultError: 'Something went wrong',
-    login: 'Please login to your account'
+    alertify.alert(result.successfull ? "Successfull" : "Error", result.message, function(){
+        alertify.message(result.message);
+    });
 }
 
 async function vote(voteValue, postId) {
@@ -72,28 +55,21 @@ async function vote(voteValue, postId) {
     const vote = voteType[voteValue];
     const target = forumPost.querySelector(`.${vote}`);
     target.innerHTML = icons.spinner;
-    
-    let message = messages.defaultError;
-    const result = await forumApi.vote({ voteValue, postId });
-    if (result) {
-        if (result.votesSum != undefined) {
-            const votes = forumPost.querySelector('.forum-votes-count');
-            votes.textContent = result.votesSum;
-            message = result.message;
-        } else if (result.errorMessage) {
-            message = result.errorMessage;
-        }
+
+    const result = await forumApi('POST', 'votes', { voteValue, postId });
+    if (result.successfull) {
+        const votes = forumPost.querySelector('.forum-votes-count');
+        votes.textContent = result.data;
     }
 
     target.innerHTML = icons[vote];
-    alert(message);
+
+    alertify.alert(result.successfull ? "Successfull" : "Error", result.message, function(){
+        alertify.message(result.message);
+    });
 }
 
-const forumApi = {
-    vote: async (data) => await handleRequest('votes', 'POST', data)
-}
-
-async function handleRequest(endpoint, method, data) {
+async function forumApi(method, endpoint, data) {
     const options = { method }
     const headers = {}
 
@@ -106,21 +82,40 @@ async function handleRequest(endpoint, method, data) {
 
     const response = await fetch(`/api/${endpoint}`, options);
 
-    if (response.status == 200) {
-        return await response.json();
-    } else if (response.status == 401) {
-        return { errorMessage: messages.login }
-    } else {
-        const result = await response.json();
-        let errorMessage = messages.defaultError;
-        if (result.ErrorMessage) {
-            errorMessage = result.ErrorMessage[0]; //Show only first
-        } else if (result.errors) {
-            errorMessage = result.errors[Object.keys(result.errors)[0]];
-        }
-        return { errorMessage };
+    if (response.status == 401) {
+        return { message: messages.login }
     }
+
+    const result = await response.json();
+
+    if (response.status == 200) {
+        result.successfull = true;
+    } else {
+        if (result.ErrorMessage) {
+            result.message = result.ErrorMessage[0]; //FIX
+        } else if (result.errors) {
+            result.message = result.errors[Object.keys(result.errors)[0]].join(' '); //FIX
+        }
+    }
+    
+    return result;
 }
+
+const icons = {
+    spinner: '<i class="fas fa-spinner i-spinner"></i>',
+    downvote: '<i class="fas fa-chevron-down"></i>',
+    upvote: '<i class="fas fa-chevron-up"></i>',
+    plus: '<i class="fas fa-plus"></i>',
+    minus: '<i class="fas fa-minus"></i>',
+    send: '<i class="fas fa-paper-plane"></i>'
+}
+
+const messages = {
+    defaultError: 'Something went wrong',
+    login: 'Please login to your account'
+}
+
+const voteType = { '-1': 'downvote', '1': 'upvote' }
 
 function createElement(type, content, attributes) {
     const result = document.createElement(type);
@@ -152,8 +147,8 @@ function createElement(type, content, attributes) {
 function createComment(comment) {
     return createElement('div', [
         comment.body,
-        createElement('span', comment.authorEmail),
+        createElement('span', ` - ${comment.authorEmail} `),
         createElement('span', comment.createdOn)
-    ], { className: 'forum-comment-content' }
+    ], { className: 'forum-comment' }
     );
 }

@@ -83,13 +83,10 @@
                 </div>
                 <div class="forum-post-comments">
                     <div class="forum-comment">
-                       @if (this.User.Identity.IsAuthenticated)
-                        {
                         <textarea rows="3"></textarea>
                         <div class="form-group align-right">
                             <button onclick="postComment('@(Model.QuestionId ?? Model.Id)')">Send <i class="fas fa-paper-plane"></i></button>
                         </div>
-                        }
                     </div>
                 </div>
             </div>
@@ -137,13 +134,10 @@
                 </div>
                 <div class="forum-post-comments">
                     <div class="forum-comment">
-                       @if (this.User.Identity.IsAuthenticated)
-                        {
                         <textarea rows="3"></textarea>
                         <div class="form-group align-right">
                             <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
                         </div>
-                        }
                     </div>
                 </div>
             </div>

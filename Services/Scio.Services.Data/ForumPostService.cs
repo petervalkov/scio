@@ -86,8 +86,8 @@
         public bool PostExist(string id, string authorId = null, string questionId = null, bool validateQuestion = false)
             => this.forumPostsRepository
                 .AllAsNoTracking()
-                .Any(x => x.Id == id
-                    && authorId != null ? x.AuthorId == authorId : true
-                    && validateQuestion ? x.QuestionId == questionId : true);
+                .Any(x => (x.Id == id)
+                    && (authorId == null || x.AuthorId == authorId)
+                    && (!validateQuestion || x.QuestionId == questionId));
     }
 }
