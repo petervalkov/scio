@@ -19,5 +19,7 @@
         void HardDelete(TEntity entity);
 
         void Undelete(TEntity entity);
+
+        Task<TEntity> FindByIdAsync(params object[] id);
     }
 }

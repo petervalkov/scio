@@ -17,18 +17,42 @@
             this.forumPostsRepository = forumPostsRepository;
         }
 
-        public IEnumerable<TViewModel> GetAllQuestions<TViewModel>()
+        public IEnumerable<TViewModel> Get<TViewModel>()
             => this.forumPostsRepository
             .AllAsNoTracking()
             .Where(p => p.QuestionId == null)
             .To<TViewModel>()
             .ToList();
 
-        public TViewModel GetById<TViewModel>(string id)
+        public TModel Get<TModel>(string id, string authorId = null)
             => this.forumPostsRepository
             .AllAsNoTracking()
-            .Where(p => p.Id == id)
-            .To<TViewModel>()
+            .Where(x => x.Id == id && (authorId == null || x.AuthorId == authorId))
+            .To<TModel>()
+            .FirstOrDefault();
+
+        public TModel Find<TModel>(string id, string authorId = null, string questionId = null)
+            => this.forumPostsRepository
+            .All()
+            .Where(x => x.Id == id
+                && (authorId == null || x.AuthorId == authorId)
+                && (questionId == null || x.QuestionId == questionId))
+            .ToList()
+            .AsQueryable()
+            .To<TModel>()
+            .FirstOrDefault();
+
+        public TModel SearchForVote<TModel>(string postId, string userId)
+            => this.forumPostsRepository
+            .AllWithDeletedIncluding("Votes")
+            .Where(p => p.Id == postId)
+            .Select(p => new ForumPost
+            {
+                Votes = p.Votes.Where(v => v.UserId == userId).ToList(),
+            })
+            .ToList()
+            .AsQueryable()
+            .To<TModel>()
             .FirstOrDefault();
 
         public async Task<string> CreateAsync(string title, string body, string questionId, string authorId)
@@ -49,9 +73,7 @@
 
         public async Task EditAsync(string id, string title, string body)
         {
-            var question = this.forumPostsRepository
-                .All()
-                .FirstOrDefault(x => x.Id == id);
+            var question = await this.forumPostsRepository.FindByIdAsync(id);
 
             question.Title = title;
             question.Body = body;
@@ -61,33 +83,10 @@
 
         public async Task DeleteAsync(string id)
         {
-            var question = this.forumPostsRepository
-                .AllAsNoTracking()
-                .FirstOrDefault(q => q.Id == id);
+            var post = await this.forumPostsRepository.FindByIdAsync(id);
 
-            this.forumPostsRepository.Delete(question);
+            this.forumPostsRepository.Delete(post);
             await this.forumPostsRepository.SaveChangesAsync();
         }
-
-        public TValidationModel SearchForVote<TValidationModel>(string postId, string userId)
-        {
-            var post = this.forumPostsRepository
-              .AllWithDeletedIncluding("Votes")
-              .Where(p => p.Id == postId)
-              .Select(p => new ForumPost
-              {
-                  Votes = p.Votes.Where(v => v.UserId == userId).ToList(),
-              })
-              .FirstOrDefault();
-
-            return AutoMapperConfig.MapperInstance.Map<TValidationModel>(post);
-        }
-
-        public bool PostExist(string id, string authorId = null, string questionId = null, bool validateQuestion = false)
-            => this.forumPostsRepository
-                .AllAsNoTracking()
-                .Any(x => (x.Id == id)
-                    && (authorId == null || x.AuthorId == authorId)
-                    && (!validateQuestion || x.QuestionId == questionId));
     }
 }

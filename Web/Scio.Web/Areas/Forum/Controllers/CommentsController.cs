@@ -49,7 +49,7 @@
         [ValidateModelState]
         public async Task<ActionResult<PostCommentsViewModel>> Post(InputModel input)
         {
-            if (!this.forumPostService.PostExist(input.PostId))
+            if (this.forumPostService.Get<ValidationModel>(input.PostId) == null)
             {
                 return this.BadRequest(new ApiResponseModel { Message = ErrorMessage.Default });
             }

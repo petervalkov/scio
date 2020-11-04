@@ -27,6 +27,8 @@
 
         public IQueryable<TEntity> AllWithDeletedIncluding(string collection) => this.DbSet.Include(collection);
 
+        public async Task<TEntity> FindByIdAsync(params object[] id) => await this.DbSet.FindAsync(id);
+
         public Task<TEntity> GetByIdWithDeletedAsync(params object[] id)
         {
             var getByIdPredicate = EfExpressionHelper.BuildByIdPredicate<TEntity>(this.Context, id);

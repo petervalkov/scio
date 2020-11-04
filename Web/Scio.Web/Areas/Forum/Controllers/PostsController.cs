@@ -12,6 +12,7 @@
     using Scio.Data.Models;
     using Scio.Services.Data;
     using Scio.Web.Infrastructure.Validation;
+    using Scio.Web.ViewModels;
     using Scio.Web.ViewModels.Forum.Common;
     using Scio.Web.ViewModels.Forum.Posts;
 
@@ -19,16 +20,13 @@
     public class PostsController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IAuthorizationService authorizationService;
         private readonly IForumPostService forumPostService;
 
         public PostsController(
             UserManager<ApplicationUser> userManager,
-            IAuthorizationService authorizationService,
             IForumPostService forumPostService)
         {
             this.userManager = userManager;
-            this.authorizationService = authorizationService;
             this.forumPostService = forumPostService;
         }
 
@@ -38,7 +36,9 @@
         [AllowAnonymous]
         public IActionResult All()
         {
-            var viewModel = this.forumPostService.GetAllQuestions<QuestionViewModel>();
+            var viewModel = this.forumPostService
+                .Get<QuestionViewModel>();
+
             return this.View(viewModel);
         }
 
@@ -53,7 +53,9 @@
                 return this.NotFound();
             }
 
-            var viewModel = this.forumPostService.GetById<DetailsViewModel>(id);
+            var viewModel = this.forumPostService
+                .Get<DetailsViewModel>(id);
+
             return this.View(viewModel);
         }
 
@@ -64,7 +66,7 @@
         public async Task<IActionResult> New(CreateInputModel input)
         {
             if (this.ModelState.ContainsKey(ErrorMessage.InvalidRequest) ||
-                !(input.QuestionId == null || this.forumPostService.PostExist(input.QuestionId)))
+                (input.QuestionId != null && this.forumPostService.Get<ValidationModel>(input.QuestionId) == null))
             {
                 return this.BadRequest();
             }
@@ -77,12 +79,13 @@
                 }
 
                 var question = this.forumPostService
-                    .GetById<DetailsViewModel>(input.QuestionId);
+                    .Get<DetailsViewModel>(input.QuestionId);
 
                 return this.View(nameof(this.Details), question);
             }
 
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = this.User
+                .FindFirstValue(ClaimTypes.NameIdentifier);
             var postId = await this.forumPostService
                 .CreateAsync(input.Title, input.Body ?? input.AnswerBody, input.QuestionId, userId);
 
@@ -96,11 +99,14 @@
 
         [HttpGet]
         [ValidateModelState]
-        public async Task<IActionResult> Edit([Required] string id)
+        public IActionResult Edit([Required] string id)
         {
-            var post = this.forumPostService.GetById<EditViewModel>(id);
+            var userId = this.User
+                .FindFirstValue(ClaimTypes.NameIdentifier);
+            var post = this
+                .forumPostService.Get<EditViewModel>(id, userId);
 
-            if (!(await this.authorizationService.AuthorizeAsync(this.User, post, "Resource")).Succeeded)
+            if (post == null)
             {
                 return this.BadRequest();
             }
@@ -111,16 +117,18 @@
         [HttpPost]
         public async Task<IActionResult> Edit(EditInputModel input)
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (this.ModelState.ContainsKey(ErrorMessage.InvalidRequest) ||
-                !this.forumPostService.PostExist(input.Id, userId, input.QuestionId, true))
+            var userId = this.User
+                .FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (this.ModelState.ContainsKey(ErrorMessage.InvalidRequest)
+                || this.forumPostService.Find<ValidationModel>(input.Id, userId, input.QuestionId) == null)
             {
                 return this.BadRequest();
             }
 
             if (!this.ModelState.IsValid)
             {
-                var errorModel = this.forumPostService.GetById<EditViewModel>(input.Id);
+                var errorModel = this.forumPostService.Get<EditViewModel>(input.Id);
                 errorModel.Title = errorModel.QuestionId == null ? input.Title : errorModel.Title;
                 errorModel.Body = errorModel.QuestionId == null ? input.Body : errorModel.Body;
                 errorModel.AnswerBody = input.AnswerBody;
@@ -138,9 +146,12 @@
         [ValidateModelState]
         public async Task<IActionResult> Delete([Required] string id)
         {
-            var question = this.forumPostService.GetById<ResourceOwnerValidationModel>(id);
+            var userId = this.User
+                .FindFirstValue(ClaimTypes.NameIdentifier);
+            var post = this.forumPostService
+                .Find<ValidationModel>(id, userId);
 
-            if (!(await this.authorizationService.AuthorizeAsync(this.User, question, "Resource")).Succeeded)
+            if (post == null)
             {
                 return this.BadRequest();
             }

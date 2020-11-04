@@ -6,18 +6,18 @@
 
     public interface IForumPostService
     {
-        TViewModel GetById<TViewModel>(string id);
+        IEnumerable<TModel> Get<TModel>();
 
-        IEnumerable<TViewModel> GetAllQuestions<TViewModel>();
+        TModel Get<TModel>(string id, string authorId = null);
+
+        TModel Find<TModel>(string id, string authorId = null, string questionId = null);
+
+        TModel SearchForVote<TModel>(string postId, string userId);
 
         Task<string> CreateAsync(string title, string body, string questionId, string authorId);
 
         Task EditAsync(string id, string title, string body);
 
         Task DeleteAsync(string id);
-
-        TValidationModel SearchForVote<TValidationModel>(string postId, string userId);
-
-        bool PostExist(string id, string authorId = null, string questionId = null, bool validateQuestion = false);
     }
 }
