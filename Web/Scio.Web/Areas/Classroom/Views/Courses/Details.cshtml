@@ -1,0 +1,26 @@
+﻿@using Scio.Common
+@using Scio.Web.Helpers
+@using System.Security.Claims
+@using Scio.Web.ViewModels.Classroom.Courses
+@model DetailsViewModel
+
+@{ ViewData["Title"] = Model.Title; }
+
+    <div style="display:block">
+        <div>@Model.Title</div>
+        <div>@Model.Description</div>
+        <div>@Model.Type</div>
+        <div>@Model.AuthorDisplayName</div>
+        <a asp-area="Classroom" asp-controller="Courses" asp-action="AddUser" asp-route-id="@Model.Id">Join course</a>
+
+
+       @foreach (var user in Model.Users)
+        {
+        <div style="display:flex">
+            <div>@user.UserEmail</div>
+            <div>@user.CreatedOn</div>
+            <div>@user.Status</div>
+        </div>
+        }
+
+    </div>

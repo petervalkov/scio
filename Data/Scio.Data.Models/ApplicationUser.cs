@@ -48,5 +48,9 @@ namespace Scio.Data.Models
         public virtual ICollection<ForumComment> ForumComments { get; set; }
 
         public virtual ICollection<ForumVote> ForumVotes { get; set; }
+
+        public virtual ICollection<Course> CoursesCreated { get; set; }
+
+        public virtual ICollection<CourseUser> CoursesEnrolled { get; set; }
     }
 }

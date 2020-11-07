@@ -95,6 +95,7 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration.GetSection("SENDGRID_API_KEY").Value));
+            services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<IForumPostService, ForumPostService>();
             services.AddTransient<IForumCommentService, ForumCommentService>();
             services.AddTransient<IForumVoteService, ForumVoteService>();

@@ -10,6 +10,8 @@
 
         public const string InvalidRequest = "Invalid request";
 
+        public const string InvalidCourseType = "Invalid course type";
+
         public const string AllowedLengthRange = "{0} must be between {2} and {1} characters";
 
         public const string MinLength = "{0} must be atleast {1} characters";

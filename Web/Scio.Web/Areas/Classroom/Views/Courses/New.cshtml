@@ -1,0 +1,45 @@
+﻿@using Scio.Web.ViewModels.Classroom.Courses
+@model InputModel
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "New";
+}
+
+<form class="forum" role="form" asp-area="Classroom" asp-controller="Courses" asp-action="New" method="post">
+    <header>
+        <div class="form-group">
+            <textarea asp-for="Title" id="question-title" rows="3" required></textarea>
+            <span asp-validation-for="Title"></span>
+        </div>
+    </header>
+    <div class="forum-content">
+        <div class="forum-post">
+            <div class="forum-post-main">
+                <div class="form-group">
+                    <textarea asp-for="Description" id="mytextarea"></textarea>
+                    <span asp-validation-for="Description"></span>
+                </div>
+                <div class="form-group">
+                    <select name="type">
+                        <option value="0">Public</option>
+                        <option value="1">Private</option>
+                    </select>
+                </div>
+                <div class="forum-post-meta">
+                    <div class="forum-post-author">
+                        <img src="~/img/default-user.png">
+                        <section>
+                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                            <span>user</span>
+                        </section>
+                    </div>
+                    <div class="form-group align-right">
+                        <button type="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="_SideContentPartial" />
+</form>

@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
 
     using Scio.Data.Common.Models;
+    using Scio.Data.Configuration;
     using Scio.Data.Models;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
@@ -29,6 +30,10 @@
         public DbSet<ForumComment> ForumComments { get; set; }
 
         public DbSet<ForumVote> ForumVotes { get; set; }
+
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<CourseUser> CourseUsers { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
 
@@ -53,6 +58,8 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new CourseUserConfiguration());
+
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 
