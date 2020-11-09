@@ -3,16 +3,20 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using Scio.Services.Data.DTOs;
+
     public interface ICourseService
     {
-        IEnumerable<TModel> GetAll<TModel>();
+        IEnumerable<TModel> All<TModel>();
 
         TModel Get<TModel>(string id);
 
+        CourseValidationModel GetValidationModel(string id, string userId);
+
         Task<string> CreateAsync(string title, string description, int type, string authorId);
 
-        Task<string> AddUserAsync(string courseId, string userId, int status);
+        Task<int> AddUserAsync(string courseId, string userId, int status);
 
-        TModel SearchForUser<TModel>(string id, string userId);
+        Task<int> UpdateUserStatusAsync(string courseId, string userId, int status);
     }
 }

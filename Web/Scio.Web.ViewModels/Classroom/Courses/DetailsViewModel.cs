@@ -1,7 +1,5 @@
 ﻿namespace Scio.Web.ViewModels.Classroom.Courses
 {
-    using System.Collections.Generic;
-
     using Scio.Data.Models;
     using Scio.Data.Models.Enums;
     using Scio.Services.Mapping;
@@ -19,7 +17,5 @@
         public string AuthorDisplayName { get; set; }
 
         public string UserStatus { get; set; }
-
-        public IEnumerable<CourseUsersViewModel> Users { get; set; }
     }
 }

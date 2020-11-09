@@ -29,10 +29,10 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult All()
+        public IActionResult Home()
         {
             var courses = this.courseService
-                .GetAll<CourseViewModel>();
+                .All<HomeViewModel>();
 
             return this.View(courses);
         }
@@ -64,25 +64,13 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddUser(string id) // Move to API
+        [AllowAnonymous]
+        public IActionResult Settings(string id)
         {
-            var userId = this.User
-                .FindFirstValue(ClaimTypes.NameIdentifier);
-
             var course = this.courseService
-                .SearchForUser<CourseUserValidationModel>(id, userId);
+                .Get<SettingsViewModel>(id);
 
-            if (course == null || course.ContainsUser)
-            {
-                return this.BadRequest();
-            }
-
-            int status = course.Type == CourseType.Public ? 1 : 0;
-
-            var courseId = await this.courseService
-                .AddUserAsync(id, userId, status);
-
-            return this.RedirectToAction(nameof(this.Details), new { id });
+            return this.View(course);
         }
     }
 }

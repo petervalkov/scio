@@ -4,7 +4,7 @@
     using Scio.Data.Models.Enums;
     using Scio.Services.Mapping;
 
-    public class CourseViewModel : IMapFrom<Course>
+    public class HomeViewModel : IMapFrom<Course>
     {
         public string Id { get; set; }
 

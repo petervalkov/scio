@@ -7,6 +7,7 @@
     using Scio.Data.Common.Repositories;
     using Scio.Data.Models;
     using Scio.Data.Models.Enums;
+    using Scio.Services.Data.DTOs;
     using Scio.Services.Mapping;
 
     public class CourseService : ICourseService
@@ -22,7 +23,7 @@
             this.courseUserRepository = courseUserRepository;
         }
 
-        public IEnumerable<TModel> GetAll<TModel>()
+        public IEnumerable<TModel> All<TModel>()
             => this.courseRepository
             .AllAsNoTracking()
             .To<TModel>()
@@ -35,20 +36,21 @@
             .To<TModel>()
             .SingleOrDefault();
 
-        public TModel SearchForUser<TModel>(string id, string userId)
-        {
-            return this.courseRepository
-                .AllWithDeletedIncluding("Users")
-                .Where(x => x.Id == id)
-                .Select(x => new Course
-                {
-                    Id = x.Id,
-                    Type = x.Type,
-                    Users = x.Users.Where(u => u.UserId == userId).ToList(),
-                })
-                .To<TModel>()
-                .FirstOrDefault();
-        }
+        public CourseValidationModel GetValidationModel(string id, string userId)
+            => this.courseRepository
+            .AllWithDeletedIncluding("Users")
+            .Where(x => x.Id == id)
+            .Select(x => new CourseValidationModel
+            {
+                Id = x.Id,
+                Type = x.Type,
+                UserStatus = x.Users
+                    .Where(x => x.UserId == userId)
+                    .Select(x => x.Status)
+                    .SingleOrDefault(),
+                AuthorId = x.AuthorId,
+            })
+            .FirstOrDefault();
 
         public async Task<string> CreateAsync(string title, string description, int type, string authorId)
         {
@@ -66,7 +68,7 @@
             return course.Id;
         }
 
-        public async Task<string> AddUserAsync(string courseId, string userId, int status)
+        public async Task<int> AddUserAsync(string courseId, string userId, int status)
         {
             var courseUser = new CourseUser
             {
@@ -78,7 +80,18 @@
             await this.courseUserRepository.AddAsync(courseUser);
             await this.courseRepository.SaveChangesAsync();
 
-            return "success";
+            return (int)courseUser.Status;
+        }
+
+        public async Task<int> UpdateUserStatusAsync(string courseId, string userId, int status)
+        {
+            var courseUser = await this.courseUserRepository
+                .FindByIdAsync(courseId, userId);
+
+            courseUser.Status = (CourseUserStatus)status;
+            await this.courseUserRepository.SaveChangesAsync();
+
+            return (int)courseUser.Status;
         }
     }
 }
