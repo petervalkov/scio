@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0",
   "defaultProvider": "jsdelivr",
   "libraries": [
@@ -40,6 +40,11 @@
       "provider": "cdnjs",
       "library": "font-awesome@5.14.0",
       "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "admin-lte@3.0.5",
+      "destination": "wwwroot/lib/admin-lte/"
     }
   ]
 }

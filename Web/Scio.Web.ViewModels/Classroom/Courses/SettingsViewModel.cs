@@ -10,6 +10,10 @@
     {
         public string Id { get; set; }
 
-        public IEnumerable<UsersViewModel> Users { get; set; }
+        public string Title { get; set; }
+
+        public string ShortTitle => this.Title.Length > 30 ? this.Title.Substring(0, 30) + "..." : this.Title;
+
+        public IEnumerable<CourseUsersViewModel> Users { get; set; }
     }
 }

@@ -6,21 +6,46 @@
 
 @{ ViewData["Title"] = Model.Title; }
 
-    <div style="display:block">
-        <div>@Model.Title</div>
-        <div>@Model.Description</div>
-        <div>@Model.Type</div>
-        <div>@Model.AuthorDisplayName</div>
-        <a asp-area="Classroom" asp-controller="Courses" asp-action="AddUser" asp-route-id="@Model.Id">Join course</a>
-
-
-       @foreach (var user in Model.Users)
-        {
-        <div style="display:flex">
-            <div>@user.UserEmail</div>
-            <div>@user.CreatedOn</div>
-            <div>@user.Status</div>
+<section class="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Course Info</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Classroom" asp-controller="Courses" asp-action="Home">Courses</a></li>
+                        <li class="breadcrumb-item active">@Model.ShortTitle</li>
+                    </ol>
+                </div>
+            </div>
         </div>
-        }
-
     </div>
+    <div class="content-flex">
+        <div class="container-fluid main-content">
+            <div class="card">
+                <div class="card-body">
+                    <span class="description">@Model.Type</span>
+                   @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.AuthorId)
+                    {
+                        <a asp-area="Classroom" asp-controller="Courses" asp-action="Settings" asp-route-id="@Model.Id" class="float-right">Settings</a>
+                    }
+                    <h2>@Model.Title</h2>
+                    @Html.Raw(Model.Description)
+                    <div class="user-block float-left">
+                        <img class="img-circle img-bordered-sm" src="@(Model.AuthorImageUrl ?? "~/img/default-user.png")" alt="user image">
+                        <span class="username">
+                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorDisplayName</a>
+                        </span>
+                        <span class="description">user</span>
+                    </div>
+                    <button onclick="joinCourse('@Model.Id')" class="btn btn-primary float-right">@((int)Model.Type == 1 ? "Send Request" : "Join Course")</button>
+                </div>
+            </div>
+        </div>
+        <partial name="_SideContentPartial" />
+    </div>
+</section>
+

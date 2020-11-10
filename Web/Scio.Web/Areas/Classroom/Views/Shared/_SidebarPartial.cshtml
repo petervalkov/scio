@@ -1,6 +1,41 @@
-﻿<aside>
-    <ul>
-        <li><a asp-area="Classroom" asp-controller="Courses" asp-action="All">All Courses</a></li>
-        <li><a asp-area="Classroom" asp-controller="Courses" asp-action="New">New Course</a></li>
-    </ul>
+﻿@using System.Security.Claims
+@using Scio.Common
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="index3.html" class="brand-link">
+        <img src="~/lib/admin-lte/img/AdminLTELogo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">@GlobalConstants.SystemName</span>
+    </a>
+    <div class="sidebar">
+       @if (this.User.Identity.IsAuthenticated)
+        {
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="~/img/default-user.png" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+
+                    <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value" class="d-block">
+                        @User.FindFirst(ClaimTypes.Name).Value
+                    </a>
+                </div>
+            </div>
+        }
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Classroom" asp-controller="Courses" asp-action="Home">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>All Courses</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Classroom" asp-controller="Courses" asp-action="New">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>New Course</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </aside>

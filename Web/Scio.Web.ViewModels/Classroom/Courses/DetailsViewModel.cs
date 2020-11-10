@@ -14,8 +14,12 @@
 
         public CourseType Type { get; set; }
 
+        public string AuthorId { get; set; }
+
         public string AuthorDisplayName { get; set; }
 
-        public string UserStatus { get; set; }
+        public string AuthorImageUrl { get; set; }
+
+        public string ShortTitle => this.Title.Length > 30 ? this.Title.Substring(0, 30) + "..." : this.Title;
     }
 }

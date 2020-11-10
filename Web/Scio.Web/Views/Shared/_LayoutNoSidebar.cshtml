@@ -14,16 +14,13 @@
     <environment names="Staging,Production">
     </environment>
 </head>
-<body class="layout-fixed layout-navbar-fixed sidebar-mini">
+<body class="layout-top-nav">
     <div class="wrapper">
         <partial name="_NavbarPartial.cshtml" />
-        <partial name="_SidebarPartial" />
-        <div class="content-wrapper">
-            <partial name="_CookieConsentPartial" />
+        <partial name="_CookieConsentPartial" />
 
-            @this.RenderBody()
+        @this.RenderBody()
 
-        </div>
         <partial name="~/Views/Shared/_FooterPartial.cshtml" />
     </div>
 

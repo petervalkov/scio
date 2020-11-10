@@ -1,0 +1,133 @@
+﻿@using Scio.Common
+@using Scio.Web.Helpers
+@using System.Security.Claims
+@using Scio.Web.ViewModels.Classroom.Courses
+@model SettingsViewModel
+
+@{ ViewData["Title"] = "Course Settings"; }
+
+<section class="content">
+    <div class="content-custom">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-area="Classroom" asp-controller="Courses" asp-action="Home">Courses</a></li>
+                            <li class="breadcrumb-item"><a asp-area="Classroom" asp-controller="Courses" asp-action="Details" asp-route-id="@Model.Id">@Model.ShortTitle</a></li>
+                            <li class="breadcrumb-item active">Settings</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-flex">
+            <div class="container-fluid main-content">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="post">
+                           @if (Model.Users.Where(x => (int)x.Status == 1).Count() == 0)
+                            {
+                                <h4>No Users Requests</h4>
+                            }
+                            else
+                            {
+                                <h4>No Users Requests</h4>
+                                <div class="row">
+                                    <div class="col-md-3"><h6>Name</h6></div>
+                                    <div class="col-md-3"><h6>Email</h6></div>
+                                    <div class="col-md-3"><h6>Last Modified</h6></div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                               @foreach (var user in Model.Users.Where(x => (int)x.Status == 1))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-3">@user.UserDisplayName</div>
+                                        <div class="col-md-3">@user.UserEmail</div>
+                                        <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
+                                        <div class="col-md-3">
+                                            <button onclick="updateStatus('@Model.Id', '@user.UserId', 2)" class="btn btn-block bg-gradient-danger btn-sm">reject</button>
+                                            @*<a onclick="updateStatus('@Model.Id', '@user.UserId', 2)">reject</a>*@
+                                        </div>
+                                    </div>
+                                    <hr>
+                                }
+                            }
+                        </div>
+
+                        <div class="post">
+                           @if (Model.Users.Where(x => (int)x.Status == 0).Count() == 0)
+                            {
+                                <h4>No Pending Requests</h4>
+                            }
+                            else
+                            {
+                                <h4>Pending Requests</h4>
+                                <div class="row">
+                                    <div class="col-md-3"><h6>Name</h6></div>
+                                    <div class="col-md-3"><h6>Email</h6></div>
+                                    <div class="col-md-3"><h6>Last Modified</h6></div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                               @foreach (var user in Model.Users.Where(x => (int)x.Status == 0))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-3">@user.UserDisplayName</div>
+                                        <div class="col-md-3">@user.UserEmail</div>
+                                        <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <button onclick="updateStatus('@Model.Id', '@user.UserId', 1)" class="btn btn-block bg-gradient-success btn-sm">approve</button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button onclick="updateStatus('@Model.Id', '@user.UserId', 2)" class="btn btn-block bg-gradient-danger btn-sm">reject</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                }
+                            }
+                        </div>
+                        <div class="post">
+                           @if (Model.Users.Where(x => (int)x.Status == 2).Count() == 0)
+                            {
+                                <h4>No Rejected Users</h4>
+                            }
+                            else
+                            {
+                                <h4>Rejected Users</h4>
+                                <div class="row">
+                                    <div class="col-md-3"><h6>Name</h6></div>
+                                    <div class="col-md-3"><h6>Email</h6></div>
+                                    <div class="col-md-3"><h6>Last Modified</h6></div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                               @foreach (var user in Model.Users.Where(x => x.Status.ToString() == "Rejected"))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-3">@user.UserDisplayName</div>
+                                        <div class="col-md-3">@user.UserEmail</div>
+                                        <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
+                                        <div class="col-md-3">
+                                            <button onclick="updateStatus('@Model.Id', '@user.UserId', 1)" class="btn btn-block bg-gradient-success btn-sm">approve</button>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <partial name="_SideContentPartial" />
+        </div>
+    </div>
+</section>
+
