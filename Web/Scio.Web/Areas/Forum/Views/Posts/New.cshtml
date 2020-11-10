@@ -3,37 +3,68 @@
 @using System.Security.Claims
 
 @{
-    ViewData["Title"] = "New";
+    ViewData["Title"] = "Ask Question";
 }
 
-<form class="forum" role="form" asp-area="Forum" asp-controller="Posts" asp-action="New" method="post">
-    <header>
-        <div class="form-group">
-            <textarea asp-for="Title" id="question-title" rows="3" required></textarea>
-            <span asp-validation-for="Title"></span>
-        </div>
-    </header>
-    <div class="forum-content">
-        <div class="forum-post">
-            <div class="forum-post-main">
-                <div class="form-group">
-                    <textarea asp-for="Body" id="mytextarea" name="body"></textarea>
-                    <span asp-validation-for="Body"></span>
+<section class="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
                 </div>
-                <div class="forum-post-meta">
-                    <div class="forum-post-author">
-                        <img src="~/img/default-user.png">
-                        <section>
-                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
-                            <span>user</span>
-                        </section>
-                    </div>
-                    <div class="form-group align-right">
-                        <button type="submit">Submit</button>
-                    </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Forum" asp-controller="Posts" asp-action="All">Forum</a></li>
+                        <li class="breadcrumb-item active">New</li>
+                    </ol>
                 </div>
             </div>
         </div>
     </div>
-    <partial name="_SideContentPartial" />
-</form>
+    <div class="content-flex">
+        <div class="container-fluid main-content">
+            <div class="card">
+                <div class="card-body">
+                    <form class="forum" role="form" asp-area="Forum" asp-controller="Posts" asp-action="New" method="post">
+                        <header>
+                            <div class="form-group">
+                                <textarea asp-for="Title" id="question-title" rows="3" required></textarea>
+                                <span asp-validation-for="Title"></span>
+                            </div>
+                        </header>
+                        <div class="forum-content">
+                            <div class="forum-post">
+                                <div class="forum-post-main">
+                                    <div class="form-group">
+                                        <textarea asp-for="Body" id="mytextarea" name="body"></textarea>
+                                        <span asp-validation-for="Body"></span>
+                                    </div>
+                                    <div class="forum-post-meta">
+                                        <div class="forum-post-author">
+                                            <img src="~/img/default-user.png">
+                                            <section>
+                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                                                <span>user</span>
+                                            </section>
+                                        </div>
+                                        <div class="form-group align-right">
+                                            <button type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <partial name="_SideContentPartial" />
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_TinyMCE" />
+    <partial name="_ValidationScriptsPartial" />
+}

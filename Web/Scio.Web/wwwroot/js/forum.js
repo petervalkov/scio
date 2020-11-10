@@ -83,7 +83,7 @@ async function forumApi(method, endpoint, data) {
     const response = await fetch(`/api/${endpoint}`, options);
 
     if (response.status == 401) {
-        return { message: messages.login }
+        return { message: 'Please login to your account' }
     }
 
     const result = await response.json();
@@ -108,11 +108,6 @@ const icons = {
     plus: '<i class="fas fa-plus"></i>',
     minus: '<i class="fas fa-minus"></i>',
     send: '<i class="fas fa-paper-plane"></i>'
-}
-
-const messages = {
-    defaultError: 'Something went wrong',
-    login: 'Please login to your account'
 }
 
 const voteType = { '-1': 'downvote', '1': 'upvote' }

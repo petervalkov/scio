@@ -8,7 +8,7 @@
     using Scio.Web.ViewModels;
 
     [AllowAnonymous]
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {

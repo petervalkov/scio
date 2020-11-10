@@ -52,6 +52,8 @@
 
         public string QuestionAuthorImageUrl { get; set; }
 
+        public string ShortTitle => this.Title.Length > 30 ? this.Title.Substring(0, 30) + "..." : this.Title;
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ForumPost, EditViewModel>()

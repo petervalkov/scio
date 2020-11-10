@@ -7,142 +7,172 @@
     ViewData["Title"] = "Edit Post";
 }
 
-<form class="forum" role="form" asp-area="Forum" asp-controller="Posts" asp-action="Edit" method="post">
-    <header>
-        <div asp-validation-summary="All"></div>
-       @if (Model.QuestionId == null)
-        {
-        <div class="form-group">
-            <textarea asp-for="Title" rows="3" required></textarea>
-            <span asp-validation-for="Title"></span>
-        </div>
-        }
-        else
-        {
-        <h1>@Model.QuestionTitle</h1>
-        <span>Asked @TimeSpanParser.Parse(Model.QuestionCreatedOn)</span>
-        }
-    </header>
-    <div class="forum-content">
-        <div class="forum-post" id="@(Model.QuestionId ?? Model.Id)">
-            <aside>
-                <div>
-                    <a class="upvote" onclick="vote(1, '@(Model.QuestionId ?? Model.Id)')">
-                        <i class="fas fa-chevron-up"></i>
-                    </a>
-                    <p class="forum-votes-count">@(Model.QuestionId != null ? Model.QuestionTotalVotes : Model.TotalVotes)</p>
-                    <a class="downvote" onclick="vote(-1, '@(Model.QuestionId ?? Model.Id)')">
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
+<section class="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
                 </div>
-                <div>
-                    <p>@Model.QuestionAnswersCount</p>
-                    <p>answers</p>
-                </div>
-                <div>
-                    <p class="forum-comments-count">@(Model.QuestionId == null ? Model.CommentsCount : Model.QuestionCommentsCount)</p>
-                    <p>comments</p>
-                </div>
-            </aside>
-            <div class="forum-post-main">
-               @if (Model.QuestionId == null)
-                {
-                <div class="form-group">
-                    <textarea asp-for="Body" id="mytextarea"></textarea>
-                    <span asp-validation-for="Body"></span>
-                </div>
-                <div class="forum-post-meta">
-                    <div class="forum-post-author">
-                        <img src="~/img/default-user.png">
-                        <section>
-                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
-                            <span>user</span>
-                        </section>
-                    </div>
-                    <div class="form-group align-right">
-                        <input asp-for="Id" type="hidden" name="id">
-                        <button type="submit">Save</button>
-                    </div>
-                </div>
-                }
-                else
-                {
-                @Html.Raw(Model.QuestionBody)
-                <div class="forum-post-meta">
-                    <div class="forum-post-author">
-                        <img src="@(Model.QuestionAuthorImageUrl ?? "~/img/default-user.png")">
-                        <section>
-                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.QuestionAuthorId">@Model.QuestionAuthorEmail</a>
-                            <span>user</span>
-                        </section>
-                    </div>
-                </div>
-                }
-                <div class="forum-post-controls">
-                    <a class="forum-comments-toggle" onclick="toggleComments('@(Model.QuestionId ?? Model.Id)')">comments <i class="fas fa-plus"></i></a>
-                </div>
-                <div class="forum-post-comments">
-                    <div class="forum-comment">
-                        <textarea rows="3"></textarea>
-                        <div class="form-group align-right">
-                            <button onclick="postComment('@(Model.QuestionId ?? Model.Id)')">Send <i class="fas fa-paper-plane"></i></button>
-                        </div>
-                    </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Forum" asp-controller="Posts" asp-action="All">Forum</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Forum" asp-controller="Posts" asp-action="Details" asp-route-id="@Model.Id">@Model.ShortTitle</a></li>
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
                 </div>
             </div>
         </div>
-       @if (Model.QuestionId != null)
-        {
-        <h2>My Answer</h2>
-        <div class="forum-post" id="@Model.Id">
-            <aside>
-                <div>
-                    <a class="upvote" onclick="vote(1, '@Model.Id')">
-                        <i class="fas fa-chevron-up"></i>
-                    </a>
-                    <p class="forum-votes-count">@Model.TotalVotes</p>
-                    <a class="downvote" onclick="vote(-1, '@Model.Id')">
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                </div>
-                <div>
-                    <p class="forum-comments-count">@Model.CommentsCount</p>
-                    <p>comments</p>
-                </div>
-            </aside>
-            <div class="forum-post-main">
-                <div class="form-group">
-                    <textarea asp-for="@Model.AnswerBody" id="mytextarea"></textarea>
-                    <span asp-validation-for="AnswerBody"></span>
-                </div>
-                <div class="forum-post-meta">
-                    <div class="forum-post-author">
-                        <img src="~/img/default-user.png">
-                        <section>
-                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
-                            <span>user</span>
-                        </section>
-                    </div>
-                    <div class="form-group align-right">
-                        <input asp-for="QuestionId" type="hidden" name="questionId">
-                        <input asp-for="Id" type="hidden" name="id">
-                        <button type="submit">Save</button>
-                    </div>
-                </div>
-                <div class="forum-post-controls">
-                    <a class="forum-comments-toggle" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
-                </div>
-                <div class="forum-post-comments">
-                    <div class="forum-comment">
-                        <textarea rows="3"></textarea>
-                        <div class="form-group align-right">
-                            <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        }
     </div>
-    <partial name="_SideContentPartial" />
-</form>
+    <div class="content-flex">
+        <div class="container-fluid main-content">
+            <div class="card">
+                <form class="card-body" role="form" asp-area="Forum" asp-controller="Posts" asp-action="Edit" method="post">
+                    <header>
+                        <div asp-validation-summary="All"></div>
+                       @if (Model.QuestionId == null)
+                        {
+                            <div class="form-group">
+                                <textarea asp-for="Title" rows="3" required></textarea>
+                                <span asp-validation-for="Title"></span>
+                            </div>
+                        }
+                        else
+                        {
+                            <h1>@Model.QuestionTitle</h1>
+                            <span>Asked @TimeSpanParser.Parse(Model.QuestionCreatedOn)</span>
+                        }
+                    </header>
+                    <div class="forum-content">
+                        <div class="forum-post" id="@(Model.QuestionId ?? Model.Id)">
+                            <aside>
+                                <div>
+                                    <a class="upvote" onclick="vote(1, '@(Model.QuestionId ?? Model.Id)')">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </a>
+                                    <p class="forum-votes-count">@(Model.QuestionId != null ? Model.QuestionTotalVotes : Model.TotalVotes)</p>
+                                    <a class="downvote" onclick="vote(-1, '@(Model.QuestionId ?? Model.Id)')">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </a>
+                                </div>
+                                <div>
+                                    <p>@Model.QuestionAnswersCount</p>
+                                    <p>answers</p>
+                                </div>
+                                <div>
+                                    <p class="forum-comments-count">@(Model.QuestionId == null ? Model.CommentsCount : Model.QuestionCommentsCount)</p>
+                                    <p>comments</p>
+                                </div>
+                            </aside>
+                            <div class="forum-post-main">
+                               @if (Model.QuestionId == null)
+                                {
+                                    <div class="form-group">
+                                        <textarea asp-for="Body" id="mytextarea"></textarea>
+                                        <span asp-validation-for="Body"></span>
+                                    </div>
+                                    <div class="forum-post-meta">
+                                        <div class="forum-post-author">
+                                            <img src="~/img/default-user.png">
+                                            <section>
+                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                                                <span>user</span>
+                                            </section>
+                                        </div>
+                                        <div class="form-group align-right">
+                                            <input asp-for="Id" type="hidden" name="id">
+                                            <button type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.Raw(Model.QuestionBody)
+                                    <div class="forum-post-meta">
+                                        <div class="forum-post-author">
+                                            <img src="@(Model.QuestionAuthorImageUrl ?? "~/img/default-user.png")">
+                                            <section>
+                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.QuestionAuthorId">@Model.QuestionAuthorEmail</a>
+                                                <span>user</span>
+                                            </section>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="forum-post-controls">
+                                    <a class="forum-comments-toggle" onclick="toggleComments('@(Model.QuestionId ?? Model.Id)')">comments <i class="fas fa-plus"></i></a>
+                                </div>
+                                <div class="forum-post-comments">
+                                    <div class="forum-comment">
+                                        <textarea rows="3"></textarea>
+                                        <div class="form-group align-right">
+                                            <button onclick="postComment('@(Model.QuestionId ?? Model.Id)')">Send <i class="fas fa-paper-plane"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       @if (Model.QuestionId != null)
+                        {
+                            <h2>My Answer</h2>
+                            <div class="forum-post" id="@Model.Id">
+                                <aside>
+                                    <div>
+                                        <a class="upvote" onclick="vote(1, '@Model.Id')">
+                                            <i class="fas fa-chevron-up"></i>
+                                        </a>
+                                        <p class="forum-votes-count">@Model.TotalVotes</p>
+                                        <a class="downvote" onclick="vote(-1, '@Model.Id')">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <p class="forum-comments-count">@Model.CommentsCount</p>
+                                        <p>comments</p>
+                                    </div>
+                                </aside>
+                                <div class="forum-post-main">
+                                    <div class="form-group">
+                                        <textarea asp-for="@Model.AnswerBody" id="mytextarea"></textarea>
+                                        <span asp-validation-for="AnswerBody"></span>
+                                    </div>
+                                    <div class="forum-post-meta">
+                                        <div class="forum-post-author">
+                                            <img src="~/img/default-user.png">
+                                            <section>
+                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                                                <span>user</span>
+                                            </section>
+                                        </div>
+                                        <div class="form-group align-right">
+                                            <input asp-for="QuestionId" type="hidden" name="questionId">
+                                            <input asp-for="Id" type="hidden" name="id">
+                                            <button type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                    <div class="forum-post-controls">
+                                        <a class="forum-comments-toggle" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
+                                    </div>
+                                    <div class="forum-post-comments">
+                                        <div class="forum-comment">
+                                            <textarea rows="3"></textarea>
+                                            <div class="form-group align-right">
+                                                <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+        <partial name="_SideContentPartial" />
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_TinyMCE" />
+    <partial name="_ValidationScriptsPartial" />
+}
