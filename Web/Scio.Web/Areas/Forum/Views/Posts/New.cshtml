@@ -1,5 +1,5 @@
-﻿@using Scio.Web.ViewModels.Forum.Posts
-@model CreateInputModel
+﻿@using Scio.Web.Areas.Forum.Models.Posts
+@model CRInputModel
 @using System.Security.Claims
 
 @{
@@ -38,8 +38,8 @@
                             <div class="forum-post">
                                 <div class="forum-post-main">
                                     <div class="form-group">
-                                        <textarea asp-for="Body" id="mytextarea" name="body"></textarea>
-                                        <span asp-validation-for="Body"></span>
+                                        <textarea asp-for="PostBody" id="post-body"></textarea>
+                                        <span asp-validation-for="PostBody"></span>
                                     </div>
                                     <div class="forum-post-meta">
                                         <div class="forum-post-author">

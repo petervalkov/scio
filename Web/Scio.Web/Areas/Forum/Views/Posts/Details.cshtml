@@ -27,34 +27,34 @@
     <div class="content-flex">
         <div class="container-fluid main-content">
             <div class="card">
+                <div class="card-header">
+                    <h2>@Model.Title</h2>
+                    <span>Asked @TimeSpanParser.Parse(Model.CreatedOn)</span>
+                </div>
                 <div class="card-body">
-                    <header>
-                        <h1>@Model.Title</h1>
-                        <span>Asked @TimeSpanParser.Parse(Model.CreatedOn)</span>
-                    </header>
                     <div class="forum-post" id="@Model.Id">
-                        <aside>
-                            <div>
+                        <aside class="mt-1">
+                            <div class="mb-3">
                                 <a class="upvote" onclick="vote(1, '@Model.Id')">
                                     <i class="fas fa-chevron-up"></i>
                                 </a>
-                                <p class="forum-votes-count">@Model.TotalVotes</p>
+                                <p class="forum-votes-count m-0">@Model.TotalVotes</p>
                                 <a class="downvote" onclick="vote(-1, '@Model.Id')">
                                     <i class="fas fa-chevron-down"></i>
                                 </a>
                             </div>
-                            <div>
-                                <p>@Model.Answers.Count()</p>
-                                <p>answers</p>
+                            <div class="mb-3">
+                                <p class="m-0">@Model.Answers.Count()</p>
+                                <p class="m-0">answers</p>
                             </div>
-                            <div>
-                                <p class="forum-comments-count">@Model.CommentsCount</p>
-                                <p>comments</p>
+                            <div class="mb-3">
+                                <p class="forum-comments-count m-0">@Model.CommentsCount</p>
+                                <p class="m-0">comments</p>
                             </div>
                         </aside>
                         <div class="forum-post-main">
                             @Html.Raw(Model.Body)
-                            <div class="forum-post-meta">
+                            <div class="forum-post-meta mt-3">
                                 <div class="forum-post-author">
                                     <img src="@(Model.AuthorImageUrl ?? "~/img/default-user.png")">
                                     <section>
@@ -63,7 +63,7 @@
                                     </section>
                                 </div>
                             </div>
-                            <div class="forum-post-controls">
+                            <div class="forum-post-controls mt-3">
                                @if (this.User.Identity.IsAuthenticated && Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                                 {
                                     <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@Model.Id">
@@ -75,7 +75,7 @@
                                 }
                                 <a class="forum-comments-toggle" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
                             </div>
-                            <div class="forum-post-comments">
+                            <div class="forum-post-comments mt-3">
                                 <div class="forum-comment">
                                     <textarea rows="3"></textarea>
                                     <div class="form-group align-right">
@@ -85,34 +85,31 @@
                             </div>
                         </div>
                     </div>
-                   @if (Model.Answers.Count() == 0)
+                    <hr />
+                   @if (Model.Answers.Count() > 0)
                     {
-                        <h2>No Answers</h2>
-                    }
-                    else
-                    {
-                        <h2>Answers</h2>
+                        <h3>Answers</h3>
                        @foreach (var answer in Model.Answers)
                         {
                             <div class="forum-post" id="@answer.Id">
-                                <aside>
-                                    <div>
+                                <aside class="mt-1">
+                                    <div class="mb-3">
                                         <a class="upvote" onclick="vote(1, '@answer.Id')">
                                             <i class="fas fa-chevron-up"></i>
                                         </a>
-                                        <p class="forum-votes-count">@answer.VotesCount</p>
+                                        <p class="forum-votes-count m-0">@answer.VotesCount</p>
                                         <a class="downvote" onclick="vote(-1, '@answer.Id')">
                                             <i class="fas fa-chevron-down"></i>
                                         </a>
                                     </div>
-                                    <div>
-                                        <p class="forum-comments-count">@answer.CommentsCount</p>
-                                        <p>comments</p>
+                                    <div class="mb-3">
+                                        <p class="forum-comments-count m-0">@answer.CommentsCount</p>
+                                        <p class="m-0">comments</p>
                                     </div>
                                 </aside>
                                 <div class="forum-post-main">
                                     @Html.Raw(answer.Body)
-                                    <div class="forum-post-meta">
+                                    <div class="forum-post-meta mt-3">
                                         <div class="forum-post-author">
                                             <img src="@(answer.AuthorImageUrl ?? "~/img/default-user.png")">
                                             <section>
@@ -122,7 +119,7 @@
                                         </div>
                                         <span>Answered @TimeSpanParser.Parse(answer.CreatedOn)</span>
                                     </div>
-                                    <div class="forum-post-controls">
+                                    <div class="forum-post-controls mt-3">
                                        @if (Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                                         {
                                             <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@answer.Id">
@@ -134,7 +131,7 @@
                                         }
                                         <a class="forum-comments-toggle" onclick="toggleComments('@answer.Id')">comments <i class="fas fa-plus"></i></a>
                                     </div>
-                                    <div class="forum-post-comments">
+                                    <div class="forum-post-comments mt-3">
                                         <div class="forum-comment">
                                             <textarea rows="3"></textarea>
                                             <div class="form-group align-right">
@@ -144,14 +141,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <hr />
                         }
                     }
-                    <h2>My Answer</h2>
+                    <h3>My Answer</h3>
                     <form role="form" asp-area="Forum" asp-controller="Posts" asp-action="New" method="post">
                         <input type="hidden" value="@Model.Id" name="questionId" />
                         <div class="form-group">
-                            <textarea asp-for="AnswerBody" id="mytextarea" name="answerBody"></textarea>
-                            <span asp-validation-for="AnswerBody"></span>
+                            <textarea asp-for="PostBody" id="post-body"></textarea>
+                            <span asp-validation-for="PostBody"></span>
                         </div>
                         <div class="forum-post-meta">
                             <div class="forum-post-author">
@@ -172,3 +170,8 @@
         <partial name="_SideContentPartial" />
     </div>
 </section>
+
+@section Scripts {
+    <partial name="_TinyMCE" />
+    <partial name="_ValidationScriptsPartial" />
+}
