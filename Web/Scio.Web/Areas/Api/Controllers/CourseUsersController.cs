@@ -8,7 +8,7 @@
     using Scio.Common;
     using Scio.Data.Models.Enums;
     using Scio.Services.Data;
-    using Scio.Web.Infrastructure.Validation;
+    using Scio.Web.Infrastructure.Filters;
     using Scio.Web.ViewModels.Classroom.Courses;
 
     [Route("api/[controller]")]
@@ -24,7 +24,7 @@
         }
 
         [HttpPost]
-        [ValidateModelState]
+        [ModelStateValidationFilter]
         public async Task<IActionResult> Join(JoinRequestModel input)
         {
             var userId = this.User
@@ -58,7 +58,7 @@
         }
 
         [HttpPut]
-        [ValidateModelState]
+        [ModelStateValidationFilter]
         public async Task<IActionResult> Update(UpdateUserStatusModel input)
         {
             var userId = this.User

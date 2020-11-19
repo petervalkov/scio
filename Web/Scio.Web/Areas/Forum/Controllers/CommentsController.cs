@@ -10,7 +10,7 @@
 
     using Scio.Common;
     using Scio.Services.Data;
-    using Scio.Web.Infrastructure.Validation;
+    using Scio.Web.Infrastructure.Filters;
     using Scio.Web.ViewModels;
     using Scio.Web.ViewModels.Forum.Comments;
 
@@ -31,7 +31,7 @@
 
         [HttpGet]
         [AllowAnonymous]
-        [ValidateModelState]
+        [ModelStateValidationFilter]
         public ActionResult<AllPostCommentsViewModel> Get([Required] string postId)
         {
             var result = this.commentService
@@ -46,7 +46,7 @@
         }
 
         [HttpPost]
-        [ValidateModelState]
+        [ModelStateValidationFilter]
         public async Task<ActionResult<PostCommentsViewModel>> Post(InputModel input)
         {
             if (this.forumPostService.Get<ValidationModel>(input.PostId) == null)

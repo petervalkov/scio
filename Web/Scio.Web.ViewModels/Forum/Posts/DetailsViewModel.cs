@@ -32,7 +32,7 @@
 
         public IEnumerable<AnswerViewModel> Answers { get; set; }
 
-        public string AnswerBody { get; set; }
+        public string PostBody { get; set; }
 
         public string ShortTitle => this.Title.Length > 30 ? this.Title.Substring(0, 30) + "..." : this.Title;
 

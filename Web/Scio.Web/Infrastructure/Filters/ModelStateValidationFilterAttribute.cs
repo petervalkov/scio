@@ -1,9 +1,9 @@
-﻿namespace Scio.Web.Infrastructure.Validation
+﻿namespace Scio.Web.Infrastructure.Filters
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
 
-    public class ValidateModelStateAttribute : ActionFilterAttribute
+    public class ModelStateValidationFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {

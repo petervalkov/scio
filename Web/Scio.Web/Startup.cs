@@ -25,7 +25,7 @@
     using Scio.Services.Mapping;
     using Scio.Services.Messaging;
     using Scio.Web.Infrastructure.Authorization;
-    using Scio.Web.Infrastructure.Validation;
+    using Scio.Web.Infrastructure.Filters;
     using Scio.Web.ViewModels;
 
     public class Startup
@@ -73,7 +73,7 @@
                 };
             });
 
-            services.AddScoped<ValidateModelStateAttribute>();
+            services.AddScoped<ModelStateValidationFilterAttribute>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
