@@ -12,6 +12,7 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.Users = new HashSet<CourseUser>();
+            this.Resources = new HashSet<Resource>();
         }
 
         public string Title { get; set; }
@@ -25,5 +26,7 @@
         public virtual ApplicationUser Author { get; set; }
 
         public virtual ICollection<CourseUser> Users { get; set; }
+
+        public virtual ICollection<Resource> Resources { get; set; }
     }
 }

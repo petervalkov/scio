@@ -19,6 +19,7 @@ namespace Scio.Data.Models
             this.ForumPosts = new HashSet<ForumPost>();
             this.ForumComments = new HashSet<ForumComment>();
             this.ForumVotes = new HashSet<ForumVote>();
+            this.ResourcesUploaded = new HashSet<Resource>();
         }
 
         public string DisplayName { get; set; }
@@ -52,5 +53,7 @@ namespace Scio.Data.Models
         public virtual ICollection<Course> CoursesCreated { get; set; }
 
         public virtual ICollection<CourseUser> CoursesEnrolled { get; set; }
+
+        public virtual ICollection<Resource> ResourcesUploaded { get; set; }
     }
 }
