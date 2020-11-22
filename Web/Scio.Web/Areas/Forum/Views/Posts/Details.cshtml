@@ -52,38 +52,51 @@
                                 <p class="m-0">comments</p>
                             </div>
                         </aside>
-                        <div class="forum-post-main">
-                            @Html.Raw(Model.Body)
-                            <div class="forum-post-meta mt-3">
-                                <div class="forum-post-author">
-                                    <img src="@(Model.AuthorImageUrl ?? "~/img/default-user.png")">
-                                    <section>
-                                        <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorDisplayName</a>
-                                        <span>user</span>
-                                    </section>
+                        <section>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.Raw(Model.Body)
                                 </div>
                             </div>
-                            <div class="forum-post-controls mt-3">
-                               @if (this.User.Identity.IsAuthenticated && Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                                {
-                                    <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@Model.Id">
-                                        edit <i class="far fa-edit"></i>
-                                    </a>
-                                    <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id">
-                                        delete <i class="far fa-trash-alt"></i>
-                                    </a>
-                                }
-                                <a class="forum-comments-toggle" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
-                            </div>
-                            <div class="forum-post-comments mt-3">
-                                <div class="forum-comment">
-                                    <textarea rows="3"></textarea>
-                                    <div class="form-group align-right">
-                                        <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <div class="user-block float-left">
+                                        <img class="img-circle img-bordered-sm" src="@(Model.AuthorImageUrl ?? "~/img/default-user.png")" alt="user image">
+                                        <span class="username">
+                                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorDisplayName</a>
+                                        </span>
+                                        <span class="description">user email</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                   @if (this.User.Identity.IsAuthenticated && Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                                    {
+                                        <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@Model.Id">
+                                            edit <i class="far fa-edit"></i>
+                                        </a>
+                                        <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@Model.Id">
+                                            delete <i class="far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    <a class="forum-comments-toggle float-right" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
+                                </div>
+                            </div>
+                            <div class="card-comments forum-post-comments mt-3">
+                                <div class="card-comment">
+                                    <img class="img-fluid img-circle img-sm" src="~/img/default-user.png" alt="Alt Text">
+                                    <div class="img-push">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm" placeholder="Press enter to post comment">
+                                            <span class="input-group-append">
+                                                <button onclick="postComment('@Model.Id')" class="form-control form-control-sm btn-info">Send <i class="fas fa-paper-plane"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                     <hr />
                    @if (Model.Answers.Count() > 0)
@@ -107,39 +120,51 @@
                                         <p class="m-0">comments</p>
                                     </div>
                                 </aside>
-                                <div class="forum-post-main">
-                                    @Html.Raw(answer.Body)
-                                    <div class="forum-post-meta mt-3">
-                                        <div class="forum-post-author">
-                                            <img src="@(answer.AuthorImageUrl ?? "~/img/default-user.png")">
-                                            <section>
-                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@answer.AuthorId">@answer.AuthorDisplayName</a>
-                                                <span>user</span>
-                                            </section>
+                                <section>
+                                    <div class="row">
+                                        <div class="col">
+                                            @Html.Raw(answer.Body)
                                         </div>
-                                        <span>Answered @TimeSpanParser.Parse(answer.CreatedOn)</span>
                                     </div>
-                                    <div class="forum-post-controls mt-3">
-                                       @if (Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                                        {
-                                            <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@answer.Id">
-                                                edit <i class="far fa-edit"></i>
-                                            </a>
-                                            <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@answer.Id">
-                                                delete <i class="far fa-trash-alt"></i>
-                                            </a>
-                                        }
-                                        <a class="forum-comments-toggle" onclick="toggleComments('@answer.Id')">comments <i class="fas fa-plus"></i></a>
-                                    </div>
-                                    <div class="forum-post-comments mt-3">
-                                        <div class="forum-comment">
-                                            <textarea rows="3"></textarea>
-                                            <div class="form-group align-right">
-                                                <button onclick="postComment('@answer.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <div class="user-block float-left">
+                                                <img class="img-circle img-bordered-sm" src="@(answer.AuthorImageUrl ?? "~/img/default-user.png")" alt="user image">
+                                                <span class="username">
+                                                    <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@answer.AuthorId">@answer.AuthorDisplayName</a>
+                                                </span>
+                                                <span class="description">user email</span>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                           @if (Model.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                                            {
+                                                <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@answer.Id">
+                                                    edit <i class="far fa-edit"></i>
+                                                </a>
+                                                <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@answer.Id">
+                                                    delete <i class="far fa-trash-alt"></i>
+                                                </a>
+                                            }
+                                            <a class="forum-comments-toggle float-right" onclick="toggleComments('@answer.Id')">comments <i class="fas fa-plus"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="card-comments forum-post-comments mt-3">
+                                        <div class="card-comment">
+                                            <img class="img-fluid img-circle img-sm" src="~/img/default-user.png" alt="Alt Text">
+                                            <div class="img-push">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Press enter to post comment">
+                                                    <span class="input-group-append">
+                                                        <button onclick="postComment('@answer.Id')" class="form-control form-control-sm btn-info">Send <i class="fas fa-paper-plane"></i></button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
                             </div>
                             <hr />
                         }
@@ -151,16 +176,18 @@
                             <textarea asp-for="PostBody" id="post-body"></textarea>
                             <span asp-validation-for="PostBody"></span>
                         </div>
-                        <div class="forum-post-meta">
-                            <div class="forum-post-author">
-                                <img src="~/img/default-user.png">
-                                <section>
-                                    <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
-                                    <span>user</span>
-                                </section>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <div class="user-block float-left">
+                                    <img src="~/img/default-user.png" class="img-circle img-bordered-sm">
+                                    <span class="username">
+                                        <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                                    </span>
+                                    <span class="description">user email</span>
+                                </div>
                             </div>
-                            <div class="form-group align-right">
-                                <button type="submit">Submit</button>
+                            <div class="col md-3">
+                                <button type="submit" class="float-right">Submit</button>
                             </div>
                         </div>
                     </form>

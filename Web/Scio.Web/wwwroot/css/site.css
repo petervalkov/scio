@@ -203,9 +203,9 @@ textarea {
     color: var(--font-error);
 }
 
-.form-group {
+/* .form-group {
     margin-top: 1.3em;
-}
+} */
 
 .form-group > span {
     display: block;
@@ -328,16 +328,6 @@ textarea {
     margin: 0 auto;
 }
 /* Forum */
-.forum-content {
-    width: 100%;
-}
-
-.forum-content form input {
-    font: inherit;
-    outline: none;
-    width: 100%;
-}
-
 .forum-post {
     display: flex;
     width: 100%;
@@ -353,15 +343,8 @@ textarea {
     font-size: 0.8em;
 }
 
-.forum-post-main {
+.forum-post > section {
     width: 100%;
-}
-
-@media(min-width: 481px){
-    .forum-post-meta {
-        display: flex;
-        justify-content: space-between;
-    }  
 }
 
 .forum-post-tags span {
@@ -376,70 +359,12 @@ textarea {
     padding: 0.5em;
 }
 
-.forum-post-author {
-    display: flex;
-    flex: 0 0 20%;
-}
-
-@media(max-width: 480px){
-    .forum-post-author {
-        margin-top: 1em;
-    }  
-}
-
-.forum-post-author > img {
-    width: 40px;
-    height: auto;
-    margin: auto 0;
-    border-radius: 50%;
-}
-
-.forum-post-author > section {
-    line-height: 1.3em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 0.5em;
-}
-
-/* Forum Controls */
-.forum-post-controls {
-    display: flex;
-    font-size: 0.8em;
-}
-
-.forum-post-controls a {
-    padding-right: 0.5em;
-}
-
-/* Forum Comments */
 .forum-post-comments {
     font-size: 0.9em;
     max-height: 0;
     overflow: hidden;
-    margin-top: 0.5em;
-    padding-left: 0.5em;
     transition: max-height 0.3s ease-out;
 }
-
-.forum-comments-toggle {
-    color: var(--accent-main-dark);
-    margin-left: auto;
-}
-
-.forum-comment {
-    padding-left: 2em;
-    border-bottom: 1px solid var(--border-light);
-}
-
-.forum-comment:last-child {
-    border-bottom: none ;
-}
-
-.forum-comment textarea {
-    margin-top: 0.5em;
-}
-
 /* Account */
 .manage-account {
     padding: 5em 1em;
@@ -518,10 +443,15 @@ html, body, .wrapper {
 	outline: inherit; 
 }
 
-@media (min-width: 1200px){
+/* @media (min-width: 1200px){
 	.content-wrapper {
 		position: fixed;
 	}
+} */
+
+.content {
+	max-width: 1600px;
+	margin: auto;
 }
 
 @media (min-width: 1200px){
@@ -541,12 +471,12 @@ html, body, .wrapper {
 	}
 
 	.main-content{
-		flex: auto;
+		flex: 0 1 900px;
 		margin: 0 auto;
 	}
 
 	.side-content{
-		flex: 0 0 430px;
+		flex: 0 0 470px;
 		margin: 0 auto;
 	}
 }
@@ -557,4 +487,8 @@ html, body, .wrapper {
 
 .align-right {
     text-align: right;
+}
+
+.card-comments {
+	background: none;
 }

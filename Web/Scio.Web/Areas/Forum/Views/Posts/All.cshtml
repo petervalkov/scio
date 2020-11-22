@@ -26,63 +26,74 @@
         <div class="container-fluid main-content">
            @foreach (var question in Model)
             {
-                <div class="card">
+                <div class="card" id="@question.Id">
                     <div class="card-header">
                         <a class="text-dark" asp-area="Forum" asp-controller="Posts" asp-action="Details" asp-route-id="@question.Id">
                             <h2>@question.Title</h2>
                         </a>
                         <span>Asked @TimeSpanParser.Parse(question.CreatedOn)</span>
                     </div>
-                    <div class="card-body">
-                        <div class="forum-post" id="@question.Id">
-                            <aside class="mt-1">
-                                <div class="mb-3">
-                                    <a class="upvote" onclick="vote(1, '@question.Id')"><i class="fas fa-chevron-up"></i></a>
-                                    <p class="forum-votes-count m-0">@question.VotesCount</p>
-                                    <a class="downvote" onclick="vote(-1, '@question.Id')"><i class="fas fa-chevron-down"></i></a>
+                    <div class="card-body forum-post">
+                        <aside class="mt-1">
+                            <div class="mb-3">
+                                <a class="upvote" onclick="vote(1, '@question.Id')"><i class="fas fa-chevron-up"></i></a>
+                                <p class="forum-votes-count m-0">@question.VotesCount</p>
+                                <a class="downvote" onclick="vote(-1, '@question.Id')"><i class="fas fa-chevron-down"></i></a>
+                            </div>
+                            <div class="mb-3">
+                                <p class="m-0">@question.AnswersCount</p>
+                                <p class="m-0">answers</p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="forum-comments-count m-0">@question.CommentsCount</p>
+                                <p class="m-0">comments</p>
+                            </div>
+                        </aside>
+                        <section>
+                            <div class="row">
+                                <div class="col">
+                                    @Html.Raw(question.Body)
                                 </div>
-                                <div class="mb-3">
-                                    <p class="m-0">@question.AnswersCount</p>
-                                    <p class="m-0">answers</p>
-                                </div>
-                                <div class="mb-3">
-                                    <p class="forum-comments-count m-0">@question.CommentsCount</p>
-                                    <p class="m-0">comments</p>
-                                </div>
-                            </aside>
-                            <div class="forum-post-main">
-                                @Html.Raw(question.Body)
-                                <div class="forum-post-meta mt-3">
-                                    <div class="forum-post-author">
-                                        <img src="@(question.AuthorImageUrl ?? "~/img/default-user.png")">
-                                        <section>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <div class="user-block float-left">
+                                        <img class="img-circle img-bordered-sm" src="@(question.AuthorImageUrl ?? "~/img/default-user.png")" alt="user image">
+                                        <span class="username">
                                             <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@question.AuthorId">@question.AuthorDisplayName</a>
-                                            <span>user</span>
-                                        </section>
+                                        </span>
+                                        <span class="description">user email</span>
                                     </div>
                                 </div>
-                                <div class="forum-post-controls mt-3">
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
                                    @if (this.User.Identity.IsAuthenticated && question.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
                                     {
-                                        <a asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@question.Id">
+                                        <a class="mr-2" asp-area="Forum" asp-controller="Posts" asp-action="Edit" asp-route-id="@question.Id">
                                             edit <i class="far fa-edit"></i>
                                         </a>
-                                        <a asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@question.Id">
+                                        <a class="mr-2" asp-area="Forum" asp-controller="Posts" asp-action="Delete" asp-route-id="@question.Id">
                                             delete <i class="far fa-trash-alt"></i>
                                         </a>
                                     }
-                                    <a class="forum-comments-toggle" onclick="toggleComments('@question.Id')">comments <i class="fas fa-plus"></i></a>
+                                    <a class="forum-comments-toggle float-right" onclick="toggleComments('@question.Id')">comments <i class="fas fa-plus"></i></a>
                                 </div>
-                                <div class="forum-post-comments mt-3">
-                                    <div class="forum-comment">
-                                        <textarea rows="3"></textarea>
-                                        <div class="form-group align-right">
-                                            <button onclick="postComment('@question.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                            </div>
+                            <div class="card-comments forum-post-comments mt-3">
+                                <div class="card-comment">
+                                    <img class="img-fluid img-circle img-sm" src="~/img/default-user.png" alt="Alt Text">
+                                    <div class="img-push">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm" placeholder="Press enter to post comment">
+                                            <span class="input-group-append">
+                                                <button onclick="postComment('@question.Id')" class="form-control form-control-sm btn-info">Send <i class="fas fa-paper-plane"></i></button>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
                     </div>
                 </div>
             }

@@ -18,7 +18,7 @@
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                         <li class="breadcrumb-item"><a asp-area="Forum" asp-controller="Posts" asp-action="All">Forum</a></li>
-                        <li class="breadcrumb-item"><a asp-area="Forum" asp-controller="Posts" asp-action="Details" asp-route-id="@Model.Id">@Model.ShortTitle</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Forum" asp-controller="Posts" asp-action="Details" asp-route-id="@(Model.QuestionId ?? Model.Id)">@(Model.ShortQuestionTitle ?? Model.ShortTitle)</a></li>
                         <li class="breadcrumb-item active">Edit</li>
                     </ol>
                 </div>
@@ -59,52 +59,65 @@
                                 <p class="m-0">comments</p>
                             </div>
                         </aside>
-                        <div class="forum-post-main">
+                        <section>
                            @if (Model.QuestionId == null)
                             {
-                                <div class="form-group">
-                                    <textarea asp-for="Body" id="post-body"></textarea>
-                                    <span asp-validation-for="Body"></span>
-                                </div>
-                                <div class="forum-post-meta">
-                                    <div class="forum-post-author">
-                                        <img src="~/img/default-user.png">
-                                        <section>
-                                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
-                                            <span>user</span>
-                                        </section>
+                                <div class="row">
+                                    <div class="col">
+                                        <textarea asp-for="Body" id="post-body"></textarea>
+                                        <span asp-validation-for="Body"></span>
                                     </div>
-                                    <div class="form-group align-right">
-                                        <input asp-for="Id" type="hidden" name="id">
-                                        <button type="submit">Save</button>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <div class="user-block float-left">
+                                            <img class="img-circle img-bordered-sm" src="~/img/default-user.png" alt="user image">
+                                            <span class="username">
+                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                                            </span>
+                                            <span class="description">user email</span>
+                                        </div>
                                     </div>
                                 </div>
                             }
                             else
                             {
-                                @Html.Raw(Model.QuestionBody)
-                                <div class="forum-post-meta">
-                                    <div class="forum-post-author">
-                                        <img src="@(Model.QuestionAuthorImageUrl ?? "~/img/default-user.png")">
-                                        <section>
-                                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.QuestionAuthorId">@Model.QuestionAuthorEmail</a>
-                                            <span>user</span>
-                                        </section>
+                                <div class="row">
+                                    <div class="col">
+                                        @Html.Raw(Model.QuestionBody)
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <div class="user-block float-left">
+                                            <img class="img-circle img-bordered-sm" src="@(Model.QuestionAuthorImageUrl ?? "~/img/default-user.png")" alt="user image">
+                                            <span class="username">
+                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.QuestionAuthorId">@Model.QuestionAuthorEmail</a>
+                                            </span>
+                                            <span class="description">user email</span>
+                                        </div>
                                     </div>
                                 </div>
                             }
-                            <div class="forum-post-controls">
-                                <a class="forum-comments-toggle" onclick="toggleComments('@(Model.QuestionId ?? Model.Id)')">comments <i class="fas fa-plus"></i></a>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <a class="forum-comments-toggle float-right" onclick="toggleComments('@(Model.QuestionId ?? Model.Id)')">comments <i class="fas fa-plus"></i></a>
+                                </div>
                             </div>
-                            <div class="forum-post-comments">
-                                <div class="forum-comment">
-                                    <textarea rows="3"></textarea>
-                                    <div class="form-group align-right">
-                                        <button onclick="postComment('@(Model.QuestionId ?? Model.Id)')">Send <i class="fas fa-paper-plane"></i></button>
+                            <div class="card-comments forum-post-comments mt-3">
+                                <div class="card-comment">
+                                    <img class="img-fluid img-circle img-sm" src="~/img/default-user.png" alt="Alt Text">
+                                    <div class="img-push">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm" placeholder="Press enter to post comment">
+                                            <span class="input-group-append">
+                                                <button onclick="postComment('@(Model.QuestionId ?? Model.Id)')" class="form-control form-control-sm btn-info">Send <i class="fas fa-paper-plane"></i></button>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
                     </div>
                    @if (Model.QuestionId != null)
                     {
@@ -122,37 +135,41 @@
                                     <p class="m-0">comments</p>
                                 </div>
                             </aside>
-                            <div class="forum-post-main">
-                                <div class="form-group">
-                                    <textarea asp-for="@Model.AnswerBody" id="mytextarea"></textarea>
+                            <section>
+                                <div class="row">
+                                    <textarea asp-for="@Model.AnswerBody" id="post-body"></textarea>
                                     <span asp-validation-for="AnswerBody"></span>
                                 </div>
-                                <div class="forum-post-meta">
-                                    <div class="forum-post-author">
-                                        <img src="~/img/default-user.png">
-                                        <section>
-                                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
-                                            <span>user</span>
-                                        </section>
-                                    </div>
-                                    <div class="form-group align-right">
-                                        <input asp-for="QuestionId" type="hidden" name="questionId">
-                                        <input asp-for="Id" type="hidden" name="id">
-                                        <button type="submit">Save</button>
-                                    </div>
-                                </div>
-                                <div class="forum-post-controls">
-                                    <a class="forum-comments-toggle" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
-                                </div>
-                                <div class="forum-post-comments">
-                                    <div class="forum-comment">
-                                        <textarea rows="3"></textarea>
-                                        <div class="form-group align-right">
-                                            <button onclick="postComment('@Model.Id')">Send <i class="fas fa-paper-plane"></i></button>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <div class="user-block float-left">
+                                            <img class="img-circle img-bordered-sm" src="~/img/default-user.png" alt="user image">
+                                            <span class="username">
+                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                                            </span>
+                                            <span class="description">user email</span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <a class="forum-comments-toggle float-right" onclick="toggleComments('@Model.Id')">comments <i class="fas fa-plus"></i></a>
+                                    </div>
+                                </div>
+                                <div class="card-comments forum-post-comments mt-3">
+                                    <div class="card-comment">
+                                        <img class="img-fluid img-circle img-sm" src="~/img/default-user.png" alt="Alt Text">
+                                        <div class="img-push">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm" placeholder="Press enter to post comment">
+                                                <span class="input-group-append">
+                                                    <button onclick="postComment('@Model.Id')" class="form-control form-control-sm btn-info">Send <i class="fas fa-paper-plane"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
                     }
                 </div>

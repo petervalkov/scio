@@ -26,38 +26,36 @@
     <div class="content-flex">
         <div class="container-fluid main-content">
             <div class="card">
-                <div class="card-body">
-                    <form class="forum" role="form" asp-area="Forum" asp-controller="Posts" asp-action="New" method="post">
-                        <header>
-                            <div class="form-group">
-                                <textarea asp-for="Title" id="question-title" rows="3" required></textarea>
-                                <span asp-validation-for="Title"></span>
-                            </div>
-                        </header>
-                        <div class="forum-content">
-                            <div class="forum-post">
-                                <div class="forum-post-main">
-                                    <div class="form-group">
-                                        <textarea asp-for="PostBody" id="post-body"></textarea>
-                                        <span asp-validation-for="PostBody"></span>
-                                    </div>
-                                    <div class="forum-post-meta">
-                                        <div class="forum-post-author">
-                                            <img src="~/img/default-user.png">
-                                            <section>
-                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
-                                                <span>user</span>
-                                            </section>
-                                        </div>
-                                        <div class="form-group align-right">
-                                            <button type="submit">Submit</button>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="card-header">
+                    <div class="form-group">
+                        <textarea asp-for="Title" id="question-title" rows="3" required></textarea>
+                        <span asp-validation-for="Title"></span>
+                    </div>
+                </div>
+                <form class="card-body" role="form" asp-area="Forum" asp-controller="Posts" asp-action="New" method="post">
+                    <section>
+                        <div class="row">
+                            <div class="col">
+                                <textarea asp-for="PostBody" id="post-body"></textarea>
+                                <span asp-validation-for="PostBody"></span>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <div class="user-block float-left">
+                                    <img class="img-circle img-bordered-sm" src="~/img/default-user.png" alt="user image">
+                                    <span class="username">
+                                        <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value">@User.FindFirst(ClaimTypes.Name).Value</a>
+                                    </span>
+                                    <span class="description">user email</span>
+                                </div>
+                            </div>
+                            <div class="col md-3">
+                                <button type="submit" class="float-right">Submit</button>
+                            </div>
+                        </div>
+                    </section>
+                </form>
             </div>
         </div>
         <partial name="_SideContentPartial" />
