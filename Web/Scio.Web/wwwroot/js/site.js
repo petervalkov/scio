@@ -31,6 +31,7 @@ async function api(method, endpoint, data) {
 }
 
 const messages = {
+    200: 'Done',
     401: 'Please log in',
     default: 'Something went wrong'
 }

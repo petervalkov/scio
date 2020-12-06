@@ -1,9 +1,9 @@
-﻿namespace Scio.Web.ViewModels.Forum.Comments
+﻿namespace Scio.Web.ViewModels.Forum.Posts
 {
     using Scio.Data.Models;
     using Scio.Services.Mapping;
 
-    public class PostCommentsViewModel : IMapFrom<ForumComment>
+    public class CommentModel : IMapFrom<ForumComment>
     {
         public string Body { get; set; }
 

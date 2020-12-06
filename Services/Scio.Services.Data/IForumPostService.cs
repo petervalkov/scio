@@ -12,8 +12,6 @@
 
         TModel Find<TModel>(string id, string authorId = null, string questionId = null);
 
-        TModel SearchForVote<TModel>(string postId, string userId);
-
         Task<string> CreateAsync(string title, string body, string questionId, string authorId);
 
         Task EditAsync(string id, string title, string body);

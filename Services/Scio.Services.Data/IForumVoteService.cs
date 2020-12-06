@@ -4,8 +4,10 @@
 
     public interface IForumVoteService
     {
-        Task<int> CreateVoteAsync(int voteType, string postId, string userId);
+        Task<int> CreateAsync(int voteType, string postId, string userId);
 
-        Task<int> UpdateVoteAsync(int voteType, string voteId);
+        Task<int> UpdateAsync(int voteType, string voteId);
+
+        TModel Get<TModel>(string postId, string userId);
     }
 }

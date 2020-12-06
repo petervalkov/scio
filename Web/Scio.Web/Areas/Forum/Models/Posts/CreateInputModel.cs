@@ -19,7 +19,7 @@
 
         public string PostBody { get; set; }
 
-        [EntityIdValidation]
+        [PostId]
         public string QuestionId { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -8,15 +8,16 @@ async function toggleComments(postId) {
     } else {
         if (comments.childElementCount == 1) {
             btn.innerHTML = `comments ${icons.spinner}`;
-            
-            const result = await forumApi('GET', `comments?postId=${postId}`);
-            if (result.successfull) {
-                result.data.forEach(comment => comments.insertBefore(createComment(comment), comments.lastElementChild));
+
+            const result = await api('GET', `comments?postId=${postId}`);
+            if (result.status == 200) {
+                const data = await result.json();
+                data.forEach(comment => comments.insertBefore(createComment(comment), comments.lastElementChild));
             }else{
-                alertify.alert("Error", result.message, function(){
-                    alertify.message(result.message);
+                alertify.alert("", messages[result.status] ?? messages.default, function(){
+                    alertify.message(messages[result.status] ?? messages.default);
                 });
-            }  
+            } 
         }
 
         btn.innerHTML = `comments ${icons.minus}`;
@@ -28,26 +29,27 @@ async function postComment(postId) {
     const currentPost = document.getElementById(postId);
     const comments = currentPost.querySelector(".forum-post-comments");
     const commentsCount = currentPost.querySelector(".forum-comments-count");
-    const textArea = comments.querySelector("textarea");
+    const textArea = comments.querySelector("input");
     const button = comments.querySelector("button");
     button.disabled = true;
     button.innerHTML = `Send ${icons.spinner}`;
 
-    const result = await forumApi('POST', 'comments', { postId, body: textArea.value });
+    const result = await api('POST', 'comments', { postId, body: textArea.value });
 
-    if(result.successfull){
+    if(result.status == 200){
+        const data = await result.json();
         textArea.value = "";
-        comments.insertBefore(createComment(result.data), comments.lastElementChild);
+        comments.insertBefore(createComment(data), comments.lastElementChild);
         comments.style.maxHeight = comments.scrollHeight + "px";
         commentsCount.textContent = Number(commentsCount.textContent) + 1; //Change
     }
 
+    alertify.alert("", messages[result.status] ?? messages.default, function(){
+        alertify.message(messages[result.status] ?? messages.default);
+    });
+
     button.innerHTML = `Send ${icons.send}`;
     button.disabled = false;
-
-    alertify.alert(result.successfull ? "Successfull" : "Error", result.message, function(){
-        alertify.message(result.message);
-    });
 }
 
 async function vote(voteValue, postId) {
@@ -56,49 +58,23 @@ async function vote(voteValue, postId) {
     const target = forumPost.querySelector(`.${vote}`);
     target.innerHTML = icons.spinner;
 
-    const result = await forumApi('POST', 'votes', { voteValue, postId });
-    if (result.successfull) {
-        const votes = forumPost.querySelector('.forum-votes-count');
-        votes.textContent = result.data;
-    }
-
-    target.innerHTML = icons[vote];
-
-    alertify.alert(result.successfull ? "Successfull" : "Error", result.message, function(){
-        alertify.message(result.message);
-    });
-}
-
-async function forumApi(method, endpoint, data) {
-    const options = { method }
-    const headers = {}
-
-    if (data !== undefined) {
-        headers['Content-Type'] = 'application/json'
-        options.body = JSON.stringify(data);
-    }
-
-    options.headers = headers;
-
-    const response = await fetch(`/api/${endpoint}`, options);
-
-    if (response.status == 401) {
-        return { message: 'Please login to your account' }
-    }
-
-    const result = await response.json();
+    const response = await api('POST', 'votes', { voteValue, postId });
+    let message = messages[response.status] ?? messages.default;
 
     if (response.status == 200) {
-        result.successfull = true;
-    } else {
-        if (result.ErrorMessage) {
-            result.message = result.ErrorMessage[0]; //FIX
-        } else if (result.errors) {
-            result.message = result.errors[Object.keys(result.errors)[0]].join(' '); //FIX
+        const result = await response.json()
+        if(result.data){
+            const votes = forumPost.querySelector('.forum-votes-count');
+            votes.textContent = result.data;
         }
+        message = result.message;
     }
-    
-    return result;
+
+    alertify.alert("", message, function(){
+        alertify.message(message);
+    });
+
+    target.innerHTML = icons[vote];
 }
 
 const icons = {
@@ -141,9 +117,14 @@ function createElement(type, content, attributes) {
 
 function createComment(comment) {
     return createElement('div', [
-        comment.body,
-        createElement('span', ` - ${comment.authorEmail} `),
-        createElement('span', comment.createdOn)
-    ], { className: 'forum-comment' }
+        createElement('img', '', { className: 'img-circle img-sm', src: '/img/default-user.png' }),
+        createElement('div', [
+            createElement('span', [
+                comment.authorEmail,
+                createElement('span', comment.createdOn, { className: 'text-muted float-right' })
+            ], { className: 'username' }),
+            comment.body
+        ], { className: 'comment-text' })
+    ], { className: 'card-comment' }
     );
 }

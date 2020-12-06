@@ -6,6 +6,7 @@
     using Scio.Data.Common.Repositories;
     using Scio.Data.Models;
     using Scio.Data.Models.Enums;
+    using Scio.Services.Mapping;
 
     public class ForumVoteService : IForumVoteService
     {
@@ -16,7 +17,7 @@
             this.forumVotesRepository = forumVotesRepository;
         }
 
-        public async Task<int> CreateVoteAsync(int voteType, string postId, string userId)
+        public async Task<int> CreateAsync(int voteType, string postId, string userId)
         {
             var vote = new ForumVote
             {
@@ -28,12 +29,17 @@
             await this.forumVotesRepository.AddAsync(vote);
             await this.forumVotesRepository.SaveChangesAsync();
 
-            return this.forumVotesRepository.AllWithDeleted().Where(v => v.PostId == vote.PostId).Select(v => (int)v.Type).Sum();
+            return this.forumVotesRepository
+                .AllWithDeleted()
+                .Where(v => v.PostId == vote.PostId)
+                .Select(v => (int)v.Type).Sum();
         }
 
-        public async Task<int> UpdateVoteAsync(int voteType, string voteId)
+        public async Task<int> UpdateAsync(int voteType, string voteId)
         {
-            var vote = this.forumVotesRepository.AllWithDeleted().FirstOrDefault(v => v.Id == voteId);
+            var vote = this.forumVotesRepository
+                .AllWithDeleted()
+                .FirstOrDefault(v => v.Id == voteId);
 
             if (vote.IsDeleted)
             {
@@ -41,9 +47,23 @@
             }
 
             vote.Type = (VoteType)voteType;
-            await this.forumVotesRepository.SaveChangesAsync();
+            await this.forumVotesRepository
+                .SaveChangesAsync();
 
-            return this.forumVotesRepository.AllWithDeleted().Where(v => v.PostId == vote.PostId).Select(v => (int)v.Type).Sum();
+            return this.forumVotesRepository
+                .AllWithDeleted()
+                .Where(v => v.PostId == vote.PostId)
+                .Select(v => (int)v.Type).Sum();
+        }
+
+        public TModel Get<TModel>(string postId, string userId)
+        {
+            var vote = this.forumVotesRepository
+                .All()
+                .Where(x => x.PostId == postId && x.UserId == userId)
+                .SingleOrDefault();
+
+            return AutoMapperConfig.MapperInstance.Map<TModel>(vote);
         }
     }
 }

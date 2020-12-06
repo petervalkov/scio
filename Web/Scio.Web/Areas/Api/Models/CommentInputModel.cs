@@ -1,11 +1,14 @@
-﻿namespace Scio.Web.ViewModels.Forum.Comments
+﻿namespace Scio.Web.Areas.Api.Models
 {
     using System.ComponentModel.DataAnnotations;
 
     using Scio.Common;
+    using Scio.Web.Infrastructure.ValidationAttributes;
 
-    public class InputModel
+    public class CommentInputModel
     {
+        [Required]
+        [PostId]
         public string PostId { get; set; }
 
         [Required]

@@ -42,19 +42,6 @@
             .To<TModel>()
             .FirstOrDefault();
 
-        public TModel SearchForVote<TModel>(string postId, string userId)
-            => this.forumPostsRepository
-            .AllWithDeletedIncluding("Votes")
-            .Where(p => p.Id == postId)
-            .Select(p => new ForumPost
-            {
-                Votes = p.Votes.Where(v => v.UserId == userId).ToList(),
-            })
-            .ToList()
-            .AsQueryable()
-            .To<TModel>()
-            .FirstOrDefault();
-
         public async Task<string> CreateAsync(string title, string body, string questionId, string authorId)
         {
             var question = new ForumPost
