@@ -7,22 +7,25 @@
         <span class="brand-text font-weight-light">@GlobalConstants.SystemName</span>
     </a>
     <div class="sidebar">
-        @if (this.User.Identity.IsAuthenticated)
-        {
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img src="~/img/default-user.png" class="img-circle elevation-2" alt="User Image">
-                </div>
-                <div class="info">
-
-                    <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier).Value" class="d-block">
-                        @User.FindFirst(ClaimTypes.Name).Value
+        <nav class="mt-5">
+            <ul class="nav nav-pills nav-sidebar flex-column small-only mt-3" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                        <p>Home</p>
                     </a>
-                </div>
-            </div>
-        }
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Forum" asp-controller="Posts" asp-action="All">
+                        <p>Forum</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Classroom" asp-controller="Courses" asp-action="Home">
+                        <p>Courses</p>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav nav-pills nav-sidebar flex-column mt-3" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Forum" asp-controller="Posts" asp-action="All">
                         <i class="nav-icon far fa-image"></i>

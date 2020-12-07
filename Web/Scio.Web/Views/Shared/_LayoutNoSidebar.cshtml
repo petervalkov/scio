@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
     <environment names="Development">
-        <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" asp-append-version="true">
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <link href="~/lib/admin-lte/css/adminlte.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/alertify.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
@@ -17,13 +17,14 @@
 <body class="layout-top-nav">
     <div class="wrapper">
         <partial name="_NavbarPartial.cshtml" />
-        <partial name="_CookieConsentPartial" />
+        <div class="content-wrapper">
+            <partial name="_CookieConsentPartial" />
 
-        @this.RenderBody()
+            @this.RenderBody()
 
+        </div>
         <partial name="~/Views/Shared/_FooterPartial.cshtml" />
     </div>
-
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>

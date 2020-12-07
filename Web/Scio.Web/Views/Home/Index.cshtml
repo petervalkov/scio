@@ -1,8 +1,33 @@
 ﻿@using Scio.Common
-@{
-    this.ViewData["Title"] = "Home Page";
-}
+@{ this.ViewData["Title"] = "Home Page"; }
 
 <div class="home-page">
-    <h1>Welcome to @GlobalConstants.SystemName!</h1>
+    <div class="home-page-header">
+        <h1 class="pt-5">Welcome to @GlobalConstants.SystemName!</h1>
+    </div>
+    <div class="home-page-content">
+        <div class="row">
+            <div class="col-12 col-lg-4 mt-3">
+                <div class="card home-card">
+                    <i class="ion ion-ios-book-outline"></i>
+                    <a asp-area="Classroom" asp-controller="Courses" asp-action="Home" class="mt-3"><h2>Courses</h2></a>
+                    <p class="mt-3">Lorem, ipsum dolor sitolor sit amet consect olor sit amet consecteturpetur adip amet consectetur adipisicing elit. Quae, in.</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 mt-3">
+                <div class="card home-card">
+                    <i class="ion ion-ios-chatboxes-outline"></i>
+                    <a asp-area="Forum" asp-controller="Posts" asp-action="All" class="mt-3"><h2>Forum</h2></a>
+                    <p class="mt-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quae, in.</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 mt-3">
+                <div class="card home-card">
+                    <i class="ion ion-ios-person-outline"></i>
+                    <h2 class="mt-3">Account</h2>
+                    <p class="mt-3">Lorem, ipsum dolor sitolor sit amet consect olor sit amet consecteturpetur adip amet consectetur adipisicing elit. Quae, in.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

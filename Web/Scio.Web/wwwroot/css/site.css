@@ -256,69 +256,51 @@ textarea {
 }
 /* Home page */
 .home-page {
-    min-height: calc(100vh - 5rem);
-    background-color: var(--custom-color);
+    text-align: center;
 }
 
-.home-page h1 {
-    text-align: center;
-    color: var(--font-light);
-    font-size: 3em;
-    padding-top: 3em;
+.home-card > a{
+    color: var(--custom-dark);
 }
 
 .home-page-header {
-    height: 470px;
-    background-color: var(--custom-color-dark);
+    height: 570px;
+    background-color: var(--custom-color);
+    background-image: url("/img/home.jpg");
+    background-position: top left;
+}
+
+.home-page-header h1 {
+    font-size: 5em;
     color: var(--custom-font-light);
 }
 
-.home-page-content {
-    padding: 1em 0;
+.home-page-content > .row{
+    max-width: 1300px;
+    margin: auto;
+}
+
+.home-card{
+    position: relative;
+    top: -127px;
     height: 100%;
-    background-color: var(--custom-color);
-}
-
-@media (min-width: 481px){
-    .home-page-content{
-        display: flex;
-        flex-direction: column;
-    }
-}
-
-@media (min-width: 840px){
-    .home-page-content{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-    }
-}
-
-.home-card {
+    padding: 33px;
     text-align: center;
-    background-color: var(--custom-color-light);
-    margin: 0 auto;
-    padding: 1em;
 }
 
-@media (min-width: 481px){
+@media (max-width: 991px) {
     .home-card{
-        width: 420px;
-        margin: 1em auto;
-        border: 1px solid var(--border-light);
-    }
-}
-
-@media (min-width: 841px){
-    .home-card{
-        margin: 0;
-        max-width: 240px;
+        margin:auto;
+        max-width: 530px;
     }
 }
 
 .home-card i {
-    font-size: 5em;
-    margin: auto;
+    font-size: 7em;
+}
+
+.home-card h2 {
+    font-size: 2em;
 }
 
 /* Privacy page*/
@@ -449,10 +431,10 @@ html, body, .wrapper {
 	}
 } */
 
-.content {
-	max-width: 1600px;
+/* .content {
+	max-width: 1400px;
 	margin: auto;
-}
+} */
 
 @media (min-width: 1200px){
 	.content-flex {
@@ -471,7 +453,7 @@ html, body, .wrapper {
 	}
 
 	.main-content{
-		flex: 0 1 900px;
+		flex: 1;
 		margin: 0 auto;
 	}
 
@@ -491,4 +473,15 @@ html, body, .wrapper {
 
 .card-comments {
 	background: none;
+}
+
+
+.small-only {
+	border-bottom: 1px solid #4f5962;
+}
+
+@media (min-width: 768px){
+	.small-only {
+		visibility:hidden;
+	}
 }
