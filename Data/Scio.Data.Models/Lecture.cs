@@ -4,32 +4,27 @@
     using System.Collections.Generic;
 
     using Scio.Data.Common.Models;
-    using Scio.Data.Models.Enums;
 
-    public class Course : BaseDeletableModel<string>
+    public class Lecture : BaseDeletableModel<string>
     {
-        public Course()
+        public Lecture()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Users = new HashSet<CourseUser>();
             this.Resources = new HashSet<Resource>();
-            this.Lectures = new HashSet<Lecture>();
         }
 
         public string Title { get; set; }
 
-        public string Description { get; set; }
+        public DateTime? ScheduledFor { get; set; }
 
-        public CourseType Type { get; set; }
+        public string CourseId { get; set; }
+
+        public virtual Course Course { get; set; }
 
         public string AuthorId { get; set; }
 
         public virtual ApplicationUser Author { get; set; }
 
-        public virtual ICollection<CourseUser> Users { get; set; }
-
         public virtual ICollection<Resource> Resources { get; set; }
-
-        public virtual ICollection<Lecture> Lectures { get; set; }
     }
 }

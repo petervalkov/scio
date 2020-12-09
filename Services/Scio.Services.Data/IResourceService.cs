@@ -6,6 +6,6 @@
 
     public interface IResourceService
     {
-        public Task<string> CreateAsync(string title, IFormFile file, string courseId, string authorId);
+        Task UploadAsync(IFormFile[] files, string lectureId, string courseId, string authorId);
     }
 }

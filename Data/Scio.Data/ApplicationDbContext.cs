@@ -35,6 +35,8 @@
 
         public DbSet<CourseUser> CourseUsers { get; set; }
 
+        public DbSet<Lecture> Lectures { get; set; }
+
         public DbSet<Resource> Resources { get; set; }
 
         public DbSet<Setting> Settings { get; set; }

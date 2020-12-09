@@ -19,6 +19,10 @@
 
         public virtual Course Course { get; set; }
 
+        public string LectureId { get; set; }
+
+        public virtual Lecture Lecture { get; set; }
+
         public string AuthorId { get; set; }
 
         public virtual ApplicationUser Author { get; set; }
