@@ -7,5 +7,7 @@
     public interface IResourceService
     {
         Task UploadAsync(IFormFile[] files, string lectureId, string courseId, string authorId);
+
+        Task<string> DeleteAsync(string id);
     }
 }

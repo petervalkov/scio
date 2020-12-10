@@ -27,21 +27,101 @@
         <div class="container-fluid main-content">
             <div class="card">
                 <div class="card-body">
+                    <h2>@Model.Title</h2>
                     <span class="description">@Model.Type</span>
-                   @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.AuthorId)
+                    @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.AuthorId)
                     {
                         <a asp-area="Classroom" asp-controller="Courses" asp-action="Settings" asp-route-id="@Model.Id" class="float-right">Settings</a>
                     }
-                    <h2>@Model.Title</h2>
-                    @Html.Raw(Model.Description)
-                    <div class="user-block float-left">
-                        <img class="img-circle img-bordered-sm" src="@(Model.AuthorImageUrl ?? "~/img/default-user.png")" alt="user image">
-                        <span class="username">
-                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorDisplayName</a>
-                        </span>
-                        <span class="description">user</span>
+                    <ul class="nav nav-tabs mt-3" id="details" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="info-tab" data-toggle="pill" href="#info-tab-content" role="tab" aria-controls="info-tab-content" aria-selected="true">Info</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="dashboard-tab" data-toggle="pill" href="#dashboard-tab-content" role="tab" aria-controls="dashboard-tab-content" aria-selected="false">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="resourse-tab" data-toggle="pill" href="#resourse-tab-content" role="tab" aria-controls="resourse-tab-content" aria-selected="false">Resourses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="users-tab" data-toggle="pill" href="#users-tab-content" role="tab" aria-controls="users-tab-content" aria-selected="false">Users</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="detailsContent">
+                        <div class="tab-pane fade show active" id="info-tab-content" role="tabpanel" aria-labelledby="info-tab">
+                            @Html.Raw(Model.Description)
+                            <div class="user-block float-left">
+                                <img class="img-circle img-bordered-sm" src="@(Model.AuthorImageUrl ?? "~/img/default-user.png")" alt="user image">
+                                <span class="username">
+                                    <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorDisplayName</a>
+                                </span>
+                                <span class="description">user</span>
+                            </div>
+                            <button onclick="joinCourse('@Model.Id')" class="btn btn-primary float-right">@((int)Model.Type == 1 ? "Send Request" : "Join Course")</button>
+                        </div>
+                        <div class="tab-pane fade" id="dashboard-tab-content" role="tabpanel" aria-labelledby="dashboard-tab">
+                            <h5>Dashboard</h5>
+                        </div>
+                        <div class="tab-pane fade" id="resourse-tab-content" role="tabpanel" aria-labelledby="resourse-tab">
+                            <div class="pl-3 mt-3">
+                                @foreach (var lecture in Model.Lectures)
+                                {
+                                    <h5>@lecture.Title</h5>
+                                    @foreach (var res in lecture.Resources)
+                                    {
+                                        <div class="row ml-3 mt-1">
+                                            <div class="col-sm-9">
+                                                <a href="~/@res.Url"><i class="far fa-file-alt"></i> @res.Title</a>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <span class="text-muted float-sm-right">@TimeSpanParser.Parse(res.CreatedOn)</span>
+                                            </div>
+                                        </div>
+                                    }
+                                    <hr />
+                                }
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="users-tab-content" role="tabpanel" aria-labelledby="users-tab">
+                            <div class="row d-flex align-items-stretch mt-3">
+                                @foreach (var user in Model.Users.Where(x => (int)x.Status == 1))
+                                {
+                                    <div class="col-12 col-md-6 d-flex align-items-stretch">
+                                        <div class="card bg-light">
+                                            <div class="card-header text-muted border-bottom-0">
+                                                Digital Strategist
+                                            </div>
+                                            <div class="card-body pt-0">
+                                                <div class="row">
+                                                    <div class="col-7">
+                                                        <h2 class="lead"><b>@user.UserDisplayName</b></h2>
+                                                        <p class="text-muted text-sm"><b>About: </b> Web Designer / UX / Graphic Artist / Coffee Lover </p>
+                                                        <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span>@user.UserEmail</li>
+                                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: + 800 - 12 12 23 52</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-5 text-center">
+                                                        <img src="@user.UserImageUrl" alt="" class="img-circle img-fluid">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="text-right">
+                                                    <a href="#" class="btn btn-sm bg-teal">
+                                                        <i class="fas fa-comments"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-user"></i> View Profile
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                     </div>
-                    <button onclick="joinCourse('@Model.Id')" class="btn btn-primary float-right">@((int)Model.Type == 1 ? "Send Request" : "Join Course")</button>
                 </div>
             </div>
         </div>

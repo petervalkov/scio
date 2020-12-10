@@ -6,13 +6,15 @@
     using Scio.Data.Models.Enums;
     using Scio.Services.Mapping;
 
-    public class CourseUsersViewModel : IMapFrom<CourseUser>
+    public class UserViewModel : IMapFrom<CourseUser>
     {
         public string UserId { get; set; }
 
         public string UserDisplayName { get; set; }
 
         public string UserEmail { get; set; }
+
+        public string UserImageUrl { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

@@ -40,5 +40,25 @@
 
             return this.BadRequest();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadResourse(InputModel input)
+        {
+            var userId = this.User
+                .FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var lectureId = await this.lectureService
+                .CreateAsync(input.Title, input.CourseId, input.Files, userId);
+
+            if (lectureId != null)
+            {
+                await this.resourceService
+                    .UploadAsync(input.Files, lectureId, input.CourseId, userId);
+
+                return this.RedirectToAction("Settings", "Courses", new { id = input.CourseId });
+            }
+
+            return this.BadRequest();
+        }
     }
 }

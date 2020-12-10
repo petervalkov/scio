@@ -39,6 +39,16 @@
             await this.resourceRepository.SaveChangesAsync();
         }
 
+        public async Task<string> DeleteAsync(string id)
+        {
+            var resourse = await this.resourceRepository.FindByIdAsync(id);
+
+            this.resourceRepository.Delete(resourse);
+            await this.resourceRepository.SaveChangesAsync();
+
+            return resourse.CourseId;
+        }
+
         private async Task<string> SaveToFileSystem(string resourceId, string courseId, IFormFile file) // Temporary
         {
             var fileName = resourceId + Path.GetExtension(file.FileName);

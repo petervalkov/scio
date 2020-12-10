@@ -30,98 +30,189 @@
             <div class="container-fluid main-content">
                 <div class="card">
                     <div class="card-body">
-                        <div class="post">
-                           @if (Model.Users.Where(x => (int)x.Status == 1).Count() == 0)
-                            {
-                                <h4>No Users Requests</h4>
-                            }
-                            else
-                            {
-                                <h4>No Users Requests</h4>
-                                <div class="row">
-                                    <div class="col-md-3"><h6>Name</h6></div>
-                                    <div class="col-md-3"><h6>Email</h6></div>
-                                    <div class="col-md-3"><h6>Last Modified</h6></div>
-                                    <div class="col-md-3"></div>
-                                </div>
-                               @foreach (var user in Model.Users.Where(x => (int)x.Status == 1))
-                                {
-                                    <div class="row">
-                                        <div class="col-md-3">@user.UserDisplayName</div>
-                                        <div class="col-md-3">@user.UserEmail</div>
-                                        <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
-                                        <div class="col-md-3">
-                                            <button onclick="updateStatus('@Model.Id', '@user.UserId', 2)" class="btn btn-block bg-gradient-danger btn-sm">reject</button>
-                                            @*<a onclick="updateStatus('@Model.Id', '@user.UserId', 2)">reject</a>*@
-                                        </div>
-                                    </div>
-                                    <hr>
-                                }
-                            }
-                        </div>
+                        <h2>@Model.Title</h2>
+                        <ul class="nav nav-tabs mt-3" id="settings" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="dashboard-tab" data-toggle="pill" href="#dashboard-tab-content" role="tab" aria-controls="dashboard-tab-content" aria-selected="true">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="resourses-tab" data-toggle="pill" href="#resourses-tab-content" role="tab" aria-controls="resourses-tab-content" aria-selected="false">Resourses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="users-tab" data-toggle="pill" href="#users-tab-content" role="tab" aria-controls="users-tab-content" aria-selected="false">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="edit-info-tab" data-toggle="pill" href="#edit-info-tab-content" role="tab" aria-controls="edit-info-tab-content" aria-selected="false">Edit Info</a>
+                            </li>
+                        </ul>
 
-                        <div class="post">
-                           @if (Model.Users.Where(x => (int)x.Status == 0).Count() == 0)
-                            {
-                                <h4>No Pending Requests</h4>
-                            }
-                            else
-                            {
-                                <h4>Pending Requests</h4>
-                                <div class="row">
-                                    <div class="col-md-3"><h6>Name</h6></div>
-                                    <div class="col-md-3"><h6>Email</h6></div>
-                                    <div class="col-md-3"><h6>Last Modified</h6></div>
-                                    <div class="col-md-3"></div>
-                                </div>
-                               @foreach (var user in Model.Users.Where(x => (int)x.Status == 0))
-                                {
-                                    <div class="row">
-                                        <div class="col-md-3">@user.UserDisplayName</div>
-                                        <div class="col-md-3">@user.UserEmail</div>
-                                        <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
-                                        <div class="col-md-3">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <button onclick="updateStatus('@Model.Id', '@user.UserId', 1)" class="btn btn-block bg-gradient-success btn-sm">approve</button>
-                                                </div>
-                                                <div class="col-6">
-                                                    <button onclick="updateStatus('@Model.Id', '@user.UserId', 2)" class="btn btn-block bg-gradient-danger btn-sm">reject</button>
+                        <div class="tab-content" id="settingsContent">
+                            <div class="tab-pane fade show active" id="dashboard-tab-content" role="tabpanel" aria-labelledby="dashboard-tab">
+                                <h5>Dashboard</h5>
+                            </div>
+                            <div class="tab-pane fade" id="resourses-tab-content" role="tabpanel" aria-labelledby="resourses-tab">
+                                <div class="card-body">
+                                    @foreach (var lecture in Model.Lectures)
+                                    {
+                                        <div class="card card-custom collapsed-card mb-0">
+                                            <div class="card-header">
+                                                <h5 class="float-left">@lecture.Title</h5>
+                                                <div class="card-tools float-right">
+                                                    <p data-card-widget="collapse" class="text-muted">add resource <i class="fas fa-plus"></i></p>
                                                 </div>
                                             </div>
+                                            <div class="card-body">
+                                                <form role="form" enctype="multipart/form-data" asp-area="Classroom" asp-controller="Resourse" asp-action="Upload" method="post">
+                                                    <div class="row">
+                                                        <div class="col-sm-10">
+                                                            <div class="form-group">
+                                                                <div class="input-group">
+                                                                    <div class="custom-file">
+                                                                        <input type="file" multiple="multiple" class="custom-file-input" id="exampleInputFile" name="files">
+                                                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 pr-0">
+                                                            <div class="form-group">
+                                                                <input type="hidden" name="courseId" value="@Model.Id" />
+                                                                <input type="hidden" name="lectureId" value="@lecture.Id" />
+                                                                <button type="submit" class="float-right">Upload</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        @foreach (var res in lecture.Resources)
+                                        {
+                                            <div class="row ml-3">
+                                                <div class="col-md-9">
+                                                    <a href="~/@res.Url"><i class="far fa-file-alt"></i> @res.Title</a>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <a asp-area="Classroom" asp-controller="Resourse" asp-action="Delete" asp-route-id="@res.Id" class="float-right">delete <i class="far fa-trash-alt"></i></a>
+                                                </div>
+                                            </div>
+                                        }
+                                        <hr>
+                                    }
+                                    <div class="card card-custom collapsed-card">
+                                        <div class="card-header">
+                                            <div class="card-tools">
+                                                <button type="button" data-card-widget="collapse">
+                                                    New Section <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <form class="mt-3" role="form" enctype="multipart/form-data" asp-area="Classroom" asp-controller="Lectures" asp-action="New" method="post">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="title" placeholder="Section Title" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" multiple="multiple" class="custom-file-input" id="exampleInputFile" name="files">
+                                                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="hidden" name="courseId" value="@Model.Id" />
+                                                    <button type="submit" class="input-group-text">Add Section</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
-                                    <hr />
-                                }
-                            }
-                        </div>
-                        <div class="post">
-                           @if (Model.Users.Where(x => (int)x.Status == 2).Count() == 0)
-                            {
-                                <h4>No Rejected Users</h4>
-                            }
-                            else
-                            {
-                                <h4>Rejected Users</h4>
-                                <div class="row">
-                                    <div class="col-md-3"><h6>Name</h6></div>
-                                    <div class="col-md-3"><h6>Email</h6></div>
-                                    <div class="col-md-3"><h6>Last Modified</h6></div>
-                                    <div class="col-md-3"></div>
                                 </div>
-                               @foreach (var user in Model.Users.Where(x => x.Status.ToString() == "Rejected"))
+                            </div>
+                            <div class="tab-pane fade" id="users-tab-content" role="tabpanel" aria-labelledby="users-tab">
+                                @if (Model.Users.Where(x => (int)x.Status == 1).Count() > 0)
                                 {
-                                    <div class="row">
-                                        <div class="col-md-3">@user.UserDisplayName</div>
-                                        <div class="col-md-3">@user.UserEmail</div>
-                                        <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
-                                        <div class="col-md-3">
-                                            <button onclick="updateStatus('@Model.Id', '@user.UserId', 1)" class="btn btn-block bg-gradient-success btn-sm">approve</button>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h2>
+                                                Users
+                                            </h2>
+                                        </div>
+                                        <div class="card-body">
+                                            @foreach (var user in Model.Users.Where(x => (int)x.Status == 1))
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-3">@user.UserDisplayName</div>
+                                                    <div class="col-md-3">@user.UserEmail</div>
+                                                    <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
+                                                    <div class="col-md-3">
+                                                        <button onclick="updateStatus('@Model.Id', '@user.UserId', 2)" class="btn btn-block bg-gradient-danger btn-sm">reject</button>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            }
                                         </div>
                                     </div>
-                                    <hr />
                                 }
-                            }
+                                @if (Model.Users.Where(x => (int)x.Status == 0).Count() > 0)
+                                {
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h2>
+                                                User Requests
+                                            </h2>
+                                        </div>
+                                        <div class="card-body">
+                                            @foreach (var user in Model.Users.Where(x => (int)x.Status == 0))
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-3">@user.UserDisplayName</div>
+                                                    <div class="col-md-3">@user.UserEmail</div>
+                                                    <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
+                                                    <div class="col-md-3">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <button onclick="updateStatus('@Model.Id', '@user.UserId', 1)" class="btn btn-block bg-gradient-success btn-sm">approve</button>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <button onclick="updateStatus('@Model.Id', '@user.UserId', 2)" class="btn btn-block bg-gradient-danger btn-sm">reject</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.Users.Where(x => (int)x.Status == 2).Count() > 0)
+                                {
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h2>
+                                                Rejected Users
+                                            </h2>
+                                        </div>
+                                        <div class="card-body">
+                                            @foreach (var user in Model.Users.Where(x => x.Status.ToString() == "Rejected"))
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-3">@user.UserDisplayName</div>
+                                                    <div class="col-md-3">@user.UserEmail</div>
+                                                    <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
+                                                    <div class="col-md-3">
+                                                        <button onclick="updateStatus('@Model.Id', '@user.UserId', 1)" class="btn btn-block bg-gradient-success btn-sm">approve</button>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="tab-pane fade" id="edit-info-tab-content" role="tabpanel" aria-labelledby="edit-info-tab">
+
+                            </div>
                         </div>
                     </div>
                 </div>
