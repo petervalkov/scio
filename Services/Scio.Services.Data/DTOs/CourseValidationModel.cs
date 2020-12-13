@@ -6,10 +6,12 @@
     {
         public string Id { get; set; }
 
-        public CourseType Type { get; set; }
+        public int Type { get; set; }
 
         public string AuthorId { get; set; }
 
-        public CourseUserStatus? UserStatus { get; set; }
+        public int? UserStatus { get; set; }
+
+        public int? UserRole { get; set; }
     }
 }

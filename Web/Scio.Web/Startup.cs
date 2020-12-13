@@ -14,7 +14,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-
+    using Scio.Common;
     using Scio.Data;
     using Scio.Data.Common;
     using Scio.Data.Common.Repositories;
@@ -86,15 +86,19 @@
                     .RequireAuthenticatedUser()
                     .Build();
                 options.AddPolicy("Resource", policy => policy.AddRequirements(new ResourceAuthorizationRequirement()));
+                options.AddPolicy(CourseRoleName.Admin, policy => policy.AddRequirements(new CourseAuthorizationRequirement(CourseRoleName.Admin)));
+                options.AddPolicy(CourseRoleName.Member, policy => policy.AddRequirements(new CourseAuthorizationRequirement(CourseRoleName.Member)));
             });
 
             services.AddScoped<IAuthorizationHandler, ResourceAuthorizationHandler>();
+            services.AddTransient<IAuthorizationHandler, CourseAuthorizationHandler>();
 
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration.GetSection("SENDGRID_API_KEY").Value));
+            services.AddTransient<ICourseUserService, CourseUserService>();
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILectureService, LectureService>();
             services.AddTransient<IResourceService, ResourceService>();

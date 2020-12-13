@@ -15,6 +15,8 @@
 
         public CourseUserStatus Status { get; set; }
 
+        public CourseRole Role { get; set; }
+
         public virtual ApplicationUser User { get; set; }
 
         public DateTime CreatedOn { get; set; }

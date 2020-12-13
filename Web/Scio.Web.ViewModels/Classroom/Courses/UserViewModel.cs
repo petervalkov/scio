@@ -20,6 +20,8 @@
 
         public DateTime? ModifiedOn { get; set; }
 
-        public CourseUserStatus Status { get; set; }
+        public string Status { get; set; }
+
+        public string Role { get; set; }
     }
 }

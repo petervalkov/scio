@@ -24,8 +24,8 @@
 
         public string ShortTitle => this.Title.Length > 30 ? this.Title.Substring(0, 30) + "..." : this.Title;
 
-        public IEnumerable<LectureViewModel> Lectures { get; set; }
+        public virtual IEnumerable<LectureViewModel> Lectures { get; set; }
 
-        public IEnumerable<UserViewModel> Users { get; set; }
+        public virtual IEnumerable<UserViewModel> Users { get; set; }
     }
 }

@@ -1,56 +1,66 @@
 ﻿namespace Scio.Web.Areas.Api.Controllers
 {
+    using System;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     using Scio.Common;
-    using Scio.Data.Models.Enums;
+    using Scio.Data.Models;
     using Scio.Services.Data;
+    using Scio.Web.Helpers;
     using Scio.Web.Infrastructure.Filters;
+    using Scio.Web.ViewModels.Classroom;
     using Scio.Web.ViewModels.Classroom.Courses;
 
     [Route("api/[controller]")]
     [ApiController]
     public class CourseUsersController : ControllerBase
     {
-        private readonly ICourseService courseService;
+        private readonly ICourseUserService courseUserService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public CourseUsersController(
-            ICourseService courseService)
+            ICourseUserService courseUserService,
+            UserManager<ApplicationUser> userManager)
         {
-            this.courseService = courseService;
+            this.userManager = userManager;
+            this.courseUserService = courseUserService;
         }
 
         [HttpPost]
         [ModelStateValidationFilter]
         public async Task<IActionResult> Join(JoinRequestModel input)
         {
-            var userId = this.User
-                .FindFirstValue(ClaimTypes.NameIdentifier);
-            var course = this.courseService
-                .GetValidationModel(input.CourseId, userId);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var course = this.courseUserService.FindCourseUser(input.CourseId, userId);
 
             if (course == null || course.UserStatus != null)
             {
                 return this.BadRequest();
             }
 
-            int status = course.Type switch
+            var courseUserStatus = course.Type switch
             {
-                CourseType.Public => (int)CourseUserStatus.Accepted,
-                CourseType.Private => (int)CourseUserStatus.Pending,
-                _ => (int)CourseUserStatus.Pending,
+                1 => await this.courseUserService.CreateAsync(input.CourseId, userId, 0, 0),
+                0 => await this.courseUserService.CreateAsync(input.CourseId, userId, 1, 1),
+                _ => 0
             };
 
-            var result = (CourseUserStatus)await this.courseService // Check if successfull
-                .AddUserAsync(input.CourseId, userId, status);
-
-            string message = result switch
+            if (courseUserStatus == 1)
             {
-                CourseUserStatus.Accepted => Message.SuccessfullJoin,
-                CourseUserStatus.Pending => Message.RequestSent,
+                var user = await this.userManager.GetUserAsync(this.User);
+                await this.userManager.AddClaimAsync(user, new Claim(CourseRoleName.Member, course.Id));
+            }
+
+            string message = courseUserStatus switch
+            {
+                1 => Message.SuccessfullJoin,
+                0 => Message.RequestSent,
                 _ => Message.SuccessDefault,
             };
 
@@ -58,23 +68,43 @@
         }
 
         [HttpPut]
+        [Authorize(Policy = CourseRoleName.Admin)]
         [ModelStateValidationFilter]
         public async Task<IActionResult> Update(UpdateUserStatusModel input)
         {
             var userId = this.User
                 .FindFirstValue(ClaimTypes.NameIdentifier);
-            var course = this.courseService
-                .GetValidationModel(input.CourseId, input.UserId);
+            var course = this.courseUserService
+                .FindCourseUser(input.CourseId, input.UserId);
 
-            if (course == null || course.UserStatus == null || course.AuthorId != userId)
+            if (course == null || course.UserStatus == null || course.UserStatus == input.Status)
             {
                 return this.BadRequest();
             }
 
-            var result = (CourseUserStatus)await this.courseService
-                .UpdateUserStatusAsync(input.CourseId, input.UserId, input.Status);
+            var result = await this.courseUserService
+                .UpdateStatusAsync<CourseUserModel>(input.CourseId, input.UserId, input.Status);
 
-            return this.Ok(result.ToString());
+            if (result == null)
+            {
+                return this.StatusCode(500);
+            }
+
+            var user = await this.userManager.FindByIdAsync(input.UserId);
+
+            if (result.Status == "Accepted")
+            {
+                await this.userManager.AddClaimAsync(user, new Claim(CourseRoleName.Member, course.Id));
+            }
+            else
+            {
+                var claim = user.Claims.FirstOrDefault(x => x.ClaimType == CourseRoleName.Member && x.ClaimValue == course.Id);
+                user.Claims.Remove(claim);
+            }
+
+            result.Date = TimeSpanParser.Parse((DateTime)(result.ModifiedOn ?? result.CreatedOn));
+
+            return this.Ok(result);
         }
     }
 }
