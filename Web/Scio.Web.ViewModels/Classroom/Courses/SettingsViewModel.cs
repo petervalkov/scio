@@ -16,5 +16,7 @@
         public IEnumerable<UserViewModel> Users { get; set; }
 
         public IEnumerable<LectureViewModel> Lectures { get; set; }
+
+        public IEnumerable<ExamViewModel> Exams { get; set; }
     }
 }

@@ -1,0 +1,245 @@
+﻿@using Scio.Web.ViewModels.Classroom.Exams
+@model InputModel
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "New Exam";
+}
+
+<section class="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Create exam</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Classroom" asp-controller="Courses" asp-action="Home">Courses</a></li>
+                        <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-flex">
+        <div class="container-fluid main-content">
+            <div class="card">
+                <div class="card-body">
+                    <form role="form" asp-area="Classroom" asp-controller="Exams" asp-action="New" method="post">
+                        <input type="hidden" value="@ViewData["CourseId"]" name="courseId"/>
+                        <div class="form-group mt-1">
+                            <label for="course-title">Title</label>
+                            <textarea asp-for="Title" class="form-control"></textarea>
+                            <span asp-validation-for="Title"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="opens">Opens</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                </div>
+                                <input type="text" class="form-control float-right" id="opens" name="openInterval">
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-1">
+                            <label for="course-title">Duration:</label>
+                            <input asp-for="Duration" type="number" class="form-control">
+                            <span asp-validation-for="Duration"></span>
+                        </div>
+
+                        <hr />
+
+                        <div>
+
+                            <a onclick="addQuestion(event)">add question</a>
+                        </div>
+
+                    @*<div class="card card-no-border">
+                        <div class="row">
+                            <div class="col-11">
+                                <h5>Question 1.</h5>
+                            </div>
+                            <div class="col-11">
+                                <i class="ion-close"></i>
+                            </div>
+                            <div class="col-6 col-md-2">
+                <select id="question[0]_type" name="question[0].type" class="form-control">
+                    <option value="" disabled selected hidden>Select Type</option>
+                    <option value="0">Open</option>
+                    <option value="1">Single</option>
+                    <option value="2">Multiple</option>
+                </select>
+            </div>
+                        </div>
+                        <textarea id="question[0]_content" name="question[0].content" class="form-control" placeholder="Question"></textarea>
+                        <div class="form-group mt-1">
+            <textarea id="question[0]_content" name="question[0].content" class="form-control" placeholder="Question"></textarea>
+        </div>
+                        <h6>Possible Answers</h6>
+
+                        <div class="row mt2">
+                            <input id="question[0].answers[0]_iscorrect" name="question[0].answers[1].iscorrect" type="checkbox" class="form-control col-2 col-md-1 m-auto">
+                            <textarea id="question[0].answers[0]_content" name="question[0].answers[1].content" class="form-control col-6 col-md-7 col-lg-8 m-auto" rows="1" placeholder="Answer"></textarea>
+                            <input id="question[0].answers[0]_points" name="question[0].answers[1].points" type="number" class="form-control col-3 col-lg-2 m-auto" placeholder="Points">
+                            <i class="ion-ios-trash-outline ion-xl col-1 m-auto"></i>
+                        </div>
+
+                        <div class="row mt2">
+                            <div class="col-2 col-md-1 d-flex">
+                                <input id="question[0].answers[0]_iscorrect" name="question[0].answers[1].iscorrect" type="checkbox" class="form-control m-auto">
+                            </div>
+                            <div class="col-8 col-md-9 d-flex">
+                                <textarea id="question[0].answers[0]_content" name="question[0].answers[1].content" class="form-control m-auto" rows="1" placeholder="Answer"></textarea>
+                            </div>
+                            <div class="col-2 col-md-1 d-flex">
+                                <input id="question[0].answers[0]_points" name="question[0].answers[1].points" type="number" class="form-control m-auto" placeholder="Points">
+                            </div>
+                            <div class="col-1 d-flex">
+                                <i class="ion-ios-trash-outline ion-xl m-auto"></i>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-1">
+                                <input id="question[0].answers[1]_iscorrect" name="question[0].answers[1].iscorrect" type="checkbox" class="form-control">
+                            </div>
+                            <div class="col-8">
+                                <textarea id="question[0].answers[1]_content" name="question[0].answers[1].content" class="form-control" rows="1" placeholder="Answer"></textarea>
+                            </div>
+                            <div class="col-2">
+                                <input id="question[0].answers[1]_points" name="question[0].answers[1].points" type="number" class="form-control" placeholder="Points">
+                            </div>
+                            <div class="col-1">
+                                <i class="ion-ios-trash-outline"></i>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-1">
+                                <input id="question[0].answers[2]_iscorrect" name="question[0].answers[2].iscorrect" type="checkbox" class="form-control">
+                            </div>
+                            <div class="col-8">
+                                <textarea id="question[0].answers[2]_content" name="question[0].answers[2].content" class="form-control" rows="1" placeholder="Answer"></textarea>
+                            </div>
+                            <div class="col-2">
+                                <input id="question[0].answers[2]_points" name="question[0].answers[2].points" type="number" class="form-control" placeholder="Points">
+                            </div>
+                            <div class="col-1">
+                                <i class="ion-ios-trash-outline"></i>
+                            </div>
+                        </div>
+                    </div>*@
+
+
+                        <hr />
+
+                        @*<div class="card card-no-border">
+                            <div class="row">
+                                <div class="col-6 col md-9">
+                                    <h5>Question 2.</h5>
+                                </div>
+                                <div class="col-6 col md-3">
+                                    <select id="question[1]_type" name="question[1].type" class="form-control">
+                                        <option value="" disabled selected hidden>Select Type</option>
+                                        <option value="0">Open</option>
+                                        <option value="1">Single</option>
+                                        <option value="2">Multiple</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mt-1">
+                                <textarea id="question[1]_content" name="question[1].content" class="form-control" placeholder="Question"></textarea>
+                            </div>
+                            <h6>Answers</h6>
+                            <div class="row">
+                                <div class="col-1">
+                                    <input id="question[1].answers[1]_iscorrect" name="question[1].answers[1].iscorrect" type="checkbox" class="form-control">
+                                </div>
+                                <div class="col-7">
+                                    <textarea id="question[1].answers[1]_content" name="question[1].answers[1].content" class="form-control" rows="1" placeholder="Answer"></textarea>
+                                </div>
+                                <div class="col-3">
+                                    <input id="question[1].answers[1]_iscorrect" name="question[1].answers[1].iscorrect" type="number" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h5>Question 3</h5>
+                            <div class="form-group mt-1">
+                                <label>Type</label>
+                                <select id="question[2]_type" name="question[2].type" class="form-control">
+                                    <option value="0">Open</option>
+                                    <option value="1">Single</option>
+                                    <option value="2">Multiple</option>
+                                </select>
+                            </div>
+                            <div class="form-group mt-1">
+                                <label>Content</label>
+                                <textarea id="question[2]_type" name="question[2].content" class="form-control"></textarea>
+                            </div>
+
+                            <div class="form-group mt-1">
+                                <label>Is Correct</label>
+                                <input id="question[2]_iscorrect" name="question[2].iscorrect" type="checkbox" class="form-control">
+                            </div>
+                            <div class="form-group mt-1">
+                                <label>Points</label>
+                                <input id="question[2]_points" name="question[2].points" type="number" class="form-control">
+                            </div>
+                        </div>*@
+
+                        <hr />
+                        <div class="form-group align-right">
+                            <button type="submit" class="float-right">Submit</button>
+                        </div>
+
+                        <hr />
+                        <hr />
+                        <div class="user-block float-left">
+                            <img class="img-circle img-bordered-sm" src="~/img/default-user.png" alt="user image">
+                            <span class="username">
+                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">@User.FindFirstValue(ClaimTypes.Name)</a>
+                            </span>
+                            <span class="description">user</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <partial name="_SideContentPartial" />
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/daterangepicker/moment.min.js"></script>
+    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
+    <script>
+        $(function () {
+            //$('#opens').datetimepicker({
+            //    format: 'LT'
+            //})
+            //$('#closes').datetimepicker({
+            //    format: 'LT'
+            //})
+            $('#opens').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                locale: {
+                    format: 'MM/DD/YYYY hh:mm A'
+                }
+            })
+
+            //$('#closes').daterangepicker({
+            //    timePicker: true,
+            //    timePickerIncrement: 30,
+            //    locale: {
+            //        format: 'MM/DD/YYYY hh:mm A'
+            //    }
+            //})
+        })
+    </script>
+}

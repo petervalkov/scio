@@ -41,6 +41,16 @@
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<Exam> Exams { get; set; }
+
+        public DbSet<ExamQuestion> ExamQuestions { get; set; }
+
+        public DbSet<ExamAnswer> ExamAnswers { get; set; }
+
+        public DbSet<Submission> Submissions { get; set; }
+
+        public DbSet<SubmissionAnswer> SubmissionAnswers { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

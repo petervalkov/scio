@@ -22,6 +22,7 @@
     using Scio.Data.Repositories;
     using Scio.Data.Seeding;
     using Scio.Services.Data;
+    using Scio.Services.Data.DTOs;
     using Scio.Services.Mapping;
     using Scio.Services.Messaging;
     using Scio.Web.Infrastructure.Authorization;
@@ -102,6 +103,7 @@
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILectureService, LectureService>();
             services.AddTransient<IResourceService, ResourceService>();
+            services.AddTransient<IExamService, ExamService>();
             services.AddTransient<IForumPostService, ForumPostService>();
             services.AddTransient<IForumCommentService, ForumCommentService>();
             services.AddTransient<IForumVoteService, ForumVoteService>();
@@ -120,7 +122,9 @@
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(ErrorViewModel).GetTypeInfo().Assembly,
+                typeof(QuestionInput).GetTypeInfo().Assembly);
 
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
