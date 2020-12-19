@@ -15,6 +15,7 @@
             this.Resources = new HashSet<Resource>();
             this.Lectures = new HashSet<Lecture>();
             this.Exams = new HashSet<Exam>();
+            this.Notifications = new HashSet<Notification>();
         }
 
         public string Title { get; set; }
@@ -34,5 +35,7 @@
         public virtual ICollection<Lecture> Lectures { get; set; }
 
         public virtual ICollection<Exam> Exams { get; set; }
+
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

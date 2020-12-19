@@ -110,6 +110,7 @@
             services.AddTransient<IForumVoteService, ForumVoteService>();
             services.AddTransient<ICloudinaryService, CloudinaryService>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<INotificationService, NotificationService>();
 
             Account account = new Account(
                 this.configuration["Cloudinary:AppName"],

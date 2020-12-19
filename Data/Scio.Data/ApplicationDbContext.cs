@@ -53,6 +53,8 @@
 
         public DbSet<SubmissionAnswer> SubmissionAnswers { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -75,6 +77,7 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CourseUserConfiguration());
+            builder.ApplyConfiguration(new NotificationConfiguration());
 
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
