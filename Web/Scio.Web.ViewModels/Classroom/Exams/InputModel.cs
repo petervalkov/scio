@@ -9,10 +9,13 @@
 
         public int Duration { get; set; }
 
-        public string OpenInterval { get; set; }
+        public string Opens { get; set; }
 
-        // public DateTime Closes { get; set; }
+        public DateTime Closes { get; set; }
+
         public string CourseId { get; set; }
+
+        public string CourseTitle { get; set; }
 
         public ICollection<QuestionInputModel> Question { get; set; }
     }

@@ -104,6 +104,7 @@
             services.AddTransient<ILectureService, LectureService>();
             services.AddTransient<IResourceService, ResourceService>();
             services.AddTransient<IExamService, ExamService>();
+            services.AddTransient<ISubmissionService, SubmissionService>();
             services.AddTransient<IForumPostService, ForumPostService>();
             services.AddTransient<IForumCommentService, ForumCommentService>();
             services.AddTransient<IForumVoteService, ForumVoteService>();

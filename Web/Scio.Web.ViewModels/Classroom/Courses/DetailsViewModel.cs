@@ -27,5 +27,7 @@
         public virtual IEnumerable<LectureViewModel> Lectures { get; set; }
 
         public virtual IEnumerable<UserViewModel> Users { get; set; }
+
+        public virtual IEnumerable<DetailsExamViewModel> Exams { get; set; }
     }
 }

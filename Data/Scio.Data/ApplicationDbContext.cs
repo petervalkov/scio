@@ -49,6 +49,8 @@
 
         public DbSet<Submission> Submissions { get; set; }
 
+        public DbSet<SubmissionQuestion> SubmissionQuestions { get; set; }
+
         public DbSet<SubmissionAnswer> SubmissionAnswers { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

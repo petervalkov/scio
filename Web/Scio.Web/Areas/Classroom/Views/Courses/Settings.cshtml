@@ -31,26 +31,32 @@
                 <div class="card">
                     <div class="card-body">
                         <h2>@Model.Title</h2>
-                        <ul class="nav nav-tabs mt-3" id="settings" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="dashboard-tab" data-toggle="pill" href="#dashboard-tab-content" role="tab" aria-controls="dashboard-tab-content" aria-selected="true">Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="resourses-tab" data-toggle="pill" href="#resourses-tab-content" role="tab" aria-controls="resourses-tab-content" aria-selected="false">Resourses</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="users-tab" data-toggle="pill" href="#users-tab-content" role="tab" aria-controls="users-tab-content" aria-selected="false">Users</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="edit-info-tab" data-toggle="pill" href="#edit-info-tab-content" role="tab" aria-controls="edit-info-tab-content" aria-selected="false">Edit Info</a>
-                            </li>
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link nav-link-custom active" href="#info" data-toggle="tab">Info</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#lectures" data-toggle="tab">Lectures</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#exams" data-toggle="tab">Exams</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#users" data-toggle="tab">Users</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#dashboard" data-toggle="tab">Dashboard</a></li>
                         </ul>
-
-                        <div class="tab-content" id="settingsContent">
-                            <div class="tab-pane fade show active" id="dashboard-tab-content" role="tabpanel" aria-labelledby="dashboard-tab">
-                                <h5>Dashboard</h5>
+                        <div class="tab-content">
+                            @*INFO TAB*@
+                            <div class="active tab-pane" id="info">
+                                <div class="card no-border">
+                                    <div class="card-body">
+                                        @Html.Raw(Model.Description)
+                                        <div class="user-block float-left">
+                                            <img class="img-circle img-bordered-sm" src="@(Model.AuthorImageUrl ?? "~/img/default-user.png")" alt="user image">
+                                            <span class="username">
+                                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorDisplayName</a>
+                                            </span>
+                                            <span class="description">user</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="tab-pane fade" id="resourses-tab-content" role="tabpanel" aria-labelledby="resourses-tab">
+
+                            @*LECTURES TAB*@
+                            <div class="tab-pane" id="lectures">
                                 <div class="card-body">
                                     @foreach (var lecture in Model.Lectures)
                                     {
@@ -129,89 +135,96 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="users-tab-content" role="tabpanel" aria-labelledby="users-tab">
-                                @if (Model.Users.Where(x => (int)x.Status == 1).Count() > 0)
-                                {
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h2>
-                                                Users
-                                            </h2>
-                                        </div>
-                                        <div class="card-body">
-                                            @foreach (var user in Model.Users.Where(x => (int)x.Status == 1))
-                                            {
-                                                <div class="row">
-                                                    <div class="col-md-3">@user.UserDisplayName</div>
-                                                    <div class="col-md-3">@user.UserEmail</div>
-                                                    <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
-                                                    <div class="col-md-3">
-                                                        <button onclick="updateStatus('@Model.Id', '@user.UserId', 2)" class="btn btn-block bg-gradient-danger btn-sm">reject</button>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                                @if (Model.Users.Where(x => (int)x.Status == 0).Count() > 0)
-                                {
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h2>
-                                                User Requests
-                                            </h2>
-                                        </div>
-                                        <div class="card-body">
-                                            @foreach (var user in Model.Users.Where(x => (int)x.Status == 0))
-                                            {
-                                                <div class="row">
-                                                    <div class="col-md-3">@user.UserDisplayName</div>
-                                                    <div class="col-md-3">@user.UserEmail</div>
-                                                    <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
-                                                    <div class="col-md-3">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <button onclick="updateStatus('@Model.Id', '@user.UserId', 1)" class="btn btn-block bg-gradient-success btn-sm">approve</button>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <button onclick="updateStatus('@Model.Id', '@user.UserId', 2)" class="btn btn-block bg-gradient-danger btn-sm">reject</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr />
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                                @if (Model.Users.Where(x => (int)x.Status == 2).Count() > 0)
-                                {
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h2>
-                                                Rejected Users
-                                            </h2>
-                                        </div>
-                                        <div class="card-body">
-                                            @foreach (var user in Model.Users.Where(x => x.Status.ToString() == "Rejected"))
-                                            {
-                                                <div class="row">
-                                                    <div class="col-md-3">@user.UserDisplayName</div>
-                                                    <div class="col-md-3">@user.UserEmail</div>
-                                                    <div class="col-md-3">@(user.ModifiedOn ?? user.CreatedOn)</div>
-                                                    <div class="col-md-3">
-                                                        <button onclick="updateStatus('@Model.Id', '@user.UserId', 1)" class="btn btn-block bg-gradient-success btn-sm">approve</button>
-                                                    </div>
-                                                </div>
-                                                <hr />
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                            <div class="tab-pane fade" id="edit-info-tab-content" role="tabpanel" aria-labelledby="edit-info-tab">
 
+                            @*EXAMS TAB*@
+                            <div class="tab-pane" id="exams">
+                                <div class="card no-border">
+                                    <div class="card-body">
+                                        @foreach (var exam in Model.Exams)
+                                        {
+                                            <div class="row">
+                                                <div class="col-12 col-sm-4 d-flex">
+                                                    <h6 class="m-auto ml-sm-0 mt-sm-auto mb-sm-auto">@exam.Title</h6>
+                                                </div>
+                                                <div class="col-12 col-sm-4 d-flex">
+                                                    <p class="m-auto">Created @TimeSpanParser.Parse((DateTime)exam.CreatedOn)</p>
+                                                </div>
+                                                <div class="col-12 col-sm-4 d-flex">
+                                                    <a class="btn btn-outline-info btn-flat btn-block btn-sm m-auto" asp-area="Classroom" asp-controller="Exams" asp-action="Details" asp-route-id="@exam.Id">View</a>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        }
+                                    </div>
+                                </div>
+                                <a class="btn btn-info btn-flat" asp-area="Classroom" asp-controller="Exams" asp-action="New" asp-route-id="@Model.Id">New Exam</a>
+                            </div>
+
+                            @*USERS TAB*@
+                            <div class="tab-pane" id="users">
+                                <div class="card-body">
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <div class="row" id="@user.UserId">
+                                            <div class="col-sm-7 col-md-4">
+                                                <div class="user-block float-left">
+                                                    <img class="img-circle img-bordered-sm" src="@(user.UserImageUrl ?? "~/img/default-user.png")" alt="user image">
+                                                    <span class="username">
+                                                        <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@user.UserId">@user.UserDisplayName</a>
+                                                    </span>
+                                                    <span class="description">@user.UserEmail</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5 col-md-3">
+                                                <div class="user-info-status">@(user.Role == "None" ? user.Status : user.Role)</div>
+                                                <small class="user-info-date text-muted">@(user.ModifiedOn == null ? "added" : "modified") @TimeSpanParser.Parse(user.ModifiedOn ?? user.CreatedOn)</small>
+                                            </div>
+
+                                            <div class="col-md-5">
+                                                <div class="row controls">
+                                                    @if (user.Status == "Pending")
+                                                    {
+                                                        <div class="col-sm-6 text-center">
+                                                            <button type="button" class="btn btn-block btn-outline-success btn-flat" onclick="updateStatus('@Model.Id', '@user.UserId', 1)">Accept</button>
+                                                        </div>
+                                                        <div class="col-sm-6 text-center">
+                                                            <button type="button" class="btn btn-block btn-outline-danger btn-flat" onclick="updateStatus('@Model.Id', '@user.UserId', 2)">Reject</button>
+                                                        </div>
+                                                    }
+                                                    else if (user.Status == "Accepted")
+                                                    {
+                                                        <div class="col-6 text-center">
+                                                            <button type="button" class="btn btn-block btn-outline-info btn-flat">Admin</button>
+                                                        </div>
+                                                        <div class="col-6 text-center">
+                                                            <button type="button" class="btn btn-block btn-outline-danger btn-flat" onclick="updateStatus('@Model.Id', '@user.UserId', 3)">Remove</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-6 text-center">
+                                                            <button type="button" class="btn btn-block btn-outline-success btn-flat" onclick="updateStatus('@Model.Id', '@user.UserId', 1)">Accept</button>
+                                                        </div>
+                                                        <div class="col-6 text-center">
+                                                            <button type="button" class="btn btn-block btn-outline-danger btn-flat" )">Delete</button>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <hr>
+                                    }
+                                </div>
+                            </div>
+
+                            @*DASHBOARD TAB*@
+                            <div id="dashboard" class="tab-pane">
+                                <div class="card no-border">
+                                    <div class="card-body">
+                                        <h3>Dashboard</h3>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

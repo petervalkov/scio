@@ -27,183 +27,80 @@
         <div class="container-fluid main-content">
             <div class="card">
                 <div class="card-body">
+                    <h2>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </h2>
                     <form role="form" asp-area="Classroom" asp-controller="Exams" asp-action="New" method="post">
-                        <input type="hidden" value="@ViewData["CourseId"]" name="courseId"/>
-                        <div class="form-group mt-1">
-                            <label for="course-title">Title</label>
+                        <div class="form-group">
+                            <label asp-for="Title">Title:</label>
                             <textarea asp-for="Title" class="form-control"></textarea>
                             <span asp-validation-for="Title"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label for="opens">Opens</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="far fa-clock"></i></span>
-                                </div>
-                                <input type="text" class="form-control float-right" id="opens" name="openInterval">
-                            </div>
-                        </div>
-
-                        <div class="form-group mt-1">
-                            <label for="course-title">Duration:</label>
-                            <input asp-for="Duration" type="number" class="form-control">
-                            <span asp-validation-for="Duration"></span>
-                        </div>
-
-                        <hr />
-
-                        <div>
-
-                            <a onclick="addQuestion(event)">add question</a>
-                        </div>
-
-                    @*<div class="card card-no-border">
                         <div class="row">
-                            <div class="col-11">
-                                <h5>Question 1.</h5>
-                            </div>
-                            <div class="col-11">
-                                <i class="ion-close"></i>
-                            </div>
-                            <div class="col-6 col-md-2">
-                <select id="question[0]_type" name="question[0].type" class="form-control">
-                    <option value="" disabled selected hidden>Select Type</option>
-                    <option value="0">Open</option>
-                    <option value="1">Single</option>
-                    <option value="2">Multiple</option>
-                </select>
-            </div>
-                        </div>
-                        <textarea id="question[0]_content" name="question[0].content" class="form-control" placeholder="Question"></textarea>
-                        <div class="form-group mt-1">
-            <textarea id="question[0]_content" name="question[0].content" class="form-control" placeholder="Question"></textarea>
-        </div>
-                        <h6>Possible Answers</h6>
-
-                        <div class="row mt2">
-                            <input id="question[0].answers[0]_iscorrect" name="question[0].answers[1].iscorrect" type="checkbox" class="form-control col-2 col-md-1 m-auto">
-                            <textarea id="question[0].answers[0]_content" name="question[0].answers[1].content" class="form-control col-6 col-md-7 col-lg-8 m-auto" rows="1" placeholder="Answer"></textarea>
-                            <input id="question[0].answers[0]_points" name="question[0].answers[1].points" type="number" class="form-control col-3 col-lg-2 m-auto" placeholder="Points">
-                            <i class="ion-ios-trash-outline ion-xl col-1 m-auto"></i>
-                        </div>
-
-                        <div class="row mt2">
-                            <div class="col-2 col-md-1 d-flex">
-                                <input id="question[0].answers[0]_iscorrect" name="question[0].answers[1].iscorrect" type="checkbox" class="form-control m-auto">
-                            </div>
-                            <div class="col-8 col-md-9 d-flex">
-                                <textarea id="question[0].answers[0]_content" name="question[0].answers[1].content" class="form-control m-auto" rows="1" placeholder="Answer"></textarea>
-                            </div>
-                            <div class="col-2 col-md-1 d-flex">
-                                <input id="question[0].answers[0]_points" name="question[0].answers[1].points" type="number" class="form-control m-auto" placeholder="Points">
-                            </div>
-                            <div class="col-1 d-flex">
-                                <i class="ion-ios-trash-outline ion-xl m-auto"></i>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-1">
-                                <input id="question[0].answers[1]_iscorrect" name="question[0].answers[1].iscorrect" type="checkbox" class="form-control">
-                            </div>
-                            <div class="col-8">
-                                <textarea id="question[0].answers[1]_content" name="question[0].answers[1].content" class="form-control" rows="1" placeholder="Answer"></textarea>
-                            </div>
-                            <div class="col-2">
-                                <input id="question[0].answers[1]_points" name="question[0].answers[1].points" type="number" class="form-control" placeholder="Points">
-                            </div>
-                            <div class="col-1">
-                                <i class="ion-ios-trash-outline"></i>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-1">
-                                <input id="question[0].answers[2]_iscorrect" name="question[0].answers[2].iscorrect" type="checkbox" class="form-control">
-                            </div>
-                            <div class="col-8">
-                                <textarea id="question[0].answers[2]_content" name="question[0].answers[2].content" class="form-control" rows="1" placeholder="Answer"></textarea>
-                            </div>
-                            <div class="col-2">
-                                <input id="question[0].answers[2]_points" name="question[0].answers[2].points" type="number" class="form-control" placeholder="Points">
-                            </div>
-                            <div class="col-1">
-                                <i class="ion-ios-trash-outline"></i>
-                            </div>
-                        </div>
-                    </div>*@
-
-
-                        <hr />
-
-                        @*<div class="card card-no-border">
-                            <div class="row">
-                                <div class="col-6 col md-9">
-                                    <h5>Question 2.</h5>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Opens">Opens:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                        </div>
+                                        <input id="opens" asp-for="Opens" type="text" class="form-control float-right">
+                                    </div>
                                 </div>
-                                <div class="col-6 col md-3">
-                                    <select id="question[1]_type" name="question[1].type" class="form-control">
-                                        <option value="" disabled selected hidden>Select Type</option>
-                                        <option value="0">Open</option>
-                                        <option value="1">Single</option>
-                                        <option value="2">Multiple</option>
-                                    </select>
+                                <div class="form-group">
+                                    <label asp-for="Closes">Closes:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                        </div>
+                                        <input id="closes" asp-for="Closes" type="text" class="form-control float-right">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group mt-1">
-                                <textarea id="question[1]_content" name="question[1].content" class="form-control" placeholder="Question"></textarea>
-                            </div>
-                            <h6>Answers</h6>
-                            <div class="row">
-                                <div class="col-1">
-                                    <input id="question[1].answers[1]_iscorrect" name="question[1].answers[1].iscorrect" type="checkbox" class="form-control">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Duration">Duration:</label>
+                                    <input asp-for="Duration" type="number" class="form-control">
+                                    <span asp-validation-for="Duration"></span>
                                 </div>
-                                <div class="col-7">
-                                    <textarea id="question[1].answers[1]_content" name="question[1].answers[1].content" class="form-control" rows="1" placeholder="Answer"></textarea>
-                                </div>
-                                <div class="col-3">
-                                    <input id="question[1].answers[1]_iscorrect" name="question[1].answers[1].iscorrect" type="number" class="form-control">
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <label for="course-title">Accept after closing time</label>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="bootstrap-switch bootstrap-switch-wrapper bootstrap-switch-animate float-right">
+                                                    <div class="bootstrap-switch-container">
+                                                        <span class="bootstrap-switch-handle-on bootstrap-switch-success">YES</span>
+                                                        <span class="bootstrap-switch-label">&nbsp;</span>
+                                                        <span class="bootstrap-switch-handle-off bootstrap-switch-danger">NO</span>
+                                                        <input type="checkbox" name="my-checkbox">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="card">
-                            <h5>Question 3</h5>
-                            <div class="form-group mt-1">
-                                <label>Type</label>
-                                <select id="question[2]_type" name="question[2].type" class="form-control">
-                                    <option value="0">Open</option>
-                                    <option value="1">Single</option>
-                                    <option value="2">Multiple</option>
-                                </select>
+                        <div>
+                            <ol id="questions" class="pl-3 mb-3">
+                            </ol>
+                            <div class="col-12 col-md-6 m-auto">
+                                <div class="btn btn-flat btn-outline-info btn-block btn-sm" onclick="addQuestion()">
+                                    Add Question <i class="fa fa-plus"></i>
+                                </div>
                             </div>
-                            <div class="form-group mt-1">
-                                <label>Content</label>
-                                <textarea id="question[2]_type" name="question[2].content" class="form-control"></textarea>
-                            </div>
-
-                            <div class="form-group mt-1">
-                                <label>Is Correct</label>
-                                <input id="question[2]_iscorrect" name="question[2].iscorrect" type="checkbox" class="form-control">
-                            </div>
-                            <div class="form-group mt-1">
-                                <label>Points</label>
-                                <input id="question[2]_points" name="question[2].points" type="number" class="form-control">
-                            </div>
-                        </div>*@
-
+                        </div>
                         <hr />
                         <div class="form-group align-right">
-                            <button type="submit" class="float-right">Submit</button>
-                        </div>
-
-                        <hr />
-                        <hr />
-                        <div class="user-block float-left">
-                            <img class="img-circle img-bordered-sm" src="~/img/default-user.png" alt="user image">
-                            <span class="username">
-                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">@User.FindFirstValue(ClaimTypes.Name)</a>
-                            </span>
-                            <span class="description">user</span>
+                            <input type="hidden" value="@ViewData["CourseId"]" name="courseId" />
+                            <div class="form-group align-right">
+                                <button type="submit" class="btn btn-info btn-flat btn-block-md float-right pl-4 pr-4"><i class="fas fa-save"></i> Save</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -232,14 +129,7 @@
                     format: 'MM/DD/YYYY hh:mm A'
                 }
             })
-
-            //$('#closes').daterangepicker({
-            //    timePicker: true,
-            //    timePickerIncrement: 30,
-            //    locale: {
-            //        format: 'MM/DD/YYYY hh:mm A'
-            //    }
-            //})
         })
     </script>
+    <script src="~/js/bootstrap-switch.js"></script>
 }

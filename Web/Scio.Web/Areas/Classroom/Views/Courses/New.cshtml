@@ -27,38 +27,34 @@
         <div class="container-fluid main-content">
             <div class="card">
                 <div class="card-body">
-                    <form class="forum" role="form" asp-area="Classroom" asp-controller="Courses" asp-action="New" method="post">
-                        <header>
-                            <div class="form-group">
-                                <select name="type" class="form-control">
-                                    <option value="0">Public</option>
-                                    <option value="1">Private</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <textarea asp-for="Title" id="question-title" rows="3" required class="form-control"></textarea>
-                                <span asp-validation-for="Title"></span>
-                            </div>
-                        </header>
-                        <div class="forum-content">
-                            <div class="forum-post">
-                                <div class="forum-post-main">
-                                    <div class="form-group">
-                                        <textarea asp-for="Description" id="mytextarea"></textarea>
-                                        <span asp-validation-for="Description"></span>
-                                    </div>
-                                    <div class="user-block float-left">
-                                        <img class="img-circle img-bordered-sm" src="~/img/default-user.png" alt="user image">
-                                        <span class="username">
-                                            <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">@User.FindFirstValue(ClaimTypes.Name)</a>
-                                        </span>
-                                        <span class="description">user</span>
-                                    </div>
-                                    <div class="form-group align-right">
-                                        <button type="submit" class="btn btn-primary float-right">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
+                    <form role="form" asp-area="Classroom" asp-controller="Courses" asp-action="New" method="post">
+                        <div class="form-group mt-1">
+                            <label for="course-title">Title</label>
+                            <textarea asp-for="Title" rows="3" required id="course-title" class="form-control"></textarea>
+                            <span asp-validation-for="Title"></span>
+                        </div>
+                        <div class="form-group mt-1">
+                            <label for="course-type">Type</label>
+                            <select name="type" class="form-control" id="course-type">
+                                <option value="0">Public</option>
+                                <option value="1">Private</option>
+                            </select>
+                        </div>
+                        <div class="form-group mt-1">
+                            <label for="post-body">Description</label>
+                            <textarea asp-for="Description" id="post-body"></textarea>
+                            <span asp-validation-for="Description"></span>
+                        </div>
+                        <hr />
+                        <div class="user-block float-left">
+                            <img class="img-circle img-bordered-sm" src="~/img/default-user.png" alt="user image">
+                            <span class="username">
+                                <a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">@User.FindFirstValue(ClaimTypes.Name)</a>
+                            </span>
+                            <span class="description">user</span>
+                        </div>
+                        <div class="form-group align-right">
+                            <button type="submit" class="float-right">Submit</button>
                         </div>
                     </form>
                 </div>

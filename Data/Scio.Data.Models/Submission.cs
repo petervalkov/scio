@@ -10,7 +10,8 @@
         public Submission()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Answers = new HashSet<SubmissionAnswer>();
+            this.Answers = new HashSet<SubmissionAnswer>(); // REMOVE
+            this.Questions = new HashSet<SubmissionQuestion>();
         }
 
         public int Score { get; set; }
@@ -27,6 +28,8 @@
 
         public virtual ApplicationUser Author { get; set; }
 
-        public virtual ICollection<SubmissionAnswer> Answers { get; set; }
+        public virtual ICollection<SubmissionAnswer> Answers { get; set; }// REMOVE
+
+        public virtual ICollection<SubmissionQuestion> Questions { get; set; }
     }
 }

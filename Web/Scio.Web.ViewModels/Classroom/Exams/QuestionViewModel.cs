@@ -11,6 +11,6 @@
 
         public string Content { get; set; }
 
-        public virtual ICollection<AnswerViewModel> Answers { get; set; }
+        public virtual AnswerViewModel[] Answers { get; set; }
     }
 }

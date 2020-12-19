@@ -1,0 +1,84 @@
+﻿@using Scio.Common
+@using Scio.Web.Helpers
+@using System.Security.Claims
+@using Scio.Web.ViewModels.Classroom.Exams
+@model ResultViewModel
+
+@{ ViewData["Title"] = Model.Title; }
+
+<section class="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Course Info</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Classroom" asp-controller="Courses" asp-action="Home">Courses</a></li>
+                        <li class="breadcrumb-item active">@Model.Title</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-flex">
+        <div class="container-fluid main-content">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <h4 class="text-muted">@Model.ExamTitle</h4>
+                        <h2>@Model.ExamTitle</h2>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-12 col-sm-6 text-center">
+                            <p>Started: @Model.CreatedOn</p>
+                            <p>Ended: @Model.Ended</p>
+                            <p>Total time: @(Model.Ended - Model.CreatedOn)</p>
+                        </div>
+                        <div class="col-12 col-sm-6 text-center">
+                            <p>Points: </p>
+                        </div>
+                    </div>
+                    <hr />
+                    <ol>
+                        @if (Model.Questions.Count > 0)
+                        {
+                            @foreach (var question in Model.Questions)
+                            {
+                                <li>
+                                    <p>@question.Content</p>
+                                    @foreach (var answer in question.Answers)
+                                    {
+                                        <div class="row pb-2 pt-2">
+                                            <div class="col-1 col-md-1 m-auto d-flex">
+                                                @if (answer.IsCorrect ?? false)
+                                                {
+                                                    if (answer.IsCorrect == answer.ExamAnswerIsCorrect)
+                                                    {
+                                                        <i class="fas fa-check ion-xl text-success m-auto"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="fas fa-times ion-xl text-danger m-auto"></i>
+                                                    }
+                                                }
+                                            </div>
+                                            <p class="col-7 mt-auto mb-auto mr-auto pl-3">@answer.Content</p>
+                                            <div class="col-2">@answer.IsCorrect</div>
+                                            <div class="col-2">@answer.ExamAnswerIsCorrect</div>
+                                        </div>
+                                    }
+                                </li>
+                            }
+                        }
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <partial name="_SideContentPartial" />
+    </div>
+</section>
+

@@ -46,7 +46,7 @@
             }).ToList();
 
             // FIX
-            var openWindow = input.OpenInterval.Split("-");
+            var openWindow = input.Opens.Split("-");
             var opens = DateTime.ParseExact(openWindow[0].Trim(), "MM/dd/yyyy hh:mm tt", CultureInfo.InvariantCulture);
             var closes = DateTime.ParseExact(openWindow[1].Trim(), "MM/dd/yyyy hh:mm tt", CultureInfo.InvariantCulture);
 
@@ -61,6 +61,15 @@
         {
             var viewModel = this.examService
                 .Get<DetailsViewModel>(id);
+
+            return this.View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Start([Required] string id)
+        {
+            var viewModel = this.examService
+                .Get<ExamStartViewModel>(id);
 
             return this.View(viewModel);
         }

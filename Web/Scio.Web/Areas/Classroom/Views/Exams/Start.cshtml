@@ -1,0 +1,71 @@
+﻿@using Scio.Common
+@using Scio.Web.Helpers
+@using System.Security.Claims
+@using Scio.Web.ViewModels.Classroom.Exams
+@model ExamStartViewModel
+
+@{ ViewData["Title"] = Model.Title; }
+
+<section class="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Course Info</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Classroom" asp-controller="Courses" asp-action="Home">Courses</a></li>
+                        <li class="breadcrumb-item active">@Model.Title</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-flex">
+        <div class="container-fluid main-content">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <h2>@Model.Title</h2>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-12 col-sm-6 text-center">
+                            <p>Opens: @Model.Opens</p>
+                            <p>Closes: @Model.Closes</p>
+                        </div>
+                        <div class="col-12 col-sm-6 text-center">
+                            <p>Duration: @Model.Duration</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        @if (Model.Opens > DateTime.UtcNow)
+                        {
+                            <div class="col-12 text-center">
+                                <p>This exam opens @TimeSpanParser.Parse(Model.Opens)</p>
+                            </div>
+                        }
+                        else if (Model.Closes < DateTime.UtcNow)
+                        {
+                            <div class="col-12 d-flex">
+                                <p class="m-auto">This exam closed @TimeSpanParser.Parse(Model.Closes)</p>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-12 col-md-3 m-auto">
+                                <a asp-area="Classroom" asp-controller="Submissions" asp-action="New" asp-route-id="@Model.Id" class="btn btn-outline-info btn-flat btn-block">Start Attempt</a> @*Change to ExamId*@
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <partial name="_SideContentPartial" />
+    </div>
+</section>
+

@@ -1,0 +1,71 @@
+﻿@using Scio.Common
+@using Scio.Web.Helpers
+@using System.Security.Claims
+@using Scio.Web.ViewModels.Classroom.Exams
+@model SubmissionViewModel
+
+@{ ViewData["Title"] = Model.ExamTitle; }
+
+<section class="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Course Info</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Classroom" asp-controller="Courses" asp-action="Home">Courses</a></li>
+                        <li class="breadcrumb-item active">@Model.ExamTitle</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-flex">
+        <div class="container-fluid main-content">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <h4 class="text-muted">@Model.ExamCourseTitle</h4>
+                        <h2>@Model.ExamTitle</h2>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12 col-md-6 text-center">
+                            <p>Started: @Model.CreatedOn</p>
+                        </div>
+                        <div class="col-12 col-md-6 text-center">
+                            <p>Time Remaining: 58:57</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <form asp-area="classroom" asp-controller="submissions" asp-action="new" method="post">
+                        <ol>
+                            @for (int i = 0; i < Model.Questions.Length; i++)
+                            {
+                                <li>
+                                    <input asp-for="@Model.Questions[i].Id" type="hidden" name="questionId">
+                                    <p>@Model.Questions[i].Content</p>
+                                    @for (int j = 0; j < Model.Questions[i].Answers.Length; j++)
+                                    {
+                                        <div class="row pb-2 pt-2">
+                                            <input asp-for="@Model.Questions[i].Answers[j].Id" type="hidden">
+                                            <input asp-for="@Model.Questions[i].Answers[j].IsCorrect" type="checkbox" value="true" class="form-control col-2 col-md-1 mr-0">
+                                            <p class="col-6 col-md-7 col-lg-8 mt-auto mb-auto mr-auto">@Model.Questions[i].Answers[j].Content</p>
+                                        </div>
+                                    }
+                                    <hr />
+                                </li>
+                            }
+                        </ol>
+                        <input value="@Model.Id" type="hidden" name="submissionId">
+                        <button class="btn btn-info btn-flat" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <partial name="_SideContentPartial" />
+    </div>
+</section>
+
