@@ -1,4 +1,4 @@
-﻿namespace Scio.Services.Data.DTOs
+﻿namespace Scio.Services.Data.Models.Exams
 {
     using System.Collections.Generic;
 

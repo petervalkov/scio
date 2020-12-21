@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scio.Data;
 
 namespace Scio.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201220204746_SetClosesOpensDurationNullable")]
+    partial class SetClosesOpensDurationNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,15 +332,6 @@ namespace Scio.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("AcceptAfterClosing")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("AcceptExpiredTime")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("AnswersPerQuestion")
-                        .HasColumnType("int");
-
                     b.Property<string>("AuthorId")
                         .HasColumnType("nvarchar(450)");
 
@@ -365,12 +358,6 @@ namespace Scio.Data.Migrations
 
                     b.Property<DateTime?>("Opens")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("QuestionsPerVariant")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("RandomVariant")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");

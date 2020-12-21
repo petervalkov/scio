@@ -9,6 +9,8 @@
     using Scio.Common;
     using Scio.Data.Models;
     using Scio.Services.Data;
+    using Scio.Web.Helpers;
+    using Scio.Web.Infrastructure.Filters;
     using Scio.Web.ViewModels.Classroom.Courses;
 
     [Area("Classroom")]
@@ -51,16 +53,46 @@
                 return this.View(input);
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-            var courseId = await this.courseService.CreateAsync(input.Title, input.Description, input.Type, user.Id);
+            var user = await this.userManager
+                .GetUserAsync(this.User);
+            var courseId = await this.courseService
+                .CreateAsync(input.Title, input.Description, input.Type, user.Id);
 
             if (courseId == null)
             {
-                return this.StatusCode(500);
+                return this.NotFound();
             }
 
-            await this.userManager.AddClaimAsync(user, new Claim(CourseRoleName.Admin, courseId));
+            await this.userManager
+                .AddClaimAsync(user, new Claim(CourseRoleName.Admin, courseId));
+
             return this.RedirectToAction(nameof(this.Details), new { id = courseId });
+        }
+
+        [HttpPost]
+        [Authorize(Policy = CourseRoleName.Admin)]
+        public async Task<IActionResult> Edit(EditInputModel input) // NOT WORKING
+        {
+            if (!this.ModelState.IsValid)
+            {
+                var course = this.courseService
+                    .Get<SettingsViewModel>(input.CourseId);
+                PropertyCopier<EditInputModel, SettingsViewModel>.Copy(input, course);
+
+                return this.View(nameof(this.Settings), course);
+            }
+
+            var user = await this.userManager
+                .GetUserAsync(this.User);
+            var courseId = await this.courseService
+                .UpdateAsync(input.CourseId, input.Title, input.Description, input.Type);
+
+            if (courseId == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.RedirectToAction(nameof(this.Settings), new { id = courseId });
         }
 
         [HttpGet]
@@ -107,10 +139,12 @@
 
         [HttpPost]
         [Authorize(Policy = CourseRoleName.Admin)]
-        public async Task<IActionResult> AddToAdmin(AddToAdminInputModel input) //Move to courseUsers
+        public async Task<IActionResult> AddToAdmin(AddToAdminInputModel input) // Move to courseUsers
         {
-            var user = await this.userManager.FindByIdAsync(input.UserId);
-            await this.userManager.AddClaimAsync(user, new Claim(CourseRoleName.Admin, input.CourseId));
+            var user = await this.userManager
+                .FindByIdAsync(input.UserId);
+            await this.userManager
+                .AddClaimAsync(user, new Claim(CourseRoleName.Admin, input.CourseId));
 
             return this.RedirectToAction(nameof(this.Settings), new { id = input.CourseId });
         }

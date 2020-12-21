@@ -1,4 +1,4 @@
-﻿namespace Scio.Services.Data.DTOs
+﻿namespace Scio.Services.Data.Models.Exams
 {
     using Scio.Data.Models;
     using Scio.Services.Mapping;

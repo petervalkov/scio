@@ -8,8 +8,9 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
+
     using Scio.Services.Data;
-    using Scio.Services.Data.DTOs;
+    using Scio.Services.Data.Models.Exams;
     using Scio.Web.ViewModels.Classroom.Exams;
 
     [Area("Classroom")]
@@ -33,25 +34,33 @@
         public async Task<IActionResult> New(InputModel input)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var questions = input.Question.Select(q => new QuestionInput
+            var exam = new ExamInput
             {
-                Content = q.Content,
-                Answers = q.Answers.Select(a => new AnswerInput
+                Title = input.Title, // use automapper !!!
+                Opens = input.Opens,
+                Closes = input.Closes,
+                Duration = input.Duration,
+                AcceptAfterClosing = input.AcceptAfterClosing,
+                AcceptExpiredTime = input.AcceptExpiredTime,
+                RandomVariant = input.RandomVariant,
+                QuestionsPerVariant = input.QuestionsPerVariant,
+                AnswersPerQuestion = input.AnswersPerQuestion,
+                CourseId = input.CourseId,
+                AuthorId = userId,
+                Questions = input.Question?.Select(q => new QuestionInput
                 {
-                    Content = a.Content,
-                    Points = a.Points,
-                    IsCorrect = a.IsCorrect,
-                }),
-            }).ToList();
-
-            // FIX
-            var openWindow = input.Opens.Split("-");
-            var opens = DateTime.ParseExact(openWindow[0].Trim(), "MM/dd/yyyy hh:mm tt", CultureInfo.InvariantCulture);
-            var closes = DateTime.ParseExact(openWindow[1].Trim(), "MM/dd/yyyy hh:mm tt", CultureInfo.InvariantCulture);
+                    Content = q.Content,
+                    Answers = q.Answers.Select(a => new AnswerInput
+                    {
+                        Content = a.Content,
+                        Points = a.Points,
+                        IsCorrect = a.IsCorrect,
+                    }),
+                }).ToList(),
+            };
 
             var examId = await this.examService
-                .CreateAsync(input.Title, opens, closes, input.Duration, questions, input.CourseId, userId);
+                .CreateAsync(exam);
 
             return this.RedirectToAction(nameof(this.Details), new { id = examId });
         }

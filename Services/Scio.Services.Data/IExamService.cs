@@ -5,10 +5,11 @@
     using System.Threading.Tasks;
 
     using Scio.Services.Data.DTOs;
+    using Scio.Services.Data.Models.Exams;
 
     public interface IExamService
     {
-        Task<string> CreateAsync(string title, DateTime opens, DateTime closes, int duration, ICollection<QuestionInput> questions, string courseId, string authorId);
+        Task<string> CreateAsync(ExamInput exam);
 
         TModel Get<TModel>(string id);
     }

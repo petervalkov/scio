@@ -16,11 +16,21 @@
 
         public string Title { get; set; }
 
-        public DateTime Opens { get; set; }
+        public DateTime? Opens { get; set; }
 
-        public DateTime Closes { get; set; }
+        public DateTime? Closes { get; set; }
 
-        public int Duration { get; set; }
+        public int? Duration { get; set; }
+
+        public bool AcceptAfterClosing { get; set; }
+
+        public bool AcceptExpiredTime { get; set; }
+
+        public bool RandomVariant { get; set; }
+
+        public int QuestionsPerVariant { get; set; }
+
+        public int AnswersPerQuestion { get; set; }
 
         public string CourseId { get; set; }
 

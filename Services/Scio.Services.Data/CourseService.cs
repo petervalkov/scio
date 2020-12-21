@@ -55,5 +55,19 @@
 
             return course.Id;
         }
+
+        public async Task<string> UpdateAsync(string id, string title, string description, int type)
+        {
+            ;
+            var course = await this.courseRepository.FindByIdAsync(id);
+
+            course.Title = title;
+            course.Description = description;
+            course.Type = (CourseType)type;
+
+            await this.courseRepository.SaveChangesAsync();
+
+            return course.Id;
+        }
     }
 }
